@@ -1,0 +1,4155 @@
+<!DOCTYPE html>
+<!-- BlackLite UI Customization Tool -->
+<!-- Copyrights Peter Hauer -->
+<!-- under GPL-3.0 license -->
+<!-- see https://github.com/PeterPeet/BlackLite-Tools -->
+<html lang="en">
+<head>
+	<meta charset="UTF-8" />
+	<title>BlackLite UI Customization Tool</title>
+	<style>
+		body {
+			margin: 0;
+			padding: 20px;
+			font-family: Arial, sans-serif;
+			background-color: #f0f0f0;
+		}
+		.sample-content {
+			max-width: 800px;
+			margin: 0 auto;
+			padding: 20px;
+			background-color: white;
+			border-radius: 8px;
+			box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+		}
+		h1 {
+			color: #91C121;
+		}
+		.button {
+			padding: 6px 12px;
+			font-size: 14px;
+			border: none;
+			border-radius: 4px;
+			color: white;
+			cursor: pointer;
+			margin: 2px 0;
+			transition: background-color 0.3s ease;
+			white-space: nowrap;
+			background-color: #129c00;
+		}
+		.button:hover {
+			opacity: 0.9;
+		}
+		@media (max-width: 768px) {
+			.button {
+				width: 100%;
+			}
+		}
+	</style>
+</head>
+<body>
+	<div class="sample-content">
+		<h1 class="color_blue">Welcome to the BlackLite UI Demo</h1>
+		<p class="color_gray">This is a sample page to demonstrate the UI customization tool.</p>
+		<button class="button" onclick="alert('Button click')">Sample Button</button>
+		<div style="margin-top: 20px;">
+			<input type="text" placeholder="Sample input field" class="settinglabel miniinput" />
+		</div>
+	</div>
+
+	<!-- BlackLite UI Customization Tool -->
+	<script>
+		/**
+		 * BlackLite UI Customization Tool v2.1
+		 * A responsive, secure UI customization tool for web interfaces
+		 * Features:
+		 * - Theme customization with live preview
+		 * - Simplified Background image editor
+		 * - Streamlined Preset management system
+		 * - Mobile-friendly responsive design
+		 * - DOM-safe operations
+		 */
+		(function () {
+			'use strict';
+			console.log('Loading Theme Editor');
+
+			// Styles for BlackLight Tool should not interfere with Lite
+			const BLTOOLspecificstyles = `
+				.BLTOOL-body {
+					margin: 0;
+					padding: 20px;
+					font-family: Arial, sans-serif;
+					background-color: #f0f0f0;
+				}
+				.BLTOOL-sample-content {
+					max-width: 800px;
+					margin: 0 auto;
+					padding: 20px;
+					background-color: white;
+					border-radius: 8px;
+					box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+				}
+				.BLTOOL-h1 {
+					color: #333;
+				}
+				.BLTOOL-button {
+					padding: 6px 12px;
+					font-size: 14px;
+					border: none;
+					border-radius: 4px;
+					color: white;
+					cursor: pointer;
+					margin: 2px 0;
+					transition: background-color 0.3s ease;
+					white-space: nowrap;
+				}
+				.BLTOOL-button-primary {
+					background-color: #129c00;
+				}
+				.BLTOOL-button-secondary {
+					background-color: #337ab7;
+				}
+				.BLTOOL-button-danger {
+					background-color: #d9534f;
+				}
+				.BLTOOL-button-toggle {
+					background-color: #337ab7;
+				}
+				.BLTOOL-button:hover {
+					opacity: 0.9;
+				}
+				@media (max-width: 768px) {
+					.BLTOOL-button {
+						width: 100%;
+					}
+				}
+				.BLTOOL-blacklite-tools {
+					position: fixed;
+					top: 50px;
+					right: 20px;
+					width: 350px;
+					min-height: 200px;
+					max-height: 90vh;
+					background-color: #1e1e1e;
+					color: white;
+					border-radius: 8px;
+					box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+					z-index: 99999;
+					padding: 10px;
+					font-family: sans-serif;
+					display: flex;
+					flex-direction: column;
+				}
+				.BLTOOL-tab-button {
+					flex: 1;
+					text-align: center;
+					padding: 5px;
+					cursor: pointer;
+					background-color: #2e2e2e;
+					border: none;
+				}
+				.BLTOOL-tab-button.BLTOOL-active-tab {
+					background-color: #337ab7;
+				}
+				.BLTOOL-scroll-container {
+					max-height: 475px;
+					overflow-y: auto;
+					width: 100%;
+					box-sizing: border-box;
+				}
+				@media (max-width: 768px) {
+					.BLTOOL-blacklite-tools {
+						width: 90%;
+						left: 5%;
+						right: auto;
+						top: 10px;
+						max-height: 95vh;
+					}
+					.BLTOOL-tab-button {
+						flex: 1 1 33%;
+						font-size: 12px;
+						padding: 3px;
+					}
+				}
+			`;
+			
+			const BLTOOLSLitedefaultThemeCSS = `
+ /* Global appearances */
+ body {
+	 background-color: #303030;
+	 background-image: none;
+	 background-size: cover;
+	 background-position: center center;
+	 background-attachment: fixed;
+ }
+ hr {
+	 padding: 0px;
+	 margin: 0px;
+ }
+ button, html input[type=button], input[type=reset], input[type=submit] {
+	 -webkit-appearance: button;
+	 appearance: button;
+	 cursor: pointer;
+ }
+ .invert_colors
+ {
+	 filter: invert(1);
+ }
+ .unselectable {
+	 -webkit-touch-callout: none !important;
+	 -webkit-user-select: none !important;
+	 -khtml-user-select: none !important;
+	 -moz-user-select: none !important;
+	 -ms-user-select: none !important;
+	 user-select: none !important;
+ }
+ .flex {
+	 display: flex;
+	 align-items: center;
+ }
+ .flex-push-right {
+	 margin-left: auto;
+ }
+ .justifyleft {
+	 text-align: left;
+ }
+ .justifyright {
+	 text-align: right;
+ }
+ .hidden {
+	 display: none;
+ }
+
+ /* Outer container */
+ #outerbodybg
+ {
+	 z-index:-1;
+	 position: absolute;
+	 top: 0;
+	 right: 0;
+	 bottom: 0;
+	 left: 0;
+ }
+ #outerbody
+ {
+	 z-index:-2;
+	 position:relative;
+ }
+
+ /* Responsive containers */
+ .maincontainer {
+	 padding-right: 4px;
+	 padding-left: 4px;
+	 margin-right: auto;
+	 margin-left: auto;
+ }
+ @media (min-width: 768px) {
+ .adaptivecontainer {
+	 width: 750px;
+ }}
+ @media (min-width: 992px) {
+ .adaptivecontainer {
+	 width: 970px;
+ }}
+ @media (min-width: 1200px) {
+ .adaptivecontainer {
+	 width: 1170px;
+ }}
+
+ @media (min-width: 1200px) {
+ .clampedcontainer {
+	 width: 1170px;
+ }}
+ @media (min-width: 1800px) {
+ .bigclampedcontainer {
+	 width: 1770px;
+ }}
+ .centeredcontainer {
+	 width: calc(100% - 662px)!important;
+ }
+ @media (max-width: 960px) {
+	 .centeredcontainer {
+		 width: 33%!important;
+	 }
+ }
+
+
+ /* Viewports */
+ .normal_viewport_height
+ {
+	 height: calc(98vh - 240px);
+ }
+ @media (max-width: 534px) {
+	 .normal_viewport_height
+	 {
+		 height: calc(98vh - 260px);
+	 }
+ }
+ @media (max-width: 342px) {
+	 .normal_viewport_height
+	 {
+		 height: calc(98vh - 280px);
+	 }
+ }
+ @media print {
+	 #inputrow, #actionmenu, #actionmenu2,.topmenu,.lastreq,.corpolastreq,.cht_inp_hold_outer
+	 {
+		 display: none;
+	 }
+	 #gamescreen, .chat_msg_history
+	 {
+		 display: inline;
+		 height: auto;
+		 overflow-y: hidden;
+	 }
+ }
+ .aesthetic_viewport_height
+ {
+	 height: calc(98vh - 160px);
+ }
+ .aesthetic_viewport_height.withmenu
+ {
+	 height: calc(98vh - 198px);
+ }
+ .aesthetic_viewport_height.withtyping
+ {
+	 height: calc(98vh - 210px);
+ }
+ .aesthetic_viewport_height.withmenu.withtyping
+ {
+	 height: calc(98vh - 248px);
+ }
+
+ /* Top nav menu */
+ #connectstatusdiv {
+	 text-align: center;
+	 font-size: 14px;
+	 font-weight: bold;
+	 display: flex;
+	 flex-direction: column;
+	 justify-content: center;
+	 align-items: center;
+	 width: 100px;
+	 color:#cccccc
+ }
+ .topmenu {
+	 background-color: #757575;
+	 padding: 8px;
+	 display: flex;
+	 line-height: normal;
+ }
+ body.connected .topmenu {
+	 background-color: #337ab7;
+ }
+ .nav-link {
+	 color: #f2f2f2;
+	 font-weight: bold;
+	 margin-right: 5px;
+	 background-color: #828282;
+	 border-radius: 5px;
+ }
+ body.connected .nav-link{
+	 color: #f2f2f2;
+	 background-color: #4787be;
+ }
+ body.connected .nav-link:hover {
+	 background-color: #4db4ea;
+ }
+ body.connected .nav-link:focus {
+	 background-color: #98bcdb;
+ }
+ .navtoggler {
+	 background-color: #337ab7;
+	 border: 1px solid #bababa;
+	 height: 45px;
+	 width: 60px;
+	 border-radius: 6px;
+ }
+ .navtoggler:hover {
+	 background-color: #4db4ea;
+ }
+ @media (min-width: 768px) {
+	 .navtoggler {
+		 display: none;
+	 }
+ }
+ @media (max-width: 768px) {
+	 .nav-item {
+		 margin-bottom: 3px;
+	 }
+ }
+ /* Hamburger decoration */
+ .navbar-button-bar {
+	 display: block;
+	 height: 2px;
+	 width: 42px;
+	 border: 1px solid #fff;
+	 margin: auto;
+ }
+ .navbar-button-bar+.navbar-button-bar {
+	 margin-top: 4px;
+ }
+
+ /* Buttons disabled modifier */
+ body:not(.connected) .btn-primary {
+	 background-color: #757575;
+	 border-color: #4a4a4a;
+ }
+ body:not(.connected) .btn-primary.focus,
+ body:not(.connected) .btn-primary:focus {
+	 background-color: #5c5c5c;
+	 border-color: #292929;
+ }
+ body:not(.connected) .btn-primary:hover {
+	 background-color: #5c5c5c;
+	 border-color: #4a4a4a;
+ }
+
+ /* Settings and Context menu */
+ .settinglabel {
+	 color: #ffffff;
+	 display: flex;
+	 flex-flow: wrap;
+ }
+ .settinglabel input {
+	 width: 6ch;
+	 background-color: #1a3364;
+	 outline: none;
+ }
+ .settinglabel input[type=checkbox] {
+	 width: 3ch;
+ }
+ .settinglabel.miniinput {
+	 background-color: #ffffff;
+	 color:#555;
+	 border:0px solid #ccc;
+	 border-radius: 4px;
+	 width: 100%;
+	 padding: 2px;
+ }
+ .settinglabel.miniinput:focus {
+	 color:#555;
+ }
+ .settingsmall{
+	 font-size: 10px;
+ }
+ .settingsmall.widerinput {
+	 width: 8ch;
+ }
+ .settinglabel input:focus {
+	 color: #cdf;
+ }
+ .settingsmenu {
+	 display: flex;
+	 flex-wrap: wrap;
+	 padding: 6px;
+ }
+ .settingsbody
+ {
+	 height: calc(86vh - 94px);
+	 overflow-y: auto;
+	 overflow-x: hidden;
+	 text-align: center;
+ }
+ .settingitem {
+	 width: 50%;
+	 padding-left: 6px;
+	 padding-right: 6px;
+	 padding-bottom: 5px;
+	 padding-top: 5px;
+	 display: inline-block;
+	 border-bottom: 1px solid #465d73;
+ }
+ .settingitem.wide{
+	 width: 100%;
+ }
+ .settingcell
+ {
+	 padding: 3px;
+	 width: 100%;
+ }
+ .settingsdesctxt
+ {
+	 width:100%;
+	 font-size:11px;
+	 color:#ffffff;
+	 padding:3px;
+ }
+ .settingminmax {
+	 display: grid;
+	 grid-template-columns: 50% 50%;
+ }
+ .settingminmax div {
+	 font-size: 8pt;
+	 color: #ffffff;
+ }
+ .inlinelabel {
+	 color: #ffffff;
+	 display: flex;
+	 flex-flow: wrap;
+ }
+
+ .inlinelabel input
+ {
+	 border-radius: 4px;
+	 background-color: #ffffff;
+	 color:#555;
+	 border:0px solid #ccc;
+	 margin: 4px;
+ }
+ .inlinelabel .rowitem
+ {
+	 padding: 4px;
+ }
+ .menuinput_multiline{
+	 overflow: auto;
+	 background-color: #404040;
+	 color: #ffffff;
+	 resize: vertical;
+ }
+ .menuinput_inline {
+	 background-color: #404040;
+	 color: #ffffff;
+	 resize: none;
+	 overflow: auto;
+	 display: inline;
+	 width: 100%;
+ }
+ .menutext {
+	 text-align: center;
+	 font-size: 10pt;
+	 color: #ffffff;
+	 padding-top: 10px;
+ }
+ .box-label {
+	 color: #ffffff;
+	 padding-left: 10px;
+	 padding-right: 10px;
+	 padding-bottom: 5px;
+	 padding-top: 5px;
+	 display: inline-block;
+	 font-size: 12px;
+ }
+ .context_tab_container
+ {
+	 padding:3px;
+ }
+ .settingsnav
+ {
+	 margin-top: 6px;
+	 margin-left: 6px;
+	 font-size: 12px;
+ }
+ .settingsnav>li.active>a {
+	 color: #0063ff!important;
+ }
+ .settingsnav>li>a{
+	 border-radius: 8px 8px 0 0;
+	 padding: 5px;
+	 padding-top: 6px!important;
+	 padding-bottom: 2px!important;
+	 color: #666;
+	 background-color: #b1b1b1;
+ }
+
+
+ /* Save menu */
+ .saveloadpopup {
+	 width: 660px;
+	 background-color: #263040;
+	 margin-top: 120px;
+ }
+ @media (max-width: 768px) {
+	 .saveloadpopup {
+		 width: 100%;
+		 background-color: #263040;
+		 margin-top: 120px;
+	 }
+ }
+ .saveloadgrid
+ {
+	 height: auto;
+	 overflow-y: auto;
+	 margin-top: 4px;
+	 padding: 4px;
+	 display: grid;
+	 gap: 2px;
+	 font-size: 12px;
+ }
+ @media (max-width: 340px) {
+	 .saveloadgrid {
+		 font-size: 8px;
+	 }
+ }
+ .btnicon-save
+ {
+	 width: 16px;
+	 height: 16px;
+	 content:var(--img_save);
+ }
+ .btnicon-load
+ {
+	 width: 16px;
+	 height: 16px;
+	 content:var(--img_load);
+ }
+ .btnicon-delete
+ {
+	 width: 16px;
+	 height: 16px;
+	 content:var(--img_delete);
+ }
+ .btnicon-download
+ {
+	 width: 16px;
+	 height: 16px;
+	 content:var(--img_download);
+ }
+ .btnicon-websearch, .btnicon-websearch:active, .btnicon-websearch:hover, .btnicon-websearch:focus, .btnicon-websearch:active:focus
+ {
+	 background-size: 80% 80%;
+	 background-position: center;
+	 background-repeat: no-repeat;
+	 background-image: var(--img_websearch);
+	 background-color: #15a0ad;
+ }
+ .btnicon-websearch.inactive, .btnicon-websearch.inactive:active, .btnicon-websearch.inactive:hover, .btnicon-websearch.inactive:focus, .btnicon-websearch.inactive:active:focus
+ {
+	 background-color: #6a6a6a;
+ }
+
+ /* Help tooltips */
+ .helpicon {
+	 display: inline-block;
+	 font-family: sans-serif;
+	 font-weight: bold;
+	 text-align: center;
+	 width: 2.2ex;
+	 height: 2.4ex;
+	 font-size: 1.4ex;
+	 line-height: 1.8ex;
+	 border-radius: 1.2ex;
+	 margin-right: 4px;
+	 margin-left: 1px;
+	 padding: 1px;
+	 color: #295071;
+	 background: #ffffff;
+	 border: 1px solid white;
+	 text-decoration: none;
+ }
+ .helpicon:hover {
+	 cursor: pointer;
+ }
+ .helpicon:hover .helptext {
+	 display: inline-block;
+	 width: 260px;
+	 background-color: #1f2931;
+	 color: #ffffff;
+	 font-size: 10pt;
+	 font-weight: normal;
+	 line-height: normal;
+	 border-radius: 6px;
+	 padding: 10px;
+	 margin-left: 10px;
+	 border: 1px solid #337ab7;
+ }
+ @media (max-width: 680px) {
+	 .helpicon:hover .helptext {
+		 margin: 0 0 auto;
+		 position: fixed;
+		 top: 20%;
+		 left: 50%;
+		 transform: translate(-50%, -50%);
+	 }
+ }
+ .helptext {
+	 display: none;
+	 font-family: sans-serif;
+	 position: absolute;
+	 z-index: 1;
+	 text-shadow: none !important;
+ }
+
+ /* Classic UI Main Text */
+ #gamescreen {
+	 overflow-x: hidden;
+	 display: flex;
+	 vertical-align: bottom;
+	 color: #ffffff;
+	 font-size: 12pt;
+	 font-family: "Helvetica";
+ }
+ #gamescreen span {
+	 align-self: flex-end;
+ }
+ #gametext {
+	 max-height: 100%;
+	 width: 100%;
+	 word-wrap: break-word;
+	 padding: 10px;
+	 overflow-y: auto;
+	 white-space: pre-wrap;
+ }
+ #gametext, chunk, chunk * {
+	 outline: 0px solid transparent;
+ }
+ #gametext img {
+	 max-width: 100%;
+	 height: auto;
+ }
+ .txtchunk{
+	 white-space: pre-wrap;
+ }
+ .lastreq
+ {
+	 font-size:9pt;
+	 padding-top: 2px;
+	 text-shadow: 1px 1px 1px #000000;
+ }
+
+ /* Horizontal action bar */
+ #actionmenuitems button,#actionmenuitems2 button {
+	 width: 78px;
+ }
+ #actionmenuitems button.slim,#actionmenuitems2 button.slim {
+	 width: 38px;
+ }
+ @media (max-width: 666px) {
+	 #actionmenuitems button,#actionmenuitems2 button {
+		 width: 60px;
+		 padding: 4px 4px;
+		 font-size: 12px;
+	 }
+	 #actionmenuitems button.slim,#actionmenuitems2 button.slim {
+		 width: 30px;
+		 padding: 4px 4px;
+		 font-size: 12px;
+	 }
+ }
+ .borderbox {
+	 border-radius: 5px;
+	 border: 1px solid #646464;
+	 padding: 4px;
+	 background: #373737;
+ }
+
+ /* Classic UI bottom rows */
+ #inputrow {
+	 margin-top: 10px;
+	 padding: 0px;
+	 width: 100%;
+	 display: flex;
+ }
+ #inputrow > :nth-child(1) {
+	 flex: 0 0 0%; /* Effectively hides the first column */
+ }
+ #inputrow > :nth-child(2) {
+	 flex: 1; /* Flexible, takes up remaining space */
+ }
+ #inputrow > :nth-child(3) {
+	 flex: 0 0 64px; /* Fixed width for the third column */
+ }
+ #inputrow.show_mode > :nth-child(1) {
+	 flex: 0 0 50px; /* Fixed width for the first column */
+ }
+ #inputrow.show_mode > :nth-child(2) {
+	 flex: 1; /* Flexible, takes up remaining space */
+ }
+ #inputrow.show_mode > :nth-child(3) {
+	 flex: 0 0 64px; /* Fixed width for the third column */
+ }
+ .input_action
+ {
+	 content:var(--img_sword);
+ }
+ .input_story
+ {
+	 content:var(--img_paper);
+ }
+ .input_dice
+ {
+	 content:var(--img_dice);
+ }
+ .input_chat
+ {
+	 content:var(--img_chat);
+ }
+ #btnmode_chat, #btnmode_adventure {
+	 width: 100%;
+	 height: 100%;
+	 overflow: auto;
+	 overflow-x: hidden;
+ }
+ #btnsend {
+	 width: 100%;
+	 height: 100%;
+	 font-size: 11px;
+	 font-weight: bold;
+	 padding: 6px;
+ }
+ #btnsend.wait {
+	 background-color: #6c6c6e;
+ }
+ #btnsend.wait:hover {
+	 background-color: #98989a;
+ }
+ .showmicbig{
+	 width: 32px;
+	 height: 32px;
+	 margin:auto;
+	 background-repeat: no-repeat !important;
+	 background-position: center !important;
+	 background-image: var(--img_mic) !important;
+ }
+ .showmiclivebig{
+	 width: 32px;
+	 height: 32px;
+	 margin:auto;
+	 background-repeat: no-repeat !important;
+	 background-position: center !important;
+	 background-image: var(--img_mic_live) !important;
+ }
+ .showmicoffbig{
+	 width: 32px;
+	 height: 32px;
+	 margin:auto;
+	 background-repeat: no-repeat !important;
+	 background-position: center !important;
+	 background-image: var(--img_mic_off) !important;
+ }
+ .token-budget {
+	 right: 20px;
+	 bottom: 3px;
+	 color: gray;
+	 position: absolute;
+	 font-size: 8px;
+	 -webkit-user-select: none;
+	 -moz-user-select: none;
+	 -ms-user-select: none;
+	 user-select: none;
+ }
+
+
+ /* Popup dialogs */
+ .workerpopup {
+	 background-color: #263040;
+	 margin-top: 100px;
+ }
+ @media (max-width: 768px) {
+	 .workerpopup {
+		 width: 100%;
+		 background-color: #263040;
+		 margin-top: 100px;
+	 }
+ }
+ .nspopup {
+	 background-color: #263040;
+	 margin-top: 200px;
+ }
+ .nspopup.moderate {
+	 margin-top: 170px;
+ }
+ .nspopup.higher {
+	 margin-top: 120px;
+ }
+ .nspopup.evenhigher {
+	 margin-top: 70px;
+ }
+ .nspopup.highest {
+	 margin-top: 40px;
+ }
+ .nspopup.fixsize {
+	 width: 330px;
+ }
+ .nspopup.sidepanelsize {
+	 width: 330px!important;
+	 margin-top: 0px!important;
+ }
+ @media (max-width: 960px) {
+	 .nspopup.sidepanelsize {
+		 width: 33vw!important;
+		 margin-top: 0px!important;
+	 }
+ }
+ .nspopup.flexsize {
+	 width: 600px;
+ }
+ @media (max-width: 620px) {
+	 .nspopup.flexsize {
+	 width: 100%;
+	 }
+ }
+ .nspopup.flexsizesmall {
+	 width: 440px;
+ }
+ @media (max-width: 520px) {
+	 .nspopup.flexsizesmall {
+	 width: 100%;
+	 }
+ }
+ .nspopup.flexsizevsmall {
+	 width: 380px;
+ }
+ @media (max-width: 400px) {
+	 .nspopup.flexsizevsmall {
+	 width: 100%;
+	 }
+ }
+ .nspopup.flexsizebig {
+	 width: 940px;
+ }
+ @media (max-width: 992px) {
+	 .nspopup.flexsizebig {
+	 width: 740px;
+	 }
+ }
+ @media (max-width: 750px) {
+	 .nspopup.flexsizebig {
+	 width: 100%;
+	 }
+ }
+ .msgboxtxt
+ {
+	 max-height: 320px;
+	 overflow-y: auto;
+	 overflow-wrap: break-word;
+ }
+ .popupcontainer{
+	 position: absolute;
+	 top: 0px;
+	 left: 0px;
+	 z-index: 3;
+	 width: 100%;
+	 height: 100%;
+	 flex-direction: column;
+	 align-items: center;
+ }
+ .popupcontainer.side{
+	 width: unset;
+ }
+ .popupcontainer.sideright{
+	 width: unset;
+	 left:unset;
+	 right:0px;
+ }
+ .popupbg {
+	 position: fixed;
+	 top: 0;
+	 bottom: 0;
+	 left: 0;
+	 right: 0;
+	 z-index: -1;
+	 background-color: rgba(0, 0, 0, 0.5);
+	 flex-direction: column;
+	 align-items: center;
+ }
+ .popuptitlebar {
+	 padding: 10px;
+	 background-color: #757575;
+ }
+ body.connected .popuptitlebar {
+	 background-color: #337ab7;
+ }
+ .popuptitletext {
+	 display: flex;
+	 align-items: center;
+	 color: #ffffff;
+	 font-size: 12pt;
+ }
+ .popupfooter {
+	 width: 100%;
+	 padding: 10px;
+	 display: flex;
+	 justify-content: center;
+	 background-color: #4d4d4d;
+ }
+ body.connected .popupfooter{
+	 background-color: #295071;
+ }
+ .popupfooter button {
+	 width: 100px;
+	 margin-left: 10px;
+	 margin-right: 10px;
+ }
+
+ /* World info table */
+ .widelbtn
+ {
+	 font-size: 12px;
+	 height: 24px;
+	 padding: 5px;
+	 margin: 2px;
+	 font-weight: bolder;
+ }
+ .wiarrowbtn
+ {
+	 font-size: 12px;
+	 height: 18px;
+	 padding: 2px;
+	 margin: 0px 1px 0px 1px;
+	 font-weight: bolder;
+ }
+ .wiinputkeycol
+ {
+	 min-width: 70px;
+	 width: 15%;
+ }
+ .wiinputkey
+ {
+	 font-size: 14px;
+	 height: 24px;
+	 padding: 2px;
+	 margin: 0px;
+ }
+ .wiinputvalcol
+ {
+	 width: 85%;
+ }
+ .wiinputval
+ {
+	 font-size: 14px;
+	 height: 24px;
+	 padding: 2px;
+	 margin: 0px;
+	 resize: vertical;
+ }
+ .wilist
+ {
+	 background-color: #434343;
+	 overflow-y: auto;
+	 max-height: 320px;
+	 min-height: 60px;
+ }
+ .witoggleroff,.witoggleroff:hover,.witoggleroff:focus
+ {
+	 color: transparent;
+	 text-shadow: 0 0 0 gray;
+	 text-decoration:none;
+ }
+ .witoggleron,.witoggleron:hover,.witoggleron:focus
+ {
+	 color: transparent;
+	 text-shadow: 0 0 0 #0cdb0c;
+	 text-decoration:none;
+ }
+
+ /* Worker table */
+ .workerTableDiv,.shareStory{
+	 max-height: 420px;
+	 overflow-y: auto;
+	 overflow-x: hidden;
+ }
+ .workerTable{
+	 color: #ffffff;
+	 font-size: min(1.4vw,14px);
+ }
+ .workerTable>tbody>tr>td{
+	 padding: min(0.4vw, 5px);
+ }
+
+ /* Logprobs table */
+ .logprobstable
+ {
+	 font-size: 11px;
+	 width: 100%;
+	 border-spacing: 2px;
+ }
+ .logprobstable table, th, td {
+	 border: 2px solid #5d5d5d;
+ }
+ .logprobstable>tbody>tr>td
+ {
+	 width: 16.4%;
+ }
+ .tablelines
+ {
+	 border: 1px solid;
+ }
+
+ /* Scenario menu */
+ .scenariopopup {
+	 width: 600px;
+	 background-color: #263040;
+	 margin-top: 60px;
+ }
+
+ @media (max-width: 768px) {
+	 .scenariopopup {
+		 width: 100%;
+		 background-color: #263040;
+		 margin-top: 70px;
+	 }
+ }
+ .scenariosearch
+ {
+	 margin-top: 8px;
+	 margin-left: 8px;
+	 width: calc(100% - 16px);
+	 padding: 4px;
+ }
+ .scenariosearchbox1
+ {
+	 display: inline;
+	 width: calc(100% - 100px);
+ }
+ .scenariosearchbox2
+ {
+	 display: inline;
+	 width: 94px;
+	 padding: 6px 3px;
+ }
+ .scenariogrid
+ {
+	 height: 225px;
+	 overflow-y: auto;
+	 margin-top: 4px;
+	 padding: 8px;
+	 display: grid;
+	 gap: 8px;
+	 grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+	 grid-auto-rows: 55px;
+ }
+ .scenariodesc
+ {
+	 padding: 4px 12px;
+	 width: 100%;
+	 height: 160px;
+	 color: #b7e2ff;
+	 overflow-y: auto;
+ }
+ .scenarioitem
+ {
+	 font-size: 14px;
+	 color: white;
+	 font-weight: 500;
+	 font-family: 'Segoe UI', Tahoma;
+	 background-repeat: no-repeat;
+	 background-position: top 4px left 4px, center;
+	 background-size: 24px, 100%;
+	 padding: 2px 2px;
+ }
+ .scenarioitem.blue
+ {
+	 background-image: var(--img_paper),linear-gradient(to right, #63aae7, #337ab7);
+ }
+ .scenarioitem.blue:hover
+ {
+	 background-image: var(--img_paper),linear-gradient(to right, #7ebbf0, #438ac7);
+ }
+ .scenarioitem.blue:focus
+ {
+	 background-image: var(--img_paper),linear-gradient(to right, #4c7aa3, #4c7aa3);
+ }
+ .scenarioitem.green
+ {
+	 background-image: var(--img_sword),linear-gradient(to right, #58db6e, #2ba04e);
+ }
+ .scenarioitem.green:hover
+ {
+	 background-image: var(--img_sword),linear-gradient(to right, #68e47d, #37b85e);
+ }
+ .scenarioitem.green:focus
+ {
+	 background-image: var(--img_sword),linear-gradient(to right, #53a34c, #4ca353);
+ }
+ .scenarioitem.red
+ {
+	 background-image: var(--img_chat),linear-gradient(to right, #e76363, #b73333);
+ }
+ .scenarioitem.red:hover
+ {
+	 background-image: var(--img_chat),linear-gradient(to right, #f07e7e, #c74343);
+ }
+ .scenarioitem.red:focus
+ {
+	 background-image: var(--img_chat),linear-gradient(to right, #a34c4c, #a34c4c);
+ }
+ .scenarioitem.purple
+ {
+	 background-image: none,linear-gradient(to right, #dc63e7, #ac33b7);
+ }
+ .scenarioitem.purple:hover
+ {
+	 background-image: none,linear-gradient(to right, #f07ee6, #c743c7);
+ }
+ .scenarioitem.purple:focus
+ {
+	 background-image: none,linear-gradient(to right, #a34c9c, #a34ca3);
+ }
+ .scenarioitem.yellow
+ {
+	 background-image: var(--img_compass),linear-gradient(to right, #daae5d, #ad8823);
+ }
+ .scenarioitem.yellow:hover
+ {
+	 background-image: var(--img_compass),linear-gradient(to right, #e0c56e, #bba632);
+ }
+ .scenarioitem.yellow:focus
+ {
+	 background-image: var(--img_compass),linear-gradient(to right, #a38c4c, #a38c4c);
+ }
+
+ /* Welcome splash */
+ .welcome-theme-selector {
+	 display: flex;
+	 justify-content: center;
+	 align-items: center;
+	 gap: 16px;
+ }
+ .welcome-theme-option {
+	 border: 2px solid #666666;
+	 padding: 8px;
+	 border-radius: 6px;
+	 cursor: pointer;
+ }
+ .welcome-theme-option:hover {
+	 border-color: #eeeeee;
+ }
+ .welcome-theme-image {
+	 display: block;
+	 width: min(23vw, 150px);
+	 height: min(23vw, 150px);
+	 margin-bottom: 8px;
+ }
+ .welcomeimg1
+ {
+	 content:var(--img_theme_1);
+ }
+ .welcomeimg2
+ {
+	 content:var(--img_theme_2);
+ }
+ .welcomeimg3
+ {
+	 content:var(--img_theme_3);
+ }
+
+ /* Spinning load circle for requests */
+ .outerloader {
+	 display: flex;
+	 margin: auto;
+	 align-items: center;
+	 justify-content: center;
+ }
+ .outerloadernum
+ {
+	 position: absolute;
+	 color:white;
+	 font-size: 11px;
+ }
+ .innerloader {
+	 width: 32px;
+	 height: 32px;
+	 border: 5px solid #f3f3f3;
+	 border-top: 5px solid #3498db;
+	 border-radius: 50%;
+	 animation: spin 4s linear infinite;
+ }
+ .innerloader.greenloader
+ {
+	 border-top: 5px solid #0dcc2d;
+ }
+ .innerloader.redloader
+ {
+	 border-top: 5px solid #f7610a;
+ }
+
+ /* Spinning load circle for images and inline images */
+ .imgloader
+ {
+	 border: 5px solid #8a8686;
+	 border-top: 5px solid peru;
+	 border-radius: 50%;
+	 width: 32px;
+	 height: 32px;
+	 display: flex;
+	 margin: auto;
+	 align-items: center;
+	 justify-content: center;
+	 animation: spin 4s linear infinite;
+
+	 top: 0;
+	 bottom: 0;
+	 left: 0;
+	 right: 0;
+	 position: absolute;
+	 margin: auto;
+ }
+ .imagelabel
+ {
+	 bottom: 20%;
+	 left: 0;
+	 right: 0;
+	 position: absolute;
+	 margin: auto;
+	 text-align: center;
+	 color:peru;
+	 font-weight: bold;
+ }
+ .storyimgfloat
+ {
+	 width: fit-content;
+	 float: right;
+	 position: relative;
+	 padding: 4px;
+	 clear: both;
+ }
+ .storyimgside
+ {
+	 display: inline-block;
+	 width: fit-content;
+	 text-align: center;
+	 position: relative;
+	 padding: 4px;
+	 margin: 0 auto;
+ }
+ .storyimgcenter
+ {
+	 width: fit-content;
+	 text-align: center;
+	 position: relative;
+	 padding: 4px;
+	 margin: 0 auto;
+ }
+
+ /* Clicked in image preview window */
+ .zoomedimgdiv
+ {
+	 text-align: center;
+	 position: relative;
+	 margin: 0 auto;
+	 padding-top: 6px;
+	 padding-bottom: 4px;
+ }
+ .zoomedimgdesc{
+	 max-height: 120px;
+	 overflow-y: auto;
+	 overflow-x: hidden;
+	 font-size: 12px;
+ }
+ .zoomedimg
+ {
+	 border-radius: 6%;
+	 width:462px;
+	 height:462px;
+ }
+ .zoomedimg.portrait
+ {
+	 width:308px;
+	 height:462px;
+ }
+ .zoomedimg.portrait_long
+ {
+	 width:231px;
+	 height:462px;
+ }
+ .zoomedimg.landscape
+ {
+	 width:462px;
+	 height:308px;
+ }
+ .zoomedimg.landscape_long
+ {
+	 width:462px;
+	 height:231px;
+ }
+ @media (max-width: 620px) {
+	 .zoomedimg {
+		 width:min(96vw, 420px);
+		 height:min(96vw, 420px);
+	 }
+	 .zoomedimg.portrait
+	 {
+		 width:min(64vw, 280px);
+		 height:min(96vw, 420px);
+	 }
+	 .zoomedimg.landscape
+	 {
+		 width:min(96vw, 420px);
+		 height:min(64vw, 280px);
+	 }
+	 .zoomedimg.portrait_long
+	 {
+		 width:min(48vw, 210px);
+		 height:min(96vw, 420px);
+	 }
+	 .zoomedimg.landscape_long
+	 {
+		 width:min(96vw, 420px);
+		 height:min(48vw, 210px);
+	 }
+ }
+
+ /* Spinning circle animation */
+ @keyframes spin {
+	 0% {
+		 transform: rotate(0deg);
+	 }
+	 12.4% {
+		 transform: rotate(0deg);
+	 }
+	 12.5% {
+		 transform: rotate(45deg);
+	 }
+	 24.9% {
+		 transform: rotate(45deg);
+	 }
+	 25% {
+		 transform: rotate(90deg);
+	 }
+	 37.4% {
+		 transform: rotate(90deg);
+	 }
+	 37.5% {
+		 transform: rotate(135deg);
+	 }
+	 49.9% {
+		 transform: rotate(135deg);
+	 }
+	 50% {
+		 transform: rotate(180deg);
+	 }
+	 62.4% {
+		 transform: rotate(180deg);
+	 }
+	 62.5% {
+		 transform: rotate(225deg);
+	 }
+	 74.9% {
+		 transform: rotate(225deg);
+	 }
+	 75% {
+		 transform: rotate(270deg);
+	 }
+	 87.4% {
+		 transform: rotate(270deg);
+	 }
+	 87.5% {
+		 transform: rotate(315deg);
+	 }
+	 99.9% {
+		 transform: rotate(315deg);
+	 }
+	 100% {
+		 transform: rotate(360deg);
+	 }
+ }
+
+ /* no custom scrollbars on mobile */
+ @media screen and (hover: hover) and (any-pointer: fine)
+ {
+	 ::-webkit-scrollbar {
+	 width: 8px;
+	 }
+	 ::-webkit-scrollbar-track {
+	 background: transparent;
+	 }
+	 ::-webkit-scrollbar-thumb {
+	 background-color: #9191915e;
+	 border-radius: 10px;
+	 border: transparent;
+	 }
+	 ::-webkit-scrollbar-thumb:hover {
+	 background: #9494948a;
+	 }
+ }
+
+ /* Background images */
+ .gamescreenbgnormal
+ {
+	 background-color: #262626;
+ }
+ .translucentbg
+ {
+	 background-color: #00000066;
+ }
+ .transparentbg
+ {
+	 background-color: #00000000 !important;
+ }
+
+ /* Messenger UI */
+ .chat_received_msg {
+	 display: inline-block;
+	 padding: 0 0 0 10px;
+	 vertical-align: top;
+	 width: 92%;
+ }
+
+ .chat_received_withd_msg p {
+	 font-size: 14px;
+	 margin: 0;
+	 padding: 5px 10px 5px 12px;
+	 width: 100%;
+	 white-space: pre-wrap;
+ }
+
+ .chat_received_withd_msg {
+	 width: 75%;
+	 background: #1d282f none repeat scroll 0 0;
+	 border-radius: 0 15px 15px 15px;
+	 color: #dde6e7;
+	 overflow:auto;
+ }
+ .chat_mesgs{
+	 width:100%;
+	 background: #0b141a;
+ }
+ .chat_mesgs_inner{
+	 padding: 12px 20px 12px 20px;
+ }
+ .chat_sent_msg p {
+	 font-size: 14px;
+	 margin: 0;
+	 color: #dde6e7;
+	 padding: 5px 10px 5px 12px;
+	 width: 100%;
+	 white-space: pre-wrap;
+ }
+ .chat_sent_msg {
+	 float: right;
+	 width: 75%;
+	 overflow:auto;
+	 background:#005c4b;
+	 border-radius: 12px 15px 0px 15px;
+ }
+ .chat_outgoing_msg {
+	 overflow: hidden;
+	 margin: 8px 0 8px;
+ }
+ .incoming_msg
+ {
+	 margin: 8px 0 8px;
+ }
+ .cht_inp_bg
+ {
+	 display: inline-block;
+	 width: calc(100% - 84px);
+	 background: #222222aa none repeat scroll 0 0;
+	 margin-top: 8px;
+	 margin-left: 2px;
+	 border-radius: 16px;
+	 padding-left: 10px;
+	 padding-right: 10px;
+	 padding-top: 7px;
+	 border: 1px solid #bbbbbbaa;
+ }
+ .cht_inp_bg_inner
+ {
+	 width: 100%;
+	 resize: none;
+	 overflow-x:hidden;
+	 background: #00000000 none repeat scroll 0 0;
+	 border: medium none;
+	 color: #bebebe;
+	 font-size: 15px;
+	 outline:none;
+ }
+ .cht_inp_bg.shorter
+ {
+	 width: calc(100% - 114px);
+ }
+ .cht_inp_hold_outer {
+	 border-top: 1px solid #c4c4c4;
+	 position: relative;
+ }
+ .chat_btnmode_chat {
+	 background: #143574 none repeat scroll 0 0;
+	 border:none;
+	 border-radius: 50%;
+	 color: #fff;
+	 cursor: pointer;
+	 font-size: 15px;
+	 height: 33px;
+	 position: relative;
+	 vertical-align: top;
+	 top: 11px;
+	 width: 33px;
+	 background-size: 50% !important;
+	 background-repeat: no-repeat !important;
+	 background-position: center !important;
+	 background-image: var(--img_chat) !important;
+ }
+ .chat_btnmode_adventure{
+	 background: #3263be none repeat scroll 0 0;
+	 border:none;
+	 border-radius: 50%;
+	 color: #fff;
+	 cursor: pointer;
+	 font-size: 15px;
+	 height: 33px;
+	 position: relative;
+	 vertical-align: top;
+	 top: 11px;
+	 width: 33px;
+	 background-size: 50% !important;
+	 background-repeat: no-repeat !important;
+	 background-position: center !important;
+ }
+ .chat_btnmode_adventure.storymode
+ {
+	 background-image: var(--img_paper) !important;
+ }
+ .chat_btnmode_adventure.actionmode
+ {
+	 background-image: var(--img_sword) !important;
+ }
+ .chat_btnmode_adventure.dicemode
+ {
+	 background-image: var(--img_dice) !important;
+ }
+ .chat_msg_send_btn {
+	 background: #337ab7 none repeat scroll 0 0;
+	 border:none;
+	 border-radius: 50%;
+	 color: #fff;
+	 cursor: pointer;
+	 font-size: 15px;
+	 height: 33px;
+	 position: absolute;
+	 right: 40px;
+	 top: 11px;
+	 width: 33px;
+	 background-size: 50% !important;
+	 background-repeat: no-repeat !important;
+	 background-position: center !important;
+	 background-image: var(--img_chat_send_btn) !important;
+ }
+ .chat_msg_send_btn:hover {
+	 background: #3f94df none repeat scroll 0 0;
+ }
+ .chat_msg_send_btn:disabled {
+	 background: #838383 none repeat scroll 0 0;
+ }
+ .chat_msg_send_btn.showmic{
+	 background-image: var(--img_mic) !important;
+ }
+ .chat_msg_send_btn.showmiclive{
+	 background-image: var(--img_mic_live) !important;
+ }
+ .chat_msg_send_btn.showmicoff{
+	 background-image: var(--img_mic_off) !important;
+ }
+ .chat_msg_send_btn_abort {
+	 background: #b73333 none repeat scroll 0 0;
+	 border:none;
+	 border-radius: 50%;
+	 color: #fff;
+	 cursor: pointer;
+	 font-size: 15px;
+	 height: 33px;
+	 position: absolute;
+	 right: 40px;
+	 top: 11px;
+	 width: 33px;
+	 background-size: 50% !important;
+	 background-repeat: no-repeat !important;
+	 background-position: center !important;
+	 background-image: var(--img_chat_abort_btn) !important;
+ }
+ .chat_msg_send_btn_abort:hover {
+	 background: #df3f3f none repeat scroll 0 0;
+ }
+ .chat_msg_send_btn_abort:disabled {
+	 background: #838383 none repeat scroll 0 0;
+ }
+ .chat_msg_cust_btn {
+	 background: #169c7b none repeat scroll 0 0;
+	 border:none;
+	 border-radius: 50%;
+	 color: #fff;
+	 cursor: pointer;
+	 font-size: 15px;
+	 height: 33px;
+	 position: absolute;
+	 right: 0;
+	 top: 11px;
+	 width: 33px;
+	 background-size: 64% !important;
+	 background-repeat: no-repeat !important;
+	 background-position: center !important;
+	 background-image: var(--img_chat_cust_btn) !important ;
+
+ }
+ .chat_msg_cust_btn:hover {
+	 background: #18b991 none repeat scroll 0 0;
+ }
+ .chat_msg_cust_btn:disabled {
+	 background: #838383 none repeat scroll 0 0;
+ }
+ .chat_msg_history {
+	 overflow-y: auto;
+ }
+ .chat_msg_history img {
+	 max-width: 100%;
+	 height: auto;
+ }
+
+ /* Chat typing effect with flashing dots */
+ .dot-flashing {
+	 position: relative;
+	 left: -15px;
+	 width: 8px;
+	 height: 8px;
+	 border-radius: 5px;
+	 background-color: #9e9e9e;
+	 color: #9e9e9e;
+	 animation: dot-flashing 1s infinite linear alternate;
+	 animation-delay: 0.5s;
+ }
+ .dot-flashing::before, .dot-flashing::after {
+	 content: "";
+	 display: inline-block;
+	 position: absolute;
+	 top: 0;
+ }
+ .dot-flashing::before {
+	 left: -15px;
+	 width: 8px;
+	 height: 8px;
+	 border-radius: 5px;
+	 background-color: #9e9e9e;
+	 color: #9e9e9e;
+	 animation: dot-flashing 1s infinite alternate;
+	 animation-delay: 0s;
+ }
+ .dot-flashing::after {
+	 left: 15px;
+	 width: 8px;
+	 height: 8px;
+	 border-radius: 5px;
+	 background-color: #9e9e9e;
+	 color: #9e9e9e;
+	 animation: dot-flashing 1s infinite alternate;
+	 animation-delay: 1s;
+ }
+ @keyframes dot-flashing {
+	 0% {
+		 background-color: #9e9e9e;
+	 }
+	 29.9% {
+		 background-color: #9e9e9e;
+	 }
+	 30%, 100% {
+		 background-color: #9e9e9e33;
+	 }
+ }
+
+ /* Aesthetic UI */
+ .ui-settings-inline { font-size: 12px; display:flex; flex-direction: row; }
+ .instruct-settings-input { margin: 0px 2px; font-size:10px; }
+ .instruct-settings-input input { width:40px; height:20px; }
+ #code-block-background-colorselector, #code-block-foreground-colorselector { text-align: center; margin: 0px 5px; }
+ #you-text-colorselector, #you-speech-colorselector, #you-action-colorselector, #AI-text-colorselector, #AI-speech-colorselector, #AI-action-colorselector, #sys-text-colorselector, #sys-speech-colorselector, #sys-action-colorselector { text-align: center; margin: 0px 5px; }
+ #you-bubble-colorselector, #AI-bubble-colorselector, #sys-bubble-colorselector, #you-portrait, #AI-portrait { text-align: center; margin: 0px 10px; border-radius: 1rem; padding: 1px 6px; }
+ @media screen and (max-width: 880px) {
+	 #aesthetic_text_preview_panel { display: none; }
+ }
+ .aui_nametag
+ {
+	 margin: 0 0 3px;
+	 font-weight: bold;
+ }
+
+ /* Corpo UI */
+ .corpostyle
+ {
+	 background-color: #ffffff;
+	 overflow-x: hidden;
+	 max-height: 100%;
+	 width: 100%;
+	 word-wrap: break-word;
+	 font-size: 18px;
+	 font-family: Inter, sans-serif;
+	 tab-size: 4;
+	 line-height: 32px;
+	 color: rgb(55, 65, 81);
+	 display: flex;
+ }
+ @media (max-width: 400px)
+ {
+	 .corpostyle
+	 {
+		 font-size: 16px;
+		 line-height: 26px;
+	 }
+	 .corpostyleinner
+	 {
+		 padding-left: 6px;
+		 padding-right: 6px;
+		 margin-top: 0px;
+	 }
+	 .corpostyleitem
+	 {
+		 padding-left: 6px;
+		 padding-right: 6px;
+		 padding-top: 8px;
+		 padding-bottom: 8px;
+	 }
+ }
+ body.darkmode .corpostyle {
+	 background-color: #222222;
+	 color: #ececec;
+ }
+ .corpo_edit_outer
+ {
+	 display: inline-block;
+	 background: #f4f4f4aa none repeat scroll 0 0;
+	 margin-top: 6px;
+	 margin-bottom: 6px;
+	 border-radius: 16px;
+	 padding-left: 12px;
+	 padding-right: 12px;
+	 padding-top: 8px;
+	 width:100%;
+	 border: 1px solid #bbbbbbaa;
+	 position: relative;
+ }
+ .corpo_edit_inner
+ {
+	 width: 100%;
+	 resize: none;
+	 overflow-x:hidden;
+	 background: #00000000 none repeat scroll 0 0;
+	 border: medium none;
+	 color: #0d0d0d;
+	 font-size: 20px;
+	 font-weight: 400;
+	 outline:none;
+	 line-height: 28px;
+ }
+ .corpo_chat_outer
+ {
+	 width: calc(100% - 24px);
+	 max-width: 860px;
+	 background: #f4f4f4aa none repeat scroll 0 0;
+	 margin-top: 6px;
+	 margin-bottom: 4px;
+	 margin-left: auto;
+	 margin-right: auto;
+	 border-radius: 16px;
+	 padding-left: 52px;
+	 padding-right: 52px;
+	 padding-top: 8px;
+	 border: 1px solid #bbbbbbaa;
+	 position: relative;
+ }
+ body.darkmode .corpo_chat_outer
+ {
+	 background: #3b3b3baa none repeat scroll 0 0;
+ }
+ .corpo_chat_inner
+ {
+	 width: 100%;
+	 resize: none;
+	 overflow-x:hidden;
+	 background: #00000000 none repeat scroll 0 0;
+	 border: medium none;
+	 color: #0d0d0d;
+	 font-size: 20px;
+	 font-weight: 400;
+	 outline:none;
+	 line-height: 28px;
+ }
+ body.darkmode .corpo_chat_inner
+ {
+	 color: #dddddd;
+ }
+ .corpo_chat_img_btn
+ {
+	 background: #000000 none repeat scroll 0 0;
+	 border:none;
+	 border-radius: 50%;
+	 color: #fff;
+	 cursor: pointer;
+	 font-size: 15px;
+	 height: 33px;
+	 position: absolute;
+	 left: 12px;
+	 bottom: 10px;
+	 width: 33px;
+	 background-size: 50% !important;
+	 background-repeat: no-repeat !important;
+	 background-position: center !important;
+	 background-image: var(--img_corpo_clip) !important;
+ }
+ .corpo_chat_img_btn:hover {
+	 background: #555555 none repeat scroll 0 0;
+ }
+ .corpo_chat_img_btn:disabled {
+	 background: #838383 none repeat scroll 0 0;
+ }
+ .corpo_chat_send_btn {
+	 background: #000000 none repeat scroll 0 0;
+	 border:none;
+	 border-radius: 50%;
+	 color: #fff;
+	 cursor: pointer;
+	 font-size: 15px;
+	 height: 33px;
+	 position: absolute;
+	 right: 12px;
+	 bottom: 10px;
+	 width: 33px;
+	 background-size: 50% !important;
+	 background-repeat: no-repeat !important;
+	 background-position: center !important;
+	 background-image: var(--img_corpo_send_btn) !important;
+ }
+ .corpo_chat_send_btn:hover {
+	 background: #555555 none repeat scroll 0 0;
+ }
+ .corpo_chat_send_btn:disabled {
+	 background: #838383 none repeat scroll 0 0;
+ }
+ .corpo_chat_send_btn_abort {
+	 background: #000000 none repeat scroll 0 0;
+	 border:none;
+	 border-radius: 50%;
+	 color: #fff;
+	 cursor: pointer;
+	 font-size: 15px;
+	 height: 33px;
+	 position: absolute;
+	 right: 12px;
+	 bottom: 12px;
+	 width: 33px;
+	 background-size: 50% !important;
+	 background-repeat: no-repeat !important;
+	 background-position: center !important;
+	 background-image: var(--img_corpo_abort_btn) !important;
+ }
+ .corpo_btn_text
+ {
+	 display: inline-block;
+	 padding-top: 8px;
+	 vertical-align: top;
+	 color:#666666;
+	 font-size: 17px;
+ }
+ .corpo_hover_btn {
+	 background: #ffffff00 none repeat scroll 0 0;
+	 border:none;
+	 border-radius: 20%;
+	 cursor: pointer;
+	 height: 32px;
+	 width: 32px;
+	 background-size: 60% !important;
+	 background-repeat: no-repeat !important;
+	 background-position: center !important;
+ }
+ .corpo_hover_btn:hover {
+	 background: #eeeeee none repeat scroll 0 0;
+ }
+ body.darkmode .corpo_hover_btn:hover {
+	 background: #454545 none repeat scroll 0 0;
+ }
+ .corpoleftpanel
+ {
+	 width:256px;
+	 background-color: #e2e5e6;
+	 padding-left: 8px;
+	 padding-right: 8px;
+	 transition: transform 0.3s ease;
+	 height: calc(100vh - 68px);
+	 z-index: 1;
+ }
+ body.darkmode .corpoleftpanel
+ {
+	 background-color: #161616;
+ }
+ .corpoleftpanelitems
+ {
+	 display: flex;
+	 flex-direction: column;
+	 margin-top: 16px;
+	 padding: 2px;
+ }
+ .corpo_leftpanel_btn
+ {
+	 padding: 4px;
+	 margin: 2px;
+	 background: #f4f4f400;
+	 border:none;
+	 border-radius: 8px;
+	 cursor: pointer;
+	 font-size: 17px;
+	 background-repeat: no-repeat;
+	 background-position: 8px;
+	 background-size: 24px;
+	 overflow: hidden;
+	 text-overflow: ellipsis;
+	 display: inline-block;
+	 white-space: nowrap;
+	 user-select: none;
+ }
+ .corpo_leftpanel_btn:hover {
+	 background: #9dcef5;
+	 background-repeat: no-repeat;
+	 background-position: 8px;
+	 background-size: 24px;
+ }
+ .corpo_leftpanel_btn:active {
+	 transform: translateY(1px);
+ }
+ body.darkmode .corpo_leftpanel_btn:hover
+ {
+	 color: #76a8ee;
+	 background: #454545;
+	 background-repeat: no-repeat;
+	 background-position: 8px;
+	 background-size: 24px;
+ }
+ .corporightpanel
+ {
+	 width: 100%;
+	 height: calc(100vh - 68px);
+	 display: flex;
+	 flex-direction: column;
+	 padding-left: 2px;
+	 padding-right: 2px;
+ }
+ .corpo_leftpanel_close
+ {
+	 display: none;
+	 border: none;
+	 font-size: 28px;
+	 padding: 8px;
+	 padding-left: 0px;
+	 float: right;
+	 background-color: #00000000;
+ }
+ .corpo_leftpanel_open
+ {
+	 display: none;
+	 background: #f0f0f0;
+	 border:none;
+ }
+ .corpo_leftpanel_open:hover
+ {
+	 background: #dddddd;
+ }
+ body.darkmode .corpo_leftpanel_open
+ {
+	 background: #333333;
+ }
+ body.darkmode .corpo_leftpanel_open:hover
+ {
+	 background: #444444;
+ }
+ .corpo_arrow_right {
+	 display: inline-block;
+	 width: 0;
+	 height: 0;
+	 border-top: 16px solid transparent;
+	 border-bottom: 16px solid transparent;
+	 border-left: 10px solid #aaaaaa;
+ }
+ @media (max-width: 768px)
+ {
+	 .corpostylemain
+	 {
+		 margin-top: 0px;
+	 }
+	 .corpoleftpanel {
+		 position: fixed;
+		 left: 0;
+		 top: 0;
+		 height: 100%;
+		 transform: translateX(-100%);
+	 }
+	 .corpoleftpanel.open {
+		 transform: translateX(0);
+	 }
+	 .corpo_leftpanel_close {
+		 display: block;
+	 }
+	 .corpo_leftpanel_open {
+		 display: block;
+	 }
+ }
+ .corpowelcome
+ {
+	 font-size: 26px;
+	 font-weight: 550;
+	 display: flex;
+	 justify-content: center;
+	 align-items: center;
+	 height: 75vh;
+	 flex-direction: column;
+	 text-align: center;
+ }
+ .corpomainbtm
+ {
+	 padding-left: 2px;
+	 padding-right: 2px;
+	 margin-top: auto;
+ }
+ .corpostylemain
+ {
+	 overflow-y: auto;
+	 padding-left: 2px;
+	 padding-right: 2px;
+	 margin-top: 12px;
+ }
+ .corpostyleinner
+ {
+	 max-width: 860px;
+	 margin-left: auto;
+	 margin-right: auto;
+	 padding-left: 8px;
+	 padding-right: 8px;
+ }
+ .corpostyleitem
+ {
+	 padding-left: 10px;
+	 padding-right: 10px;
+	 padding-top: 10px;
+	 padding-bottom: 10px;
+	 display: flex;
+ }
+ .corpoavatar
+ {
+	 height:34px;
+	 width:auto;
+	 padding:4px;
+	 margin-right:6px;
+	 border-radius:50%;
+	 cursor:pointer;
+ }
+ .corpostyleitemheading
+ {
+	 color: rgb(33, 33, 33);
+	 font-weight: 600;
+ }
+ body.darkmode .corpostyleitemheading
+ {
+	 color: rgb(230,230,230);
+ }
+ .corpostyleitemcontent
+ {
+	 white-space: pre-wrap;
+ }
+ .corpostyleitemcontent img {
+	 max-width: 100%;
+	 height: auto;
+ }
+ .corpolastreq
+ {
+	 text-align:center;
+	 font-size:14px;
+	 line-height:1.1;
+	 margin:4px;
+	 margin-bottom:6px;
+	 margin-left:12px;
+ }
+
+ /* Colors */
+ .hlchunk
+ {
+	 color:#cedaf0;
+ }
+ .color_blueurl {
+	 color: #d3e7ff;
+ }
+ .color_blueurl:hover {
+	 color: #ffffff;
+ }
+ .color_blueurl:focus {
+	 color: #d3e7ff;
+ }
+ .color_orangeurl {
+	 color: #f7a223;
+ }
+ .color_orangeurl:hover {
+	 color: #ffe8d6;
+ }
+ .color_orangeurl:focus {
+	 color: #ffedd3;
+ }
+ .color_grayurl {
+	 color: #9e9e9e;
+ }
+ .color_grayurl:hover {
+	 color: #9f9f9f;
+ }
+ .color_grayurl:focus {
+	 color: #9e9e9e;
+ }
+
+ .color_orange {
+	 color: #f7a223;
+ }
+ .color_green {
+	 color: #3bf723;
+ }
+ .color_lightgreen {
+	 color: #b6ffa6;
+ }
+ .color_offwhite {
+	 color: #bedae9;
+ }
+ .color_darkgreen {
+	 color: #63975c;
+ }
+ .color_cyan {
+	 color: #7afaff;
+ }
+ .color_gray {
+	 color: #9b9b9b;
+ }
+ .color_lightgray {
+	 color: #bbbbbb;
+ }
+ .color_red {
+	 color: #ff7967;
+ }
+ .color_chat1 {
+	 color: #da6060;
+ }
+ .color_chat2 {
+	 color: #e0c158;
+ }
+ .color_chat3 {
+	 color: #53c753;
+ }
+ .color_chat4 {
+	 color: #b469ae;
+ }
+ .color_blue {
+	 color: #828eff;
+ }
+ .color_yellow {
+	 color: #f1dd21;
+ }
+ .color_pink {
+	 color: #ffbdbd;
+ }
+
+ .bg_black {
+	 background-color: #202020;
+ }
+ .bg_black:hover {
+	 background-color: #202020;
+ }
+ .bg_black:focus {
+	 background-color: #202020;
+ }
+ .bg_black:disabled {
+	 background-color: #202020;
+ }
+ .bg_black:disabled:hover {
+	 background-color: #202020;
+ }
+ .bg_green {
+	 background-color: #129c00;
+ }
+ .bg_green:hover {
+	 background-color: #058105;
+ }
+ .bg_green:active:focus {
+	 background-color: #105e10;
+ }
+ .bg_green:focus {
+	 background-color: #058105;
+ }
+ .bg_green:disabled {
+	 background-color: #8a8a8a;
+ }
+ .bg_green:disabled:hover {
+	 background-color: #8a8a8a;
+ }
+ .bg_red {
+	 background-color: #c40000;
+ }
+ .bg_red:hover {
+	 background-color: #da0000;
+ }
+ .bg_red:active:focus {
+	 background-color: #970606;
+ }
+ .bg_red:focus {
+	 background-color: #da0000;
+ }
+ .bg_red:disabled {
+	 background-color: #8a8a8a;
+ }
+ .bg_red:disabled:hover {
+	 background-color: #8a8a8a;
+ }
+ .bg_orange {
+	 background-color: #cc7e09;
+ }
+ .bg_orange:hover {
+	 background-color: #db8e1a;
+ }
+ .bg_orange:active:focus {
+	 background-color: #ac8314;
+ }
+ .bg_orange:focus {
+	 background-color: #b37b15;
+ }
+ .bg_orange:disabled {
+	 background-color: #8a8a8a;
+ }
+ .bg_orange:disabled:hover {
+	 background-color: #8a8a8a;
+ }
+ .bg_purple {
+	 background-color: #b900b0;
+ }
+ .bg_purple:hover {
+	 background-color: #99009e;
+ }
+ .bg_purple:active:focus {
+	 background-color: #7a137a;
+ }
+ .bg_purple:focus {
+	 background-color: #81057b;
+ }
+ .bg_purple:disabled {
+	 background-color: #8a8a8a;
+ }
+ .bg_purple:disabled:hover {
+	 background-color: #8a8a8a;
+ }
+ .bg_teal {
+	 background-color: #008f9c;
+ }
+ .bg_teal:hover {
+	 background-color: #058181;
+ }
+ .bg_teal:active:focus {
+	 background-color: #105e5e;
+ }
+ .bg_teal:focus {
+	 background-color: #057b81;
+ }
+ .bg_teal:disabled {
+	 background-color: #8a8a8a;
+ }
+ .bg_teal:disabled:hover {
+	 background-color: #8a8a8a;
+ }
+ .bg_primary {
+	 background-color: #337ab7;
+ }
+ .bg_primary:hover {
+	 background-color: #286090;
+ }
+ .bg_primary:active:focus {
+	 background-color: #23527c;
+ }
+ .bg_primary:focus {
+	 background-color: #23527c;
+ }
+ .bg_primary:disabled {
+	 background-color: #8a8a8a;
+ }
+ .bg_primary:disabled:hover {
+	 background-color: #8a8a8a;
+ }
+
+ .bluebtn {
+	 color: #fff;
+	 background-color: #5bc0de;
+	 border-color: #46b8da
+ }
+ .bluebtn.focus,.bluebtn:focus {
+	 color: #fff;
+	 background-color: #31b0d5;
+	 border-color: #1b6d85
+ }
+ .bluebtn:hover {
+	 color: #fff;
+	 background-color: #31b0d5;
+	 border-color: #269abc
+ }
+ .bluebtn.active,.bluebtn:active{
+	 color: #fff;
+	 background-color: #31b0d5;
+	 background-image: none;
+	 border-color: #269abc
+ }
+ .purplebtn {
+	 color: #fff;
+	 background-color: #9a5bde;
+	 border-color: #c946da
+ }
+ .purplebtn.focus,.purplebtn:focus {
+	 color: #fff;
+	 background-color: #9a5bde;
+	 border-color: #6c1b85
+ }
+ .purplebtn:hover {
+	 color: #fff;
+	 background-color: #9a5bde;
+	 border-color: #c946da
+ }
+ .purplebtn.active,.purplebtn:active{
+	 color: #fff;
+	 background-color: #9a5bde;
+	 background-image: none;
+	 border-color: #c946da
+ }
+ .lightpurplebtn {
+	 color: #fff;
+	 background-color: #b888eb;
+	 border-color: #dd60ee
+ }
+ .lightpurplebtn.focus,.lightpurplebtn:focus {
+	 color: #fff;
+	 background-color: #b888eb;
+	 border-color: #9035ac
+ }
+ .lightpurplebtn:hover {
+	 color: #fff;
+	 background-color: #b888eb;
+	 border-color: #dd60ee
+ }
+ .lightpurplebtn.active,.lightpurplebtn:active{
+	 color: #fff;
+	 background-color: #b888eb;
+	 background-image: none;
+	 border-color: #dd60ee
+ }
+ .redbtn {
+	 color: #fff;
+	 background-color: #d9534f;
+	 border-color: #d43f3a
+ }
+ .redbtn.focus,.redbtn:focus {
+	 color: #fff;
+	 background-color: #c9302c;
+	 border-color: #761c19
+ }
+ .redbtn:hover {
+	 color: #fff;
+	 background-color: #c9302c;
+	 border-color: #ac2925
+ }
+ .redbtn.active,.redbtn:active {
+	 color: #fff;
+	 background-color: #c9302c;
+	 background-image: none;
+	 border-color: #ac2925
+ }
+	 
+ .aestheticuipanel {
+	 margin-bottom: 20px;
+	 padding: 15px;
+	 border: 1px solid #ddd;
+	 border-radius: 5px;
+	 background-color: #f9f9f9;
+ }
+
+ .aestheticuipanel h4 {
+	 margin-bottom: 15px;
+	 padding-bottom: 10px;
+	 border-bottom: 1px solid #eee;
+ }
+
+ .color-picker {
+	 width: 50px;
+	 height: 38px;
+	 padding: 0;
+	 border: none;
+	 cursor: pointer;
+ }
+
+ .input-group-text.opacity-value {
+	 width: 40px;
+	 text-align: center;
+ }
+
+ #customizationTabs .nav-link {
+	 padding: 0.5rem 1rem;
+	 font-size: 0.9rem;
+ }
+
+ .tab-pane {
+	 padding: 15px;
+	 background-color: #fff;
+ }
+
+ .card-header button {
+	 text-decoration: none;
+	 color: #333;
+ }
+
+ .card-header button:hover {
+	 text-decoration: none;
+ }
+
+ /* Ensure the background colors adapt to the theme */
+ .aestheticuipanel, .tab-pane {
+	 background-color: inherit;
+	 border-color: rgba(0,0,0,0.1);
+ }
+
+ /* Adjust for dark mode */
+ @media (prefers-color-scheme: dark) {
+	 .aestheticuipanel, .tab-pane {
+		 background-color: #333;
+		 color: #fff;
+		 border-color: rgba(255,255,255,0.1);
+	 }
+	 
+	 .card-header button {
+		 color: #fff;
+	 }
+ }
+ `;
+
+			const BLTOOLSLitedefaultThemeCSSstyleSheet = document.createElement('style');
+			BLTOOLSLitedefaultThemeCSSstyleSheet.type = 'text/css';
+			BLTOOLSLitedefaultThemeCSSstyleSheet.innerText = BLTOOLSLitedefaultThemeCSS;
+			document.head.appendChild(BLTOOLSLitedefaultThemeCSSstyleSheet);
+
+			const BLTOOLspecificstylesstyleSheet = document.createElement('style');
+			BLTOOLspecificstylesstyleSheet.type = 'text/css';
+			BLTOOLspecificstylesstyleSheet.innerText = BLTOOLspecificstyles;
+			document.head.appendChild(BLTOOLspecificstylesstyleSheet);
+
+			// Configuration and Constants
+			const TOOL_ID = 'blacklite-tools';
+			const CONFIG = {
+				STORAGE_KEY: 'blacklite_themes_v1',
+				MODULES: ['theme-editor', 'background-editor', 'css-editor'],
+				MOBILE_BREAKPOINT: 768,
+				PRESERVED_STYLES: ['align-items', 'animation', 'animation-delay', 'appearance', 'background-attachment', 'background-color', 'background-image', 'background-position', 'background-repeat', 'background-size', 'border', 'border-bottom', 'border-color', 'border-left', 'border-radius', 'border-right', 'border-top', 'border-width', 'bottom', 'box-shadow', 'box-sizing', 'clear', 'color', 'content', 'cursor', 'display', 'filter', 'flex', 'flex-direction', 'flex-flow', 'flex-wrap', 'float', 'font-family', 'font-size', 'font-weight', 'gap', 'grid-auto-rows', 'grid-template-columns', 'height', 'justify-content', 'left', 'line-height', 'margin', 'margin-bottom', 'margin-left', 'margin-right', 'margin-top', 'max-height', 'max-width', 'min-height', 'min-width', 'opacity', 'outline', 'overflow', 'overflow-wrap', 'overflow-x', 'overflow-y', 'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top', 'position', 'resize', 'right', 'tab-size', 'text-align', 'text-decoration', 'text-overflow', 'text-shadow', 'top', 'transform', 'transition', 'user-select', 'vertical-align', 'visibility', 'white-space', 'width', 'word-wrap', 'z-index'],
+				UNSUITABLE_FOR_BACKGROUND: new Set(['select', 'option', 'small', 'pre', 'p', 'script', 'a', 'label']),
+				EXCLUDED_SELECTORS: ['head', 'body', `#${TOOL_ID}`],
+				EXCLUDED_ELEMENTS: ['blacklite-tools']
+			};
+
+			// Initialize the tool container
+			const toolsContainer = document.createElement('div');
+			toolsContainer.id = TOOL_ID;
+			toolsContainer.className = 'BLTOOL-blacklite-tools';
+			document.body.appendChild(toolsContainer);
+
+			// State Management
+			const State = {
+				activeTab: 'theme',
+				themes: {
+					default: null,
+					savedThemes: {},
+					activeTheme: 'Default Theme'
+				},
+				backgrounds: {
+					elements: {},
+					filters: {}
+				}
+			};
+
+			// Utility Functions
+			function escapeSelector(selector) {
+				return selector.replace(/([!"#$%&'()*+,.\/:;<=>?@[\]^`{|}~])/g, '\\$&').replace(/\*/g, '.*');
+			}
+
+			function debounce(func, delay) {
+				let timeout;
+				return (...args) => {
+					clearTimeout(timeout);
+					timeout = setTimeout(() => func.apply(this, args), delay);
+				};
+			}
+
+			function isExcludedElement(selector) {
+				return selector.includes(TOOL_ID) ||
+					selector === '.background-overlay' ||
+					CONFIG.EXCLUDED_ELEMENTS.some(excluded => selector.includes(excluded));
+			}
+
+			// Global Functions
+			window.previewImage = function (input, selector) {
+				const img = document.getElementById(`preview-${selector}`);
+				if (input.files && input.files[0]) {
+					const reader = new FileReader();
+					reader.onload = function (e) {
+						if (img) {
+							img.src = e.target.result;
+							img.style.display = 'block';
+
+							const currentFilters = BackgroundManager.parseFilters(State.backgrounds.filters[selector] || '');
+							const formattedFilters = {};
+							for (const [key, val] of Object.entries(currentFilters)) {
+								formattedFilters[key] = key === 'blur' && !val.endsWith('px') ? `${val}px` : val;
+							}
+							img.style.filter = BackgroundManager.filtersToString(formattedFilters);
+						}
+					};
+					reader.readAsDataURL(input.files[0]);
+				}
+			};
+
+			window.blackliteTools = {
+				updateStyle: (selector, prop, value) => ThemeManager.updateStyle(selector, prop, value),
+				exportCSS: () => ThemeManager.exportCSS(),
+				showChanges: () => ThemeManager.showChanges(),
+				reset: () => PresetManager.applyDefaultTheme(),
+				removeBackground: (selector) => BackgroundManager.removeBackground(selector)
+			};
+
+			// Module Manager
+			const ModuleManager = {
+				init() {
+					console.log('ModuleManager.init() called');
+					try {
+						this.restoreSavedThemes();
+
+						if (!State.themes.savedThemes['Default Theme']) {
+							PresetManager.savePreset('Default Theme', 'Default BlackLite UI theme', 'System', true);
+						}
+
+						ThemeManager.init();
+						this.attachGlobalEvents();
+					} catch (error) {
+						console.error('ModuleManager.init() error:', error);
+					}
+				},
+
+				attachGlobalEvents() {
+					window.addEventListener('resize', debounce(this.handleResize, 250));
+					toolsContainer.addEventListener('click', this.handleClick);
+					window.addEventListener('resize', () => {
+						ThemeManager.renderThemeEditor();
+					});
+				},
+
+				handleResize() {
+					if (window.innerWidth <= CONFIG.MOBILE_BREAKPOINT) {
+						toolsContainer.style.width = '90%';
+						toolsContainer.style.left = '5%';
+						toolsContainer.style.right = 'auto';
+					} else {
+						toolsContainer.style.width = '350px';
+						toolsContainer.style.left = 'auto';
+						toolsContainer.style.right = '20px';
+					}
+				},
+
+				handleClick(event) {
+					if (!event.target.closest(`#${TOOL_ID}`)) {
+						event.stopPropagation();
+						event.preventDefault();
+					}
+				},
+
+				restoreSavedThemes() {
+					try {
+						const saved = localStorage.getItem(CONFIG.STORAGE_KEY);
+						if (saved) {
+							const data = JSON.parse(saved);
+							State.themes.savedThemes = data.savedThemes || {};
+							State.themes.activeTheme = data.activeTheme || 'Default Theme';
+						}
+					} catch (e) {
+						console.warn('Failed to restore saved themes:', e);
+					}
+				}
+			};
+
+			// Theme Manager
+			const ThemeManager = {
+				originalStyles: {},
+				currentStyles: {},
+				searchTerm: '',
+				collapsedSelectors: new Set(),
+				scrollPosition: 0,
+				inspectorActive: false,
+
+				updateStyle(selector, prop, value) {
+					try {
+						const elements = document.querySelectorAll(selector);
+						elements.forEach(el => {
+							if (!el || el.closest(`#${TOOL_ID}`) || isExcludedElement(el.tagName.toLowerCase())) return;
+							el.style.setProperty(prop, value, '');
+						});
+						this.currentStyles[selector][prop] = value;
+					} catch (e) {
+						console.warn(`Could not apply style for selector: ${selector}`, e);
+					}
+				},
+
+				init() {
+					try {
+						console.log('Initializing ThemeManager');
+						this.originalStyles = {};
+						this.currentStyles = {};
+						this.collapsedSelectors.clear();
+
+						const elements = document.body.getElementsByTagName('*');
+						console.log('Found elements:', elements.length);
+
+						for (let el of elements) {
+							const selector = this.generateUniqueSelector(el);
+							if (isExcludedElement(selector)) continue;
+
+							const computedStyle = window.getComputedStyle(el);
+							this.originalStyles[selector] = {};
+							this.currentStyles[selector] = {};
+
+							CONFIG.PRESERVED_STYLES.forEach(prop => {
+								const value = computedStyle.getPropertyValue(prop);
+								if (value) {
+									this.originalStyles[selector][prop] = value;
+									this.currentStyles[selector][prop] = value;
+								}
+							});
+
+							const bgImage = computedStyle.getPropertyValue('background-image');
+							if (bgImage && bgImage !== 'none') {
+								this.originalStyles[selector]['background-image'] = bgImage;
+								this.currentStyles[selector]['background-image'] = bgImage;
+							}
+						}
+
+						State.themes.default = JSON.parse(JSON.stringify(this.originalStyles));
+						this.originalStyles = JSON.parse(JSON.stringify(this.originalStyles));
+
+						Object.keys(this.originalStyles).forEach(selector => {
+							this.collapsedSelectors.add(selector);
+						});
+
+						this.renderThemeEditor();
+					} catch (error) {
+						console.error('ThemeManager.init() error:', error);
+					}
+				},
+
+				startInspector() {
+					this.stopInspector(); // Clean up any existing inspector
+					document.body.style.cursor = 'crosshair';
+
+					this.inspectorCleanup = (e) => {
+						if (e.target.closest(`#${TOOL_ID}`)) return;
+
+						const element = e.target;
+						const selector = this.generateUniqueSelector(element);
+						this.selectedElement = selector;
+						this.searchTerm = selector;
+						this.updateFilterResults();
+						ThemeManager.renderThemeEditor();
+
+						document.body.style.cursor = '';
+						this.inspectorActive = false;
+						document.removeEventListener('click', this.inspectorCleanup, true);
+					};
+
+					document.addEventListener('click', this.inspectorCleanup, true);
+				},
+
+				stopInspector() {
+					if (this.inspectorCleanup) {
+						document.body.style.cursor = '';
+						document.removeEventListener('click', this.inspectorCleanup, true);
+						this.inspectorCleanup = null;
+					}
+					this.inspectorActive = false;
+				},
+
+				generateUniqueSelector(element) {
+					let selectorParts = [];
+
+					if (element.id) {
+						selectorParts.push(`#${escapeSelector(element.id)}`);
+					}
+
+					if (element.className && typeof element.className === 'string') {
+						const classes = element.className.split(' ').filter(c => c.trim() !== '');
+						if (classes.length > 0) {
+							selectorParts.push(classes.map(c => `.${escapeSelector(c)}`).join(''));
+						}
+					}
+
+					if (selectorParts.length === 0) {
+						selectorParts.push(element.tagName.toLowerCase());
+					}
+
+					return selectorParts.join('');
+				},
+
+				isElementSuitableForBackground(selector) {
+					const baseSelector = selector.split(':')[0];
+					const tagNameMatch = baseSelector.match(/^([a-z]+|#|\.)[^ >+~.:#\[]*/i);
+					const tagName = tagNameMatch ? tagNameMatch[1].toLowerCase() : '';
+					return !CONFIG.UNSUITABLE_FOR_BACKGROUND.has(tagName);
+				},
+
+				applyCurrentTheme() {
+					try {
+						Object.keys(this.currentStyles).forEach(selector => {
+							if (isExcludedElement(selector)) return;
+
+							const elements = document.querySelectorAll(selector);
+							elements.forEach(el => {
+								if (!el || el.closest(`#${TOOL_ID}`) || isExcludedElement(el.tagName.toLowerCase())) return;
+
+								el.removeAttribute('style');
+
+								const styles = this.currentStyles[selector];
+								Object.entries(styles).forEach(([prop, value]) => {
+									el.style.setProperty(prop, value, '');
+								});
+							});
+						});
+
+						BackgroundManager.reset();
+
+						if (State.backgrounds.elements && Object.keys(State.backgrounds.elements).length > 0) {
+							Object.keys(State.backgrounds.elements).forEach(selector => {
+								if (isExcludedElement(selector)) return;
+
+								const imageData = State.backgrounds.elements[selector];
+								if (imageData) {
+									BackgroundManager.applyBackground(selector, imageData);
+								}
+							});
+						}
+					} catch (e) {
+						console.error('Error applying current theme:', e);
+					}
+				},
+
+				exportCSS() {
+					let cssText = `/*\nBlackLite Custom Theme\n`;
+					cssText += `Theme-Name: ${document.getElementById('preset-name')?.value || 'Custom'}\n`;
+					cssText += `Theme-Description: ${document.getElementById('preset-description')?.value || 'No description'}\n`;
+					cssText += `Creator: ${document.getElementById('preset-creator')?.value || 'Anonymous'}\n`;
+					cssText += `Date: ${new Date().toISOString()}\n*/\n\n`;
+
+					Object.keys(this.currentStyles).forEach(selector => {
+						if (isExcludedElement(selector)) return;
+
+						const styles = this.currentStyles[selector];
+						const originalStyles = this.originalStyles[selector];
+						const validStyles = Object.keys(styles).filter(
+							prop => styles[prop] !== originalStyles[prop]
+						);
+
+						if (validStyles.length > 0) {
+							cssText += `${selector} {\n`;
+							validStyles.forEach(
+								prop => {
+									cssText += `${prop}: ${styles[prop]};\n`;
+								}
+							);
+							cssText += '}\n\n';
+						}
+					});
+
+					const blob = new Blob([cssText], {
+						type: 'text/css'
+					});
+					const link = document.createElement('a');
+					link.href = URL.createObjectURL(blob);
+					link.download = 'blacklite-custom-theme.css';
+					link.click();
+				},
+
+				showChanges() {
+					let cssText = '/* BlackLite - changed parameters as CSS */\n';
+					Object.keys(this.currentStyles).forEach(selector => {
+						if (isExcludedElement(selector)) return;
+
+						const styles = this.currentStyles[selector];
+						const originalStyles = this.originalStyles[selector];
+						const validStyles = Object.keys(styles).filter(
+							prop => styles[prop] !== originalStyles[prop]
+						);
+
+						if (validStyles.length > 0) {
+							cssText += `${selector} {\n`;
+							validStyles.forEach(
+								prop => {
+									cssText += `${prop}: ${styles[prop]};\n`;
+								}
+							);
+							cssText += '}\n\n';
+						}
+					});
+
+					const win = window.open('', '_blank', 'width=420,height=420,left=42,top=42');
+					win.document.write(`<pre style="color: #000;">${cssText}</pre>`);
+					win.document.close();
+				},
+
+				renderThemeEditor() {
+					try {
+						console.log('Rendering Theme Editor');
+						const scrollContainer = toolsContainer.querySelector('.BLTOOL-scroll-container');
+						if (scrollContainer) {
+							this.scrollPosition = scrollContainer.scrollTop;
+						}
+
+						const content = `
+							<div style="margin-bottom: 5px;">
+								<h3 style="font-size: 22px; margin: 0; padding: 0; width: 100%;">BlackLite UI Customization Tool</h3>
+							</div>
+							<div style="display: flex; margin-bottom: 10px;">
+								<div class="BLTOOL-tab-button ${State.activeTab === 'theme' ? 'BLTOOL-active-tab' : ''}" data-tab="theme">Theme</div>
+								<div class="BLTOOL-tab-button ${State.activeTab === 'backgrounds' ? 'BLTOOL-active-tab' : ''}" data-tab="backgrounds">Backgrounds</div>
+								<div class="BLTOOL-tab-button ${State.activeTab === 'presets' ? 'BLTOOL-active-tab' : ''}" data-tab="presets">Presets</div>
+							</div>
+							${this.renderTabContent()}
+						`;
+
+						toolsContainer.innerHTML = content;
+
+						this.attachEventListeners();
+
+						const newScrollContainer = toolsContainer.querySelector('.BLTOOL-scroll-container');
+						if (newScrollContainer) {
+							newScrollContainer.scrollTop = this.scrollPosition;
+						}
+
+						if (State.activeTab === 'backgrounds') {
+							BackgroundManager.attachEventListeners();
+						} else if (State.activeTab === 'presets') {
+							PresetManager.attachEventListeners();
+						}
+					} catch (e) {
+						console.error('Error rendering theme editor:', e);
+					}
+				},
+
+				renderTabContent() {
+					switch (State.activeTab) {
+						case 'theme':
+							return this.renderThemeTab();
+						case 'backgrounds':
+							return BackgroundManager.renderBackgroundsTab();
+						case 'presets':
+							return PresetManager.renderPresetsTab();
+						default:
+							return this.renderThemeTab();
+					}
+				},
+
+				renderThemeTab() {
+					try {
+						console.log('Rendering Theme Tab');
+						return `
+							<div style="display: flex; margin-bottom: 5px; align-items: center;">
+								<input type="text" id="theme-filter" placeholder="Filter..." style="flex:1; padding: 4px 6px; color: black; height: 28px;" value="${this.searchTerm}">
+								<button id="apply-filter" class="BLTOOL-button BLTOOL-button-primary" style="height: 28px;">GO</button>
+							</div>
+							<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
+								<button id="toggle-inspector" class="BLTOOL-button BLTOOL-button-primary" style="flex: 1 1 48%;">Select 🔍</button>
+								<button id="toggle-collapse" class="BLTOOL-button BLTOOL-button-secondary" style="flex: 1 1 48%;">${this.collapsedSelectors.size === Object.keys(this.originalStyles).length ? 'Open ALL' : 'Close ALL'}</button>
+								<button id="show-css-button" class="BLTOOL-button BLTOOL-button-secondary" style="flex: 1 1 100%;">Show only changes as CSS</button>
+							</div>
+							<div class="BLTOOL-scroll-container" style="max-height: 475px; overflow-y: auto; width: 100%; box-sizing: border-box;">
+								${this.renderStyleGroups()}
+							</div>
+						`;
+					} catch (e) {
+						console.error('Error rendering theme tab:', e);
+						return '<div>Error rendering theme tab</div>';
+					}
+				},
+
+				attachEventListeners() {
+					try {
+						const tabButtons = document.querySelectorAll('.BLTOOL-tab-button');
+						tabButtons.forEach(button => {
+							button.addEventListener('click', () => {
+								State.activeTab = button.dataset.tab;
+								this.renderThemeEditor();
+							});
+						});
+
+						const applyFilter = document.getElementById('apply-filter');
+						if (applyFilter) {
+							applyFilter.addEventListener('click', () => {
+								this.searchTerm = document.getElementById('theme-filter').value;
+								this.updateFilterResults();
+								this.renderThemeEditor();
+							});
+						}
+
+						const themeFilter = document.getElementById('theme-filter');
+						if (themeFilter) {
+							themeFilter.addEventListener('keypress', (e) => {
+								if (e.key === 'Enter') {
+									this.searchTerm = document.getElementById('theme-filter').value;
+									this.updateFilterResults();
+									this.renderThemeEditor();
+								}
+							});
+						}
+
+						const toggleInspector = document.getElementById('toggle-inspector');
+						if (toggleInspector) {
+							toggleInspector.addEventListener('click', () => {
+								this.inspectorActive = !this.inspectorActive;
+								if (this.inspectorActive) {
+									this.startInspector();
+								} else {
+									this.stopInspector();
+								}
+								this.renderThemeEditor();
+							});
+						}
+
+						const selectorToggles = document.querySelectorAll('.BLTOOL-selector-toggle');
+						selectorToggles.forEach(toggle => {
+							toggle.addEventListener('click', (e) => {
+								const selector = toggle.dataset.selector;
+								if (this.collapsedSelectors.has(selector)) {
+									this.collapsedSelectors.delete(selector);
+								} else {
+									this.collapsedSelectors.add(selector);
+								}
+								this.renderThemeEditor();
+							});
+						});
+
+						const toggleCollapse = document.getElementById('toggle-collapse');
+						if (toggleCollapse) {
+							toggleCollapse.addEventListener('click', () => {
+								const allSelectors = Object.keys(this.originalStyles);
+								const isAllCollapsed = allSelectors.every(selector => this.collapsedSelectors.has(selector));
+
+								if (isAllCollapsed) {
+									this.collapsedSelectors.clear();
+								} else {
+									this.collapsedSelectors.clear();
+									allSelectors.forEach(selector => this.collapsedSelectors.add(selector));
+								}
+
+								this.renderThemeEditor();
+							});
+						}
+
+						const showCssButton = document.getElementById('show-css-button');
+						if (showCssButton) {
+							showCssButton.addEventListener('click', () => this.showChanges());
+						}
+					} catch (e) {
+						console.error('Error attaching event listeners:', e);
+					}
+				},
+
+				renderStyleGroups() {
+					try {
+						const allSelectors = Object.keys(this.currentStyles);
+
+						if (allSelectors.length === 0) {
+							return `<div style="padding: 10px; color: #aaa;">No elements found for customization.</div>`;
+						}
+
+						return allSelectors
+							.map(selector => {
+								if (isExcludedElement(selector)) return '';
+
+								const isCollapsed = this.collapsedSelectors.has(selector);
+								const styles = this.currentStyles[selector];
+
+								const bgImage = State.backgrounds.elements[selector] || styles['background-image'] || 'none';
+
+								const filteredProps = Object.keys(styles).filter(
+									prop => this.matchesFilter(prop, selector)
+								);
+
+								if (filteredProps.length === 0 && this.searchTerm &&
+									!this.matchesFilter("", selector)) {
+									return '';
+								}
+
+								return `
+									<div style="margin-top: 5px;">
+										<div class="BLTOOL-selector-toggle" data-selector="${selector}"
+											style="cursor: pointer; padding: 5px; background-color: #2e2e2e; color: white;">
+											${selector}
+											<span style="float:right;">${isCollapsed ? '▶' : '▼'}</span>
+										</div>
+										${isCollapsed ? '' : `
+										<div style="background-color: #3e3e3e; margin: 5px 0; padding: 5px;">
+											${filteredProps.map(prop => `
+												<div style="display: flex; align-items: center; margin: 5px 0;">
+													<span style="flex-grow: 1; margin-right: 10px; color: #aaa;">${prop}</span>
+													<input
+														type="${prop.includes('color') ? 'color' : 'text'}"
+														value="${prop === 'background-image' ? bgImage : styles[prop]}"
+														style="width: 100px; padding: 2px; color: black;"
+														onchange="window.blackliteTools.updateStyle('${selector}', '${prop}', this.value)"
+													>
+												</div>
+											`).join('')}
+										</div>
+										`}
+									</div>
+								`;
+							})
+							.join('');
+					} catch (e) {
+						console.error('Error rendering style groups:', e);
+						return '<div>Error rendering style groups</div>';
+					}
+				},
+
+				updateFilterResults() {
+					try {
+						if (!this.searchTerm.trim()) return;
+
+						this.collapsedSelectors.clear();
+
+						Object.keys(this.currentStyles).forEach(selector => {
+							const styles = this.currentStyles[selector];
+							const hasMatchingProp = Object.keys(styles).some(
+								prop => this.matchesFilter(prop, selector)
+							);
+							const selectorMatches = this.matchesFilter("", selector);
+
+							if (hasMatchingProp || selectorMatches) {
+								this.collapsedSelectors.delete(selector);
+							} else {
+								this.collapsedSelectors.add(selector);
+							}
+						});
+					} catch (e) {
+						console.error('Error updating filter results:', e);
+						}
+					},
+
+					matchesFilter(prop, selector) {
+						try {
+							if (!this.searchTerm) return true;
+
+							const sanitizedTerm = this.searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
+							const pattern = new RegExp(`.*${sanitizedTerm}.*`, 'i');
+							
+							return pattern.test(prop) || pattern.test(selector);
+						} catch (e) {
+							console.error('Error matching filter:', e);
+							return false;
+						}
+					}
+				};
+
+			// Preset Manager
+			const PresetManager = {
+				attachEventListeners() {
+					try {
+						const saveButton = document.getElementById('save-preset');
+						const exportButton = document.getElementById('export-preset');
+						const importButton = document.getElementById('import-preset');
+						const deleteButton = document.getElementById('delete-preset');
+						const presetSelect = document.getElementById('preset-select');
+						const exportDefaultButton = document.getElementById('export-default');
+						const resetToDefaultButton = document.getElementById('reset-to-default');
+						const exportCssButton = document.getElementById('export-css-button');
+						const exportImagesButton = document.getElementById('export-images');
+
+						if (saveButton) {
+							saveButton.addEventListener('click', () => {
+								const presetNameInput = document.getElementById('preset-name');
+								const presetDescriptionInput = document.getElementById('preset-description');
+								const presetCreatorInput = document.getElementById('preset-creator');
+
+								const presetName = presetNameInput ? presetNameInput.value.trim() : '';
+								const presetDescription = presetDescriptionInput ? presetDescriptionInput.value.trim() : '';
+								const presetCreator = presetCreatorInput ? presetCreatorInput.value.trim() : '';
+
+								if (presetName && presetName.toLowerCase() !== 'default theme' && presetName !== 'unsaved') {
+									this.savePreset(presetName, presetDescription, presetCreator);
+									// Clear input fields after saving
+									if (presetNameInput) presetNameInput.value = '';
+									if (presetDescriptionInput) presetDescriptionInput.value = '';
+									if (presetCreatorInput) presetCreatorInput.value = '';
+									ThemeManager.renderThemeEditor(); // Re-render to update select and UI
+								} else if (presetName.toLowerCase() === 'default theme' || presetName === 'unsaved') {
+									alert('"Default Theme" and "unsaved" are reserved names and cannot be used for saving.');
+								} else {
+									alert('Please enter a preset name.');
+								}
+							});
+						}
+
+						if (exportButton) {
+							exportButton.addEventListener('click', () => {
+								const selectedPreset = presetSelect ? presetSelect.value : null;
+								if (selectedPreset && selectedPreset !== 'unsaved' && selectedPreset !== 'Default Theme') {
+									this.exportPreset(selectedPreset);
+								} else if (selectedPreset === 'Default Theme') {
+									 alert('Please use the "Export Default Theme" button for the default theme.');
+								}
+								else {
+									alert('Please select a saved theme to export.');
+								}
+							});
+						}
+
+						if (importButton) {
+							importButton.addEventListener('click', () => {
+								const fileInput = document.createElement('input');
+								fileInput.type = 'file';
+								fileInput.accept = '.json';
+								fileInput.style.display = 'none';
+								document.body.appendChild(fileInput);
+
+								fileInput.addEventListener('change', (e) => {
+									if (e.target.files && e.target.files[0]) {
+										const file = e.target.files[0];
+										const reader = new FileReader();
+
+										reader.onload = (eventReader) => {
+											try {
+												const json = JSON.parse(eventReader.target.result);
+
+												if (!json.data || !json.data.styles || !json.data.metadata || !json.data.metadata.name) {
+													throw new Error('Invalid theme format: Missing critical data, styles, or metadata.');
+												}
+
+												const themeName = json.data.metadata.name;
+												 if (themeName.toLowerCase() === 'default theme') {
+													alert('Importing a theme named "Default Theme" is not allowed as it is a system-reserved name. Please rename the theme file if you wish to import it.');
+													return;
+												}
+
+
+												ThemeManager.currentStyles = JSON.parse(JSON.stringify(json.data.styles));
+												State.backgrounds.elements = JSON.parse(JSON.stringify(json.data.backgrounds?.elements || {}));
+												State.backgrounds.filters = JSON.parse(JSON.stringify(json.data.backgrounds?.filters || {}));
+
+												State.themes.savedThemes[themeName] = json.data;
+												State.themes.activeTheme = themeName;
+												this.saveThemesToStorage();
+												this.applyCurrentTheme();
+												ThemeManager.renderThemeEditor();
+
+											} catch (err) {
+												alert('Invalid or corrupt theme file. ' + err.message);
+												console.error('Theme import error:', err);
+											} finally {
+												 document.body.removeChild(fileInput); // Clean up
+											}
+										};
+										reader.onerror = () => {
+											alert('Error reading file.');
+											console.error('FileReader error.');
+											document.body.removeChild(fileInput); // Clean up
+										};
+										reader.readAsText(file);
+									} else {
+										document.body.removeChild(fileInput); // Clean up if no file selected
+									}
+								});
+								fileInput.click();
+							});
+						}
+
+						if (deleteButton) {
+							deleteButton.addEventListener('click', () => {
+								const selectedPreset = presetSelect ? presetSelect.value : null;
+								if (selectedPreset && selectedPreset !== 'unsaved' && selectedPreset !== 'Default Theme') {
+									if (confirm(`Are you sure you want to delete the preset "${selectedPreset}"?`)) {
+										delete State.themes.savedThemes[selectedPreset];
+										if (State.themes.activeTheme === selectedPreset) {
+											State.themes.activeTheme = 'Default Theme'; // Revert to default
+											this.applyDefaultTheme();
+										}
+										this.saveThemesToStorage();
+										ThemeManager.renderThemeEditor();
+									}
+								} else {
+									alert('Please select a saved theme to delete. "Default Theme" or "Unsaved Changes" cannot be deleted.');
+								}
+							});
+						}
+
+						if (presetSelect) {
+								  presetSelect.addEventListener('change', (e) => {
+									  const selectedPresetName = e.target.value;
+
+									  if (selectedPresetName === 'unsaved' || selectedPresetName === 'Default Theme') {
+										  document.getElementById('preset-name').value = '';
+										  document.getElementById('preset-creator').value = '';
+										  document.getElementById('preset-description').value = '';
+										  return;
+									  }
+
+									  // Get the selected theme's data
+									  const selectedTheme = State.themes.savedThemes[selectedPresetName];
+									  if (selectedTheme) {
+										  // Log the retrieved metadata for debugging
+										  console.log('Retrieved metadata:', selectedTheme.metadata);
+
+										  // Populate the fields with the theme's metadata
+										  document.getElementById('preset-name').value = selectedTheme.metadata.name || '';
+										  document.getElementById('preset-creator').value = selectedTheme.metadata.creator || '';
+										  document.getElementById('preset-description').value = selectedTheme.metadata.description || '';
+									  }
+								  });
+							  }
+
+
+						if (exportDefaultButton) {
+							exportDefaultButton.addEventListener('click', () => {
+								const defaultThemeData = this.exportDefaultTheme(); // This is the 'data' part
+								if (defaultThemeData) {
+									const exportDataContainer = { // This is the full structure of the file
+										name: 'Default Theme', // Name of the file/package
+										version: '1.0',
+										timestamp: new Date().toISOString(),
+										data: defaultThemeData // Contains metadata, styles, backgrounds for the theme itself
+									};
+
+									const blob = new Blob([JSON.stringify(exportDataContainer, null, 2)], {
+										type: 'application/json'
+									});
+									const link = document.createElement('a');
+									link.href = URL.createObjectURL(blob);
+									link.download = 'blacklite-theme-default.json';
+									document.body.appendChild(link);
+									link.click();
+									document.body.removeChild(link);
+									URL.revokeObjectURL(link.href);
+								} else {
+									alert('Could not prepare default theme for export.');
+								}
+							});
+						}
+
+						 if (resetToDefaultButton) {
+							resetToDefaultButton.addEventListener('click', () => {
+								if (confirm('Are you sure you want to reset all changes to the Default Theme? Unsaved changes will be lost.')) {
+									this.applyDefaultTheme();
+									ThemeManager.renderThemeEditor(); // Refresh UI
+								}
+							});
+						}
+
+						if (exportCssButton) {
+							 exportCssButton.addEventListener('click', () => ThemeManager.exportCSS());
+						}
+						 if (exportImagesButton && typeof BackgroundManager !== 'undefined' && BackgroundManager.exportAllImages) {
+							exportImagesButton.addEventListener('click', () => BackgroundManager.exportAllImages());
+						}
+
+
+					} catch (e) {
+						console.error('Error attaching preset manager event listeners:', e);
+					}
+				},
+
+				applyCurrentTheme() {
+					try {
+						console.log("PresetManager: Applying current theme to DOM");
+						Object.keys(ThemeManager.currentStyles).forEach(selector => {
+							if (isExcludedElement(selector)) return;
+							try {
+								const elements = document.querySelectorAll(selector);
+								elements.forEach(el => {
+									if (!el || el.closest(`#${TOOL_ID}`) || CONFIG.EXCLUDED_ELEMENTS.some(excluded => el.id === excluded || el.classList.contains(excluded))) return;
+
+									el.removeAttribute('style'); // Clear all previous inline styles first
+
+									const stylesToApply = ThemeManager.currentStyles[selector];
+									Object.entries(stylesToApply).forEach(([prop, value]) => {
+										if (value !== undefined && value !== null && CONFIG.PRESERVED_STYLES.includes(prop)) {
+											el.style.setProperty(prop, value, '');
+										}
+									});
+								});
+							} catch (e) {
+								console.warn(`PresetManager: Could not apply styles for selector: ${selector}`, e);
+							}
+						});
+
+						// Reset all previously tool-managed backgrounds before applying new ones
+						// This ensures elements that had a background in a previous theme but not the current one are cleared.
+						document.querySelectorAll('*').forEach(el => {
+							if (!el || el.closest(`#${TOOL_ID}`) || CONFIG.EXCLUDED_ELEMENTS.some(excluded => el.id === excluded || el.classList.contains(excluded))) return;
+							 // Check if this element's original style had a background image
+							const selector = ThemeManager.generateUniqueSelector(el); // Assuming this function exists and is accurate
+							if (ThemeManager.originalStyles[selector] && ThemeManager.originalStyles[selector]['background-image'] && ThemeManager.originalStyles[selector]['background-image'] !== 'none') {
+								// Revert to original if it had one
+								el.style.backgroundImage = ThemeManager.originalStyles[selector]['background-image'];
+							} else {
+								// Otherwise, clear it
+								 el.style.backgroundImage = ''; // Clear any existing background image
+							}
+							el.style.backgroundSize = '';
+							el.style.backgroundPosition = '';
+							el.style.filter = ThemeManager.originalStyles[selector]?.filter || ''; // Reset filter too
+						});
+
+
+						if (State.backgrounds.elements && typeof BackgroundManager !== 'undefined') {
+							Object.entries(State.backgrounds.elements).forEach(([selector, imageData]) => {
+								if (isExcludedElement(selector)) return;
+								if (imageData) {
+									BackgroundManager.applyBackground(selector, imageData); // Applies image + default size/pos
+
+									const filter = State.backgrounds.filters[selector];
+									if (filter) {
+										try {
+											const elements = document.querySelectorAll(selector);
+											elements.forEach(el => {
+												if (!el.closest(`#${TOOL_ID}`) && !CONFIG.EXCLUDED_ELEMENTS.some(excluded => el.id === excluded || el.classList.contains(excluded))) {
+													el.style.filter = filter;
+												}
+											});
+										} catch (e) {
+											console.warn(`PresetManager: Could not apply filter to ${selector} during theme application`, e);
+										}
+									}
+								}
+							});
+						}
+						console.log("PresetManager: Finished applying current theme to DOM.");
+					} catch (e) {
+						console.error('PresetManager: Error applying current theme to DOM:', e);
+					}
+				},
+
+				savePreset(name, description = '', creator = '', isSystemDefault = false) {
+					try {
+						if (name.toLowerCase() === 'default theme' && !isSystemDefault) {
+							alert('Cannot save over the master "Default Theme". Please choose a different name.');
+							return;
+						}
+						console.log(`Saving preset: ${name}`);
+						const presetData = {
+							metadata: {
+								name,
+								description,
+								creator,
+								date: new Date().toISOString()
+							},
+							styles: JSON.parse(JSON.stringify(ThemeManager.currentStyles)),
+							backgrounds: {
+								elements: JSON.parse(JSON.stringify(State.backgrounds.elements)),
+								filters: JSON.parse(JSON.stringify(State.backgrounds.filters))
+							}
+						};
+
+						// Log the saved metadata for debugging
+						console.log('Saved metadata:', presetData.metadata);
+
+						State.themes.savedThemes[name] = presetData;
+						State.themes.activeTheme = name;
+						this.saveThemesToStorage();
+						console.log(`Preset "${name}" saved and set as active.`);
+					} catch (e) {
+						console.error(`Error saving preset "${name}":`, e);
+					}
+				},
+
+				saveThemesToStorage() {
+					try {
+						localStorage.setItem(CONFIG.STORAGE_KEY, JSON.stringify({
+							savedThemes: State.themes.savedThemes,
+							activeTheme: State.themes.activeTheme
+						}));
+					} catch (e) {
+						console.warn('Failed to save themes to storage:', e);
+						alert('Could not save themes to local storage. Your browser might be blocking it or storage is full.');
+					}
+				},
+
+				exportPreset(presetName) {
+					try {
+						const preset = State.themes.savedThemes[presetName];
+						if (!preset) {
+							alert(`Preset "${presetName}" not found for export.`);
+							return;
+						}
+
+						const exportDataContainer = {
+							name: presetName, // Name of the theme file/package
+							version: '1.0', // You can version your themes
+							timestamp: new Date().toISOString(),
+							data: preset // This is the actual theme data (metadata, styles, backgrounds)
+						};
+
+						const blob = new Blob([JSON.stringify(exportDataContainer, null, 2)], {
+							type: 'application/json'
+						});
+						const link = document.createElement('a');
+						link.href = URL.createObjectURL(blob);
+						const safeFileName = presetName.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+						link.download = `blacklite-theme-${safeFileName || 'custom'}.json`;
+						document.body.appendChild(link);
+						link.click();
+						document.body.removeChild(link);
+						URL.revokeObjectURL(link.href);
+					} catch (e) {
+						console.error(`Error exporting preset "${presetName}":`, e);
+						alert(`Error exporting preset: ${e.message}`);
+					}
+				},
+
+				exportDefaultTheme() {
+					try {
+						// The 'data' part for the default theme file
+						const defaultThemeActualData = {
+							metadata: {
+								name: 'Default Theme', // This is the theme's name *within* the data block
+								description: 'Default BlackLite UI theme for KoboldAI Lite',
+								creator: 'System',
+								date: new Date().toISOString()
+							},
+							styles: JSON.parse(JSON.stringify(ThemeManager.originalStyles)),
+							backgrounds: {
+								elements: {}, // Default theme has no custom backgrounds
+								filters: {}
+							}
+						};
+						console.log("Default theme data prepared for export:", defaultThemeActualData);
+						return defaultThemeActualData;
+					} catch (e) {
+						console.error('Error preparing default theme data for export:', e);
+						return null;
+					}
+				},
+
+				applyPreset(presetName) {
+					try {
+						const presetToApply = State.themes.savedThemes[presetName];
+						if (!presetToApply) {
+							console.warn(`Preset "${presetName}" not found. Applying default theme instead.`);
+							this.applyDefaultTheme();
+							return;
+						}
+						console.log(`Applying preset: ${presetName}`);
+
+						ThemeManager.currentStyles = JSON.parse(JSON.stringify(presetToApply.styles));
+						State.backgrounds.elements = JSON.parse(JSON.stringify(presetToApply.backgrounds?.elements || {}));
+						State.backgrounds.filters = JSON.parse(JSON.stringify(presetToApply.backgrounds?.filters || {}));
+
+						this.applyCurrentTheme();
+
+						State.themes.activeTheme = presetName;
+						this.saveThemesToStorage();
+						console.log(`Preset "${presetName}" applied.`);
+					} catch (e) {
+						console.error(`Error applying preset "${presetName}":`, e);
+					}
+				},
+
+				applyDefaultTheme() {
+					try {
+						console.log("Applying default theme.");
+						ThemeManager.currentStyles = JSON.parse(JSON.stringify(ThemeManager.originalStyles));
+						State.backgrounds.elements = {};
+						State.backgrounds.filters = {};
+
+						this.applyCurrentTheme();
+
+						State.themes.activeTheme = 'Default Theme';
+						this.saveThemesToStorage();
+						console.log("Default theme applied.");
+					} catch (e) {
+						console.error('Error applying default theme:', e);
+					}
+				},
+
+				renderPresetsTab() {
+					try {
+						let optionsHtml = '';
+						optionsHtml += `<option value="Default Theme" ${State.themes.activeTheme === 'Default Theme' ? 'selected' : ''}>Default Theme</option>`;
+
+						Object.keys(State.themes.savedThemes)
+							.filter(name => name !== 'Default Theme')
+							.forEach(name => {
+								optionsHtml += `<option value="${name}" ${State.themes.activeTheme === name ? 'selected' : ''}>${name}</option>`;
+							});
+
+						if (State.themes.activeTheme === 'unsaved') {
+							optionsHtml += `<option value="unsaved" selected>Unsaved Changes*</option>`;
+						}
+
+						return `
+							<div style="margin-bottom: 10px; padding: 10px; background-color: #2e2e2e;">
+								<h4 style="margin-top: 0; margin-bottom: 5px;">Current Theme</h4>
+								<select id="preset-select" style="width: 100%; padding: 5px; color: black; margin-bottom: 5px;">
+									${optionsHtml}
+								</select>
+								<div style="font-size: 0.8em; color: #aaa;">${State.themes.activeTheme === 'unsaved' ? '*You have unsaved changes. Select a theme to load it, or save your current changes as a new theme.' : ''}</div>
+							</div>
+							<div style="margin-bottom: 10px; padding: 10px; background-color: #2e2e2e;">
+								<h4 style="margin-top: 0; margin-bottom: 5px;">Theme Actions</h4>
+								<div style="display: flex; flex-wrap: wrap; gap: 5px;">
+									<button id="import-preset" class="BLTOOL-button BLTOOL-button-secondary" style="flex: 1 1 48%;">Import Theme from File</button>
+									<button id="export-preset" class="BLTOOL-button BLTOOL-button-secondary" style="flex: 1 1 48%;">Export Theme to File</button>
+									<button id="reset-to-default" class="BLTOOL-button BLTOOL-button-secondary" style="width: 100%; margin-bottom: 10px;">Reset to Default Theme</button>
+									<button id="delete-preset" class="BLTOOL-button BLTOOL-button-danger" style="flex: 1 1 48%;">Delete Selected Theme</button>
+								</div>
+							</div>
+							<div style="margin-bottom: 10px; padding: 10px; background-color: #2e2e2e;">
+								<h4 style="margin-top: 0; margin-bottom: 5px;">Theme Overview</h4>
+								<input type="text" id="preset-name" placeholder="Theme Name (e.g., My Dark Mode)" style="width: 100%; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;">
+								<input type="text" id="preset-creator" placeholder="Author (e.g., Your Name)" style="width: 100%; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;">
+								<textarea id="preset-description" placeholder="Theme Description (optional)" style="width: 100%; height: 60px; resize: vertical; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;"></textarea>
+								<button id="save-preset" class="BLTOOL-button BLTOOL-button-primary" style="width: 100%;">Save Current Theme</button>
+							</div>
+							<div style="margin-top: 0px; padding: 10px; background-color: 2e2e2e;">
+								<h4 style="margin-top: 0; margin-bottom: 5px;">Additional Export Actions</h4>
+								<button id="export-default" class="BLTOOL-button BLTOOL-button-secondary" style="width: 100%; margin-bottom: 7px;">Export Default Theme</button>
+								<button id="export-css-button" class="BLTOOL-button BLTOOL-button-secondary" style="width: 100%; margin-bottom: 7px;">Export Current Changes as CSS</button>
+								<button id="export-images" class="BLTOOL-button BLTOOL-button-toggle" style="width: 100%;">Export Current Background Images</button>
+								<div id="BLTOOL-image-download-list-container" style="margin-top:7px;"></div>
+							</div>
+						`;
+					} catch (e) {
+						console.error('Error rendering presets tab:', e);
+						return '<div style="color:red;">Error rendering presets tab. Check console.</div>';
+					}
+				}
+			};
+			
+				// Background Manager
+				const BackgroundManager = {
+					allBackgroundAssignments: {},
+					selectedElement: null,
+					searchTerm: '',
+					collapsedSelectors: new Set(),
+					selectorsInitialized: false,
+					inspectorActive: false,
+					inspectorCleanup: null,
+					showOnlyWithBackground: false,
+
+					startInspector() {
+						try {
+							this.removeInspectorOverlay();
+							document.body.style.cursor = 'crosshair';
+
+							this.inspectorCleanup = (e) => {
+								if (e.target.closest(`#${TOOL_ID}`)) return;
+
+								const element = e.target;
+								const selector = ThemeManager.generateUniqueSelector(element);
+								this.selectedElement = selector;
+								this.searchTerm = selector;
+								this.updateFilterResults();
+								ThemeManager.renderThemeEditor();
+
+								document.body.style.cursor = '';
+								this.inspectorActive = false;
+								document.removeEventListener('click', this.inspectorCleanup, true);
+							};
+
+							document.addEventListener('click', this.inspectorCleanup, true);
+						} catch (e) {
+							console.error('Error starting background inspector:', e);
+						}
+					},
+
+					removeInspectorOverlay() {
+						try {
+							if (this.inspectorCleanup) {
+								document.body.style.cursor = '';
+								document.removeEventListener('click', this.inspectorCleanup, true);
+								this.inspectorCleanup = null;
+							}
+						} catch (e) {
+							console.error('Error removing background inspector overlay:', e);
+						}
+					},
+
+					attachEventListeners() {
+						try {
+							const filterImagesButton = document.getElementById('filter-images-button');
+							if (filterImagesButton) {
+								filterImagesButton.addEventListener('click', () => {
+									this.toggleImageFilter();
+								});
+							}
+
+							const bgFilter = document.getElementById('bg-filter');
+							if (bgFilter) {
+								bgFilter.addEventListener('keypress', (e) => {
+									if (e.key === 'Enter') {
+										this.searchTerm = bgFilter.value;
+										this.updateFilterResults();
+										ThemeManager.renderThemeEditor();
+									}
+								});
+							}
+
+							const applyBgFilter = document.getElementById('apply-bg-filter');
+							if (applyBgFilter) {
+								applyBgFilter.addEventListener('click', () => {
+									this.searchTerm = document.getElementById('bg-filter').value;
+									this.updateFilterResults();
+									ThemeManager.renderThemeEditor();
+								});
+							}
+
+							const toggleBgInspector = document.getElementById('toggle-bg-inspector');
+							if (toggleBgInspector) {
+								toggleBgInspector.addEventListener('click', () => {
+									this.inspectorActive = !this.inspectorActive;
+									if (this.inspectorActive) this.startInspector();
+									else this.removeInspectorOverlay();
+									ThemeManager.renderThemeEditor();
+								});
+							}
+
+							const container = document.getElementById(TOOL_ID);
+							if (!container) return;
+
+							const toggleBgCollapse = document.getElementById('toggle-bg-collapse');
+							if (toggleBgCollapse) {
+								toggleBgCollapse.addEventListener('click', () => {
+									const allSelectors = Object.keys(ThemeManager.currentStyles)
+										.filter(selector => ThemeManager.isElementSuitableForBackground(selector));
+
+									const isAllCollapsed = allSelectors.every(selector => this.collapsedSelectors.has(selector));
+
+									if (isAllCollapsed) {
+										this.collapsedSelectors.clear();
+									} else {
+										allSelectors.forEach(selector => this.collapsedSelectors.add(selector));
+									}
+
+									ThemeManager.renderThemeEditor();
+								});
+							}
+
+							const toggles = document.querySelectorAll('.BLTOOL-bg-selector-toggle');
+							toggles.forEach(toggle => {
+								toggle.addEventListener('click', (e) => {
+									e.stopPropagation();
+									const selector = toggle.dataset.selector;
+									if (this.collapsedSelectors.has(selector)) {
+										this.collapsedSelectors.delete(selector);
+									} else {
+										this.collapsedSelectors.add(selector);
+									}
+									ThemeManager.renderThemeEditor();
+								});
+							});
+
+							container.addEventListener('change', (e) => {
+								if (e.target && e.target.classList.contains('BLTOOL-bg-file-input')) {
+									const selector = e.target.dataset.selector;
+									if (e.target.files && e.target.files[0]) {
+										const file = e.target.files[0];
+										const reader = new FileReader();
+
+										reader.onload = (e) => {
+											this.applyBackground(selector, e.target.result);
+											ThemeManager.renderThemeEditor();
+										};
+
+										reader.readAsDataURL(file);
+									}
+								}
+							});
+
+							const exportImagesButton = document.getElementById('export-images');
+							if (exportImagesButton) {
+								exportImagesButton.addEventListener('click', () => {
+									console.log('Loading exportAllImages');
+									BackgroundManager.exportAllImages();
+								});
+							}
+							
+							container.addEventListener('click', (e) => {
+								if (e.target && e.target.closest('button') && e.target.closest('button').dataset.selector) {
+									const selector = e.target.closest('button').dataset.selector;
+									this.removeBackground(selector);
+								}
+							});
+
+						} catch (e) {
+							console.error('Error attaching background event listeners:', e);
+						}
+					},
+					
+					renderImageDownloadList() {
+						const images = Object.entries(State.backgrounds.elements);
+						if (images.length === 0) {
+							return '<p>No background images to display for download.</p>';
+						}
+
+						let html = '<ul>';
+						images.forEach(([selector, imageData], index) => {
+							// Sanitize selector for use in a filename (basic sanitization)
+							const safeSelectorName = selector.replace(/[^a-zA-Z0-9_.-]/g, '_').substring(0, 50);
+							html += `<li>
+										<span>${selector}:</span><br/>
+										<a href="${imageData}" download="background_${safeSelectorName}_${index + 1}.png">
+											Download Image ${index + 1}
+										</a>
+									 </li>`;
+						});
+						html += '</ul>';
+						return html;
+					},
+
+					exportAllImages() {
+						try {
+							const images = Object.entries(State.backgrounds.elements);
+							if (images.length === 0) {
+								alert('No background images to export.');
+								return;
+							}
+
+							// Create a new window
+							const win = window.open('', '_blank', 'width=600,height=400,left=100,top=100');
+							win.document.write(`
+								<html>
+									<head>
+										<title>Export Background Images</title>
+										<style>
+											body {
+												font-family: Arial, sans-serif;
+												background-color: #1e1e1e;
+												color: white;
+												padding: 20px;
+											}
+											h1 {
+												margin-top: 0;
+											}
+											ul {
+												list-style: none;
+												padding: 0;
+											}
+											li {
+												margin-bottom: 10px;
+											}
+											a {
+												color: #337ab7;
+												text-decoration: none;
+											}
+											a:hover {
+												text-decoration: underline;
+											}
+											button {
+												background-color: #337ab7;
+												color: white;
+												border: none;
+												padding: 10px 20px;
+												cursor: pointer;
+												margin-top: 20px;
+											}
+											button:hover {
+												background-color: #286090;
+											}
+										</style>
+									</head>
+									<body>
+										<h1>Export Background Images</h1>
+										${this.renderImageDownloadList()}
+										<button onclick="window.close()">Close</button>
+									</body>
+								</html>
+							`);
+							win.document.close();
+						} catch (e) {
+							console.error('Error preparing image download list:', e);
+							alert('Error preparing image download list. Please try again.');
+						}
+					},
+
+					updateFilterResults() {
+						try {
+							if (!this.searchTerm.trim()) return;
+
+							this.collapsedSelectors.clear();
+
+							Object.keys(ThemeManager.currentStyles)
+								.filter(selector => ThemeManager.isElementSuitableForBackground(selector))
+								.forEach(selector => {
+									if (this.matchesFilter(selector)) {
+										this.collapsedSelectors.delete(selector);
+									} else {
+										this.collapsedSelectors.add(selector);
+									}
+								});
+						} catch (e) {
+							console.error('Error updating background filter results:', e);
+						}
+					},
+
+					matchesFilter(selector) {
+						try {
+							if (!this.searchTerm) return true;
+
+							const sanitizedTerm = this.searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/\*/g, '.*');
+							const pattern = new RegExp(`.*${sanitizedTerm}.*`, 'i');
+
+							return pattern.test(selector);
+						} catch (e) {
+							console.error('Error matching background filter:', e);
+							return false;
+						}
+					},
+
+					applyBackground(selector, imageData) {
+						try {
+							if (isExcludedElement(selector)) return;
+
+							State.backgrounds.elements[selector] = imageData;
+
+							const elements = document.querySelectorAll(selector);
+							if (elements.length === 0) {
+								console.warn(`No elements found for selector: ${selector}`);
+								return;
+							}
+
+							elements.forEach(el => {
+								if (!el || el.closest(`#${TOOL_ID}`) ||
+									CONFIG.UNSUITABLE_FOR_BACKGROUND.has(el.tagName.toLowerCase()))
+									return;
+
+								el.style.backgroundImage = `url('${imageData}')`;
+								el.style.backgroundSize = 'cover';
+								el.style.backgroundPosition = 'center';
+							});
+
+							if (!ThemeManager.currentStyles[selector]) {
+								ThemeManager.currentStyles[selector] = {};
+							}
+							ThemeManager.currentStyles[selector]['background-image'] = `url('${imageData}')`;
+						} catch (e) {
+							console.error(`Could not apply background to ${selector}`, e);
+						}
+					},
+
+					removeBackground(selector) {
+						try {
+							if (State.backgrounds.elements[selector]) {
+								delete State.backgrounds.elements[selector];
+								delete State.backgrounds.filters[selector];
+
+								const elements = document.querySelectorAll(selector);
+								elements.forEach(el => {
+									if (!el || el.closest(`#${TOOL_ID}`) ||
+										CONFIG.UNSUITABLE_FOR_BACKGROUND.has(el.tagName.toLowerCase()))
+										return;
+
+									el.style.backgroundImage = '';
+									el.style.backgroundSize = '';
+									el.style.backgroundPosition = '';
+
+									const originalBgColor = ThemeManager.originalStyles[selector]?.['background-color'];
+									if (originalBgColor) {
+										el.style.backgroundColor = originalBgColor;
+									} else {
+										el.style.backgroundColor = '';
+									}
+								});
+
+								const preview = document.getElementById(`preview-${selector}`);
+								if (preview) {
+									preview.src = '';
+									preview.style.display = 'none';
+								}
+
+								if (ThemeManager.currentStyles[selector]) {
+									ThemeManager.currentStyles[selector]['background-image'] = 'none';
+								}
+
+								ThemeManager.renderThemeEditor();
+							}
+						} catch (e) {
+							console.error(`Could not remove background from ${selector}`, e);
+						}
+					},
+
+					reset() {
+						try {
+							console.log('Resetting all backgrounds');
+							Object.keys(State.backgrounds.elements).forEach(selector => {
+								if (isExcludedElement(selector)) return;
+
+								try {
+									const elements = document.querySelectorAll(selector);
+									elements.forEach(el => {
+										if (!el || el.closest(`#${TOOL_ID}`) ||
+											CONFIG.UNSUITABLE_FOR_BACKGROUND.has(el.tagName.toLowerCase()))
+											return;
+
+										el.style.backgroundImage = '';
+										el.style.backgroundSize = '';
+										el.style.backgroundPosition = '';
+									});
+								} catch (e) {
+									console.warn(`Error resetting background for selector: ${selector}`, e);
+								}
+							});
+
+							State.backgrounds.elements = {};
+							this.allBackgroundAssignments = {};
+						} catch (e) {
+							console.error('Error resetting backgrounds:', e);
+						}
+					},
+
+					renderBackgroundsTab() {
+						try {
+							console.log('Rendering Backgrounds Tab');
+
+							if (!this.selectorsInitialized) {
+								this.collapsedSelectors.clear();
+
+								const allInitialSelectors = Object.keys(ThemeManager.currentStyles)
+									.filter(selector => ThemeManager.isElementSuitableForBackground(selector));
+
+								allInitialSelectors.forEach(selector => {
+									this.collapsedSelectors.add(selector);
+								});
+								this.selectorsInitialized = true;
+							}
+
+							const suitableRenderSelectors = Object.keys(ThemeManager.currentStyles)
+								.filter(selector => ThemeManager.isElementSuitableForBackground(selector))
+								.filter(selector => !this.searchTerm || this.matchesFilter(selector));
+
+							const isAllEffectivelyCollapsed = suitableRenderSelectors.every(
+								selector => this.collapsedSelectors.has(selector)
+							);
+							const toggleText = isAllEffectivelyCollapsed && suitableRenderSelectors.length > 0 ? 'Open ALL' : 'Close ALL';
+
+							return `
+								<div style="display: flex; margin-bottom: 5px; align-items: center;">
+									<input type="text" id="bg-filter" placeholder="Filter elements..." style="flex:1; padding: 4px 6px; color: black; height: 28px;" value="${this.searchTerm}">
+									<button id="apply-bg-filter" class="BLTOOL-button BLTOOL-button-primary" style="height: 28px;">GO</button>
+								</div>
+								<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
+									<button id="toggle-bg-inspector" class="BLTOOL-button BLTOOL-button-primary" style="flex: 1 1 48%;">Select 🔍</button>
+									<button id="toggle-bg-collapse" class="BLTOOL-button BLTOOL-button-secondary" style="flex: 1 1 48%;">${toggleText}</button>
+									<button id="filter-images-button" class="BLTOOL-button BLTOOL-button-toggle" style="flex: 1 1 100%;">${this.showOnlyWithBackground ? 'Show All' : 'Filter Images'}</button>
+								</div>
+								<div class="BLTOOL-scroll-container" style="max-height: 475px; overflow-y: auto; width: 100%; box-sizing: border-box;">
+									${this.renderBackgroundSelectors()}
+								</div>
+							`;
+						} catch (e) {
+							console.error('Error rendering backgrounds tab:', e);
+							return '<div>Error rendering backgrounds tab</div>';
+						}
+					},
+
+					toggleImageFilter() {
+						try {
+							this.showOnlyWithBackground = !this.showOnlyWithBackground;
+							this.updateFilterResults();
+							ThemeManager.renderThemeEditor();
+						} catch (e) {
+							console.error('Error toggling image filter:', e);
+						}
+					},
+
+					renderBackgroundSelectors() {
+						try {
+							let suitableSelectors = Object.keys(ThemeManager.currentStyles)
+								.filter(selector => ThemeManager.isElementSuitableForBackground(selector))
+								.filter(selector => !this.searchTerm || this.matchesFilter(selector));
+
+							if (this.showOnlyWithBackground) {
+								suitableSelectors = suitableSelectors.filter(selector =>
+									State.backgrounds.elements[selector]
+								);
+							}
+
+							if (suitableSelectors.length === 0) {
+								return `<div style="padding: 10px; color: #aaa;">No suitable elements found for background customization.</div>`;
+							}
+
+							return suitableSelectors
+								.map(selector => {
+									const isCollapsed = this.collapsedSelectors.has(selector);
+									const hasBackground = State.backgrounds.elements[selector];
+
+									const bgImage = State.backgrounds.elements[selector] || '';
+
+									return `
+										<div style="margin-top: 5px; width: 100%; box-sizing: border-box;">
+											<div class="BLTOOL-bg-selector-toggle" data-selector="${selector}"
+												style="cursor: pointer; padding: 5px; background-color: #2e2e2e; color: white; width: 100%; box-sizing: border-box;">
+												${selector} ${hasBackground ? '🖼️' : ''}
+												<span style="float:right;">${isCollapsed ? '▶' : '▼'}</span>
+											</div>
+											${isCollapsed ? '' : `
+											<div style="background-color: #3e3e3e; margin: 5px 0; padding: 5px; width: 100%; box-sizing: border-box;">
+												<div style="margin-bottom: 10px; width: 100%;">
+													<p style="margin: 5px 0; width: 100%;">Background Image:</p>
+													<input type="file" class="BLTOOL-bg-file-input" data-selector="${selector}" style="color: white; display: inline-block; width: auto;">
+													<button class="BLTOOL-button BLTOOL-button-danger" data-selector="${selector}">🗑️</button>
+													<img id="preview-${selector}" src="${bgImage}" style="max-width: 100%; margin-top: 10px; display: ${bgImage ? 'block' : 'none'}; box-sizing: border-box;">
+												</div>
+											</div>
+											`}
+										</div>
+									`;
+								})
+								.join('');
+						} catch (e) {
+							console.error('Error rendering background selectors:', e);
+							return '<div>Error rendering background selectors</div>';
+						}
+					}
+				};
+
+				// Self-executing function with global export for KoboldAI Lite
+				// Do not change this method, because KoboldAI can't load others
+
+				// Define the function we want to expose globally
+				window.initBlackliteTools = function() {
+					console.log('Initializing Blacklite Tools');
+
+					try {
+						// Create tool container if it doesn't exist
+						if (!document.getElementById(TOOL_ID)) {
+							const toolsContainer = document.createElement('div');
+							toolsContainer.id = TOOL_ID;
+							toolsContainer.style.setProperty('all', 'revert', 'important');
+							toolsContainer.style.cssText = `
+								position: fixed;
+								top: 50px;
+								right: 20px;
+								width: 350px;
+								max-height: 90vh;
+								background-color: #1e1e1e;
+								color: white;
+								border-radius: 8px;
+								box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+								z-index: 99999;
+								padding: 10px;
+								font-family: sans-serif;
+								overflow: hidden;
+								display: flex;
+								flex-direction: column;
+							`;
+							document.body.appendChild(toolsContainer);
+						}
+
+						// Initialize module manager
+						if (typeof ModuleManager !== 'undefined') {
+							ModuleManager.init();
+						} else {
+							console.warn('ModuleManager not defined');
+						}
+
+						// Setup file input label updates
+						document.body.addEventListener('change', (e) => {
+							if (e.target && e.target.classList.contains('BLTOOL-bg-file-input')) {
+								const label = e.target.nextElementSibling;
+								if (label && label.classList.contains('file-label')) {
+									label.textContent = e.target.files[0] ? 'Change File' : 'Select File';
+								}
+							}
+						});
+					} catch (error) {
+						console.error('Error initializing Blacklite Tools:', error);
+					}
+				};
+
+				// Execute the function immediately
+				window.initBlackliteTools();
+
+				// Flag to prevent multiple initializations
+				window.blackliteToolsInitialized = true;
+			})();
+		</script>
+	</body>
+</html>
