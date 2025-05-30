@@ -1,2730 +1,700 @@
 (function () {
-    // =============================================
-    // BlackLite UI Customization Tool
-    // Copyrights Peter Hauer
-    // under GPL-3.0 license
-    // see https://github.com/PeterPeet/BlackLite-Tools
-    // =============================================
-    'use strict';
-    console.log('Loading Fixed Theme Editor');
+	// =============================================
+	// BlackLite UI Customization Tool
+	// Copyrights Peter Hauer
+	// under GPL-3.0 license
+	// see https://github.com/PeterPeet/BlackLite-Tools
+	// =============================================
+	'use strict';
+	console.log('Loading Theme Editor');
 
-    // =============================================
-    // GLOBAL CONFIGURATION AND UTILITIES
-    // =============================================
-    const BLTOOLSLitedefaultThemeCSS = `
-/* CSS Used specifically in Lite */
+	// =============================================
+	// GLOBAL CONFIGURATION AND UTILITIES
+	// =============================================
+	let BLTOOLdynamicDefaultThemeCSS = '';
 
-	/* base64 encoded image resources used in Lite */
-	:root{
-		--img_nikosquare:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAEAAAABACAMAAACdt4HsAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAADxQTFRFS2Si+X5+pmBfHyApLjZSS2SjP057Vzw5EA4Sf1ZT+9Sv1WpqnYx/7qaYw7vUAAAAS2Sj9PPzgnrLS2SjAzrF9gAAABR0Uk5T///////w////////////AKj//yMlHqVpAAAD3klEQVR4nKWXi7KjIAyGFSgxEjhV3/9d90+8onZPd810prWSDwi50fyoTNP7/X79g2D4NJlqo+rvV/Mf8npPM2B6/4+6ihKaB/pGaH4e6IPw00y3+48xhBC3J32Id+NeUzN9UPfer4RoD/eIqbnuwLS7zncLAfqdPvvDmvY9XAE6vuuImEAw8fNT1/kr4Qqw+YhdIocfJl0glxyTvyG8m7MNY1B9diAkmgGUODnH7Km7AF53AGEjUJtWYdUPzn0LyC6AQO0qCUCi1PKXAM5tCwXeAC0ROf36AqA2VACmbQ8yP9DVimeA6lPKkLaW3EPylXAARBXV701OhOVPI6hcAXH1mTyP7e8AMyEc4mQDzP7XrfOfl5D7ndAdfXID6NwMyXACEpEbgPTCLJn1hEGoAep/OKheQiCEEhj1HgBQX1ZxQMPLlyVsABwejkp8EGEQAkxRA4RgIRYhTxme1fkKoBZwAHjLA+b/cgLQ8gZ4gZ+tVtgAnboaa+Lg0IwRhBqAmX0cI0WFqHN3FUAXAOPpzIWhPzZYQgUAu4ljiaKTaKwtZtwAIdv8XkocR9+UYM5/BMTRxzJKsWEu+RPAAsBxKSWWgTHS18cofiwhlCJD4cApUb0CNWKA/5dhwAqKD2UIXAEoFgUMkIJTCCcjzkGE890BQhXA685WQNqD6ujKWDRhhI7EdKUCtKSGxd8ASEr+6sqNApKPeD/iFEpT6nAUcAMgMmBzqwVPgJCd80X3AIlDDcjSzH8PJbD7AGiT020WjfcCN0jI5WwJGk5axP4eikeyvQd4HE5i7I4xEpWANKg0m2p0OUIcQKJnd7uCaABMRebOSOoB1WUVYACzaGSs012NaI5gAC0GcPWD9iLI6/qVdGeXY7R6xu1M0FAhG7s865ctw97Zoz85kuXi5T2EbaZatLileQA+VifrYGrT7ruL+lbZ0orYcXQJpry/tl+26l1s8sOy+BxMqKjr23nf7mhFnktbOgJOGQmnVG0ZVve06VvDUFmEztGIhHAy2YHA+qsCuFNS1T0Edf41AOZ1b7uwH1tYYFA4p3U1owiOOu+AsyxrQ3AIXwrLXtryL4BPpW0rrvMaPgHSx+K6l3cj3Oin1lH6S3nfd+KDa51lAjJhE6ddz7XRu29xUH51O95SgNOahDTB3PPvLc7cZPWYEVlVlp5AkGtJK/63XZoq0jBsvUrPeNDvr/tE1SnD3qxIEVuNfAsY0J9w4Ux2ZKizHPLHFdw127r7HIS2ZpvFTHHbbN+3+2Qm29p9NvXv2v3twkHHCwd9vnA8vvI8vnQ9vvY9v3g+vvo+v3w/u/7/AZoAPJwrbZ1IAAAAAElFTkSuQmCC");
-		--img_humansquare:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAAXNSR0IB2cksfwAAAAlwSFlzAAACTwAAAk8B95E4kAAAAB5QTFRFFIqj/v//V6u9ksnUFIqjx+PpcbjHFIqjFIqjAAAAcfUgXwAAAAp0Uk5T/////9z//5IQAKod7AcAAACKSURBVHicY5hRwoAE3DsZWhhQgAdDAaoAO4MDqgALA/lAOQmVzyooaIAiYCgoKIYiICgoKIouIIhfBYYZGLYwKBuh8oHcVAUkfqKgaKCgMILPJggGCFMUIQIIewIhAnCXMAlCgQKqEQhDmGECAegCBmiGws1gYFICA2SnIgEHVC4LZlRiRDZ6cgAAfnASgWRzByEAAAAASUVORK5CYII=");
-		--img_favicon_busy:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAB5QTFRFAAAA459F8vrrV2hQWm5T2M2oeo9zWWtS6P3k1evQZQ2NdgAAAAp0Uk5TAP//7xr/5HYRi6G3mX8AAAEASURBVHicjZGxagMxDIY9GNr1hryAwaGd1frWQEQ8x+HuAXJEpbOPmG4ZkwcopG9byXYuCaHQf5I+0K9ftlKi0zl9/RzUVcdX+ny5Bc/fRGd1C05Ex0uDaaHUE31IOXKpPaDGPdGI2rfIIMLoEwC0CbkU4FIEIhog7QsgAuqM7QegYRSnFbhgWHNwyKZKr6S3TTA9oKzV8d0IaIIVCx6BXQEzs3mTEQ+hgCb0bQZuAhYELMUig9kDMH8BaZr/gWLqnVkXUNdysAsowRC2tlqU6HLcuk7k4/SSszOZzq/ncrYhW+Rnzg9AZUL2RLfrOoK0qIC/RtTi9JPaR4B07e/0C6jPUVuNXWqeAAAAAElFTkSuQmCC");
-		--img_favicon_normal:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAEtQTFRFAAAA+XJ0l09PsVdXcTw842hqw2hmTi4vMCQlb2eUgWtl+tGpBAMDEw4NPCkoFw8PJBgXt5WBVkxW4Nvf7Lia3Z+MpJnAZ05HnJOTYIS/NAAAABl0Uk5TAv////v//vT9//3/Nna08qf+///////a/hkcROQAAAGUSURBVHiclZLRcoQgDEULBAKoIKjI/39pL4i7nbUPbcYZwJyES5Kvr3/YvIx1nn9zL4G4EwuTXX7xs4QFGEklOT6SBENERguhsWHFD2AVRhL8IEgawY8b5L4fYtg+TSl8+NMEu4G2P34Q67r6I+37dLyBfU/4PY/sInG2MR8vIHG01h9mHfq1hUUQtwYcLEcp+ltmwqutdy5HMwAfc8ExKtVSLEZZW13Jxb4Azq7UHFnFrtGItLliS1UDYOfctm3JhEtlEH5zzpZNDsC63AB1VysY3gqC3C2ytsNW6Q3IjCt91Qr9QK8MiFL4nUEpEyNLYmodxYo3RquVHWUmbbRu0QCbKWwNfil5zYeENrRRqtZrGEQYqdtW8FWHLl4bgZDLFLZdbS/UzP2AEGTufkt3xWSvwzJeh4GxHWD5qlgXOZ/n2ULuC/od4Pk8x9xhCekD0Bqd/DmXgbpEumRgrMPn1K6ecs4pJc/V0nE+x35KtfTJTJufpvPTD2DyNZ3e4wP3zDCHevg+yYvf09PfkHuK7/Vv9g2CjBTdqv3bFgAAAABJRU5ErkJggg==");
-		--img_sword:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAA7AAAAOwBeShxvQAAAB5QTFRFAAAA/rUT5uvzztXjq1kW5+r14ufw/8YF/8QHr1kWOCO8XQAAAAp0Uk5TAPr+/fwgpBqRPkYi9G8AAAC6SURBVHicjZCxDoIwEIZv0cLmryTiWl/AhOBOcgubcWAmDs5lglEWdWTwgT1MkGvj4A1N+/Xr3Z8S6VpcrXeurN1799baTIOzCMdQyANBg4+QHQIhq2fhMgqqZ/WfcAqE/LfQPR2REgzwoKUSIiB1uoMA3PWIEUCPMD1arHUG08YFvAz0Ymz0T8XMBWpPYMbWE7hs4L49+4R5aGalAbiU/OkEeiAZBGACst1RAFbjqp/IgA63CUQ6gtQbfGErFF7/nE4AAAAASUVORK5CYII=");
-		--img_paper:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAAnQAAAJ0Bj3LnbgAAAB5QTFRF+OmvAAAA89Ze14Rw2cCY1k8/8eGhmEQ/+uqj87Jse3RL9AAAAAp0Uk5T/wD49//9of8rH/vnQeUAAAEOSURBVHicXdG9asMwFAXggx1COmoJ8VgNptkKcmqyGaKSB0i127RkLiTgNV2CVxMo9G177rVSm2ow0se5Vz/Gbdub6YBz2//w0sV59s0wbs5X806X1j4JFN4Bx45La9eE7OM1PANIBHKCuW7CAYgkkIWgEaWeYN5DjHA0AthIZF8ILAgrpBJJ21N1hyGCXXvGA2EJibxJQaVwgUQKlNIkj5AePNKyrWAJtYS952dH6AlpJaQViW3AXc/shlnZFoRHAhd6hpkjrLGEl7lShFKuphXgA0B23WtF+UmwCjy1VijUw70H4iPeH0KaIMl/DKZjIf/lWo/QCJjVSAMYUoSvCH80gjHdEZibCQjJJuYXZ+xAP6Rjil4AAAAASUVORK5CYII=");
-		--img_dice:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAAnQAAAJ0Bj3LnbgAAAGlQTFRF2gA3AAAArgAs9O7ptwAu2gI45Fp63y5a8+rm8t3czgA0xgAy3RtM7bG74Txk53qSsQAttQAurwAs8dLU6Yyf3tfT5WmFsAAs2gA3wqqrsBM6uhxD2gA32wA22gA30hdGsiRHt1Rq2gA3GZfQSAAAACN0Uk5T/wD//////////////////3QL3f////+22v///3AK+v///7M1XKlYAAABCElEQVR4nKWT63rCIAyG2xCggD1bD1On7v4vcgnForWVZ8++P22SF5JAyPKEsjy/nA/f2VwOALqmZeDy8xZlWSRk3xJwXowTQQA0BBzY2ujNa5gcPgsBnH/XF6aWMSxrU/Q7TkIA470QotAR0AU5+usEeFuoCCjhV+C0g2FHFYGKbcNVjEBW0xbb5xq2tEHNjQRAalU9xclRKU0OfABr+jsgVVkq+QFQ1I5RH4CS2yv/AyRTJIucKZ7kilzqqDFxWXacB7d63acRALsyMMMtAGgXR244fgUAwC0M7XC8wwh09MHrbOzt6cbr/dg3/APobIw6hCB+OO0+GPgQTPJPL2+bDhYVHm9Cv52hDBGSdP+eAAAAAElFTkSuQmCC");
-		--img_chat:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAA7AAAAOwBeShxvQAAADxQTFRFkcPmAAAAkcPmstXukL/ltNbueJGic4aTibLQkcPmvtzwpM7qmazZkcPm5vL5ps/ruNnw0uf1udD/////pH/0JgAAABR0Uk5T/wBl/xH0////Qrz8Bltj6diDAgFfSBG4AAAAzklEQVR4nL3TQQ6EIAwF0BYLSBFl9P53HUFhVKru5i/QpC+2CRWQOOpLIo9YAqQ9tJmqAJbqAFyBFuugK+hk0P0b9Mb05/MCjLUGwOZzexeBuQe9senjdmth2xbykEoFR89gJfQClHsD4eGyMlDAMmCkHYziPvixAhzjvlO+K9FxXShXAOKcB/VMJTPWegaYgP/gLwOVegVTqishO9i2+Bbw/h+Eth7g0LkOdog7AWoBnQDS5RvpuvGcZcjZ4JIWBuXkbvgAkMILWOdx6fEFbukIF0RE9j4AAAAASUVORK5CYII=");
-		--img_chat_mono:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAA7AAAAOwBeShxvQAAADxQTFRFu7u7AAAAu7u70NDQurq60dHRjY2Ng4ODu7u7rKys19fXxsbG7+/vubm5u7u709PTyMjI4+Pj3Nzc////jB2o5QAAABR0Uk5T/wBl/xH0//9C/7z8YwZb2OmDAgHH4NesAAAAzklEQVR4nL3Tyw6EIAwF0BbLw6Lg6P//6wgKo1J1N3eBJj2xTaiAxFFfEnnAEiDtoc1UBbBUB+AKtFgHXUEng+7foDemP58XYKw1ADaf27sIzD3ojU0ft1sL27aQh1QqOHoGK6EXoNwbCA+XlYEClgEj7WAQ98EPFeAQ953yXYmO60K5AhDnPKhnKpmx1jPABPwHfxmp1CuYUl0J2cG2xbeA9/8gtPUAh851sEPcCVAL6ASQLt9I143nLGPOBpe0MCgnd8MHgBRewDqPS48vawEIEy7Qd5cAAAAASUVORK5CYII=");
-		--img_compass:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAA7AAAAOwBeShxvQAAADxQTFRF/7VV/+J5AAAA8/P11Ob1l8jt/39K+chs/9tn/8Bd/+J48eTO/9x0/9Zv99ugiHp0/5MKWVFO/6k53KWUcJJTdwAAABR0Uk5T/v8A//////8Zydn/klf///v/bf9A3eYXAAABMUlEQVR4nG2T2RaDIAwFUwEBWdz+/18LuSypNS8enTGQQGgZ4VKMW4kYHb9fnnxaaOC4fUZsxbmoxHFRx5/f2BJRkY4Dgts+f2F9AU0Q3Aol9Qyd56DUvisVMlw6Dt5D5wVDKArzusdaBfaXlZqCUrlyiksRnORKt6dioRRCSND5CK1Z8Au5vn5Y1yy4zkhBaSRYS9yh85YiURwF3CtHbhwpPHGN/FuAsN7gOjwF1bhpAtYg7tnO5Wdww8Z+nn+CapyFswtiibJN5sbIJaQQGjdyk7PMWr8RRisziU7zj0OwaBRaPTkU0ep5WPo3+mGN437wedxIYS2+n7vkvl4YvnLl3Qb0Z1TICRZcWvg2Q8B1A8dkJXqNtHTh3cCE9tHzT+zB5/Am/4aFUAe4OT66+fULsfQP1birKzkAAAAASUVORK5CYII=");
-		--img_websearch:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAN1wAADdcBQiibeAAAAEtQTFRFAAAA////////////////////////////////////////////////////////////////////////////////////////////////g5kLBwAAABl0Uk5TAP8Ds+QtpRpgIn35Ud7vnMFxhNZFkswMPA2JIJgAAAFISURBVHicvZPbjsQgCIb5PdVT1dpW+/5PutTZncwp6V4NSasGBD4BoruI6E1LqRkfBb1LX2bcZV76i1r4dCoS1hW3nX/y0uW4aBbUiiWPg3xwMjU+Fxgy2DZedhS+0aa7Xp23MXeaQ+9BUV/5CKg/C7b2nKFxEwpRgZs4iPLs9aa3QKVtJA8Zo8TA2agCdgRIkIIyrJXhl7LYiExCIk30FdFakHbUtXO6k9MPO6H1gDxOdgvPiYoURMTu4alh0gN0wcKMLkNHVA0cFZuG6QxpB6eDqSXYdaYeyrIqL5MQao6p5R0Dc22lthx2jqZMlvwjfpZc9lbayHIPYdsTjjNaslx39hu53jYkPww2JE4siTPamVjgOveAYwL0MBAMeX4D+RftBq+/89D/KfdVw1y33HXTXrb99eB8Gr36OsBPw6vehnd4+Tj+P8K7EihG+ntRAAAAAElFTkSuQmCC');
-		--img_save:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAAnQAAAJ0Bj3LnbgAAADxQTFRFQlFtSVp52uHyws7lztbmjpmuUdjlu8TZeIminqi9WvH/rrjNVMbYxuT0Xm2HAAAAR1h3RVVyR1ZyR1h2eZplWQAAABR0Uk5T////////////////////ANT0HUjqAr+PAAAAgUlEQVR4nI3Q2RaDIAxF0RuCDNUWKP//ryXFWkUczmP2ghVAjkTklOQAvLT28R1CgMwbQCoC6oBIH4ocAOIR4BYoZtZboOHbKHlaQw3rTsFNNVObFjCP2gzmGvhZ47k/qOUdW7An4IdfDbAt+dLYgJbkR+zdq/YnYn+rhBxT2kPKH1FvCKEBnt/sAAAAAElFTkSuQmCC");
-		--img_save_mono:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAAnQAAAJ0Bj3LnbgAAADxQTFRFV1dXYWFh5eXl09PT2tram5ubnp6ejY2Nra2tysrKrKysvb29lpaWW1tbcnJy3d3dAAAAX19fXFxcXl5eL2vTkwAAABR0Uk5T//////////////////T//wDUHUizGkTXAAAAgUlEQVR4nI3QURKDIAxF0RcCAlUqlP3vtaRYq4jW+5kzMAHkRERWSRbAU2uXXjFGyLwBhCKgDoj0ocgJIJ0BboFiZr0HGj6NkqMt1LDtEuxUM7VpBfOoLWD+A881XvqBWt+xB38BbvjWAPuSK40NaEl+xN+96ngi9bcKyCmEI4T8BipnCJv9iKHqAAAAAElFTkSuQmCC");
-		--img_load:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAAnQAAAJ0Bj3LnbgAAADxQTFRF8MQZKbmZ8p0fAAAA8bIc8MIa8MQZq7NIKrmY7cQa0sIs8d2BebRn87wcLL+aJrmZ//8AdbhpAP//c69phZ/jMwAAABR0Uk5T//3/AP+y8v6kbP///xcZUAGrAUn40tQBAAAAp0lEQVR4nHWSiw6DIAwAy1peojLd///rKm3ZZOOiCXLpBRIhB2CCf+JeXUr1RAECATGQ+WN3TFUBKsJmJu0ijOCZo5m7EJzVRrE2c3ZBhoiXCXoYsYm4qejbUSbWo94HXCfZALXF0kVWQVAKP6Xo/hK0RHZcmVnAa+lzketYESBb6dvwPmxDqdX49TiWlIw/JeG6+ViCVsJZCWclnJVwVkLwfwau/+INBncEwpxiohQAAAAASUVORK5CYII=");
-		--img_delete:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAAnQAAAJ0Bj3LnbgAAADxQTFRF////AAAA////////////////////////////////////////////////////////////////////////npt1BAAAABR0Uk5T/wB3M/ryVkUE3GQ8bhvOlb+s6oPyVnGNAAAAt0lEQVR4nHWR2RaDIBBDGXZlVf//X8sMsQtt88BxuJpIUDTVrBLZhg1F0WutL/XUNUYfB/Dqh/Z/wA9AbLVIrIjMlySc6FyNHMC2gg2grqAC9BV0gIOHs4+z2y55B0DjvELJuUDFLYDzUsCfNAApKs/ustQFkFHP0C6PGkAmxz4j536HgdQYplWwUuEEAeF7xmkDgOGbSxyVo+EvEkCZzT0XZT7AmwpAXEEEWOutdANT7WvbVo6gB7iKBNvL+guBAAAAAElFTkSuQmCC");
-		--img_delete_mono:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAAnQAAAJ0Bj3LnbgAAADxQTFRF2NjYAAAAnZ2dRUVFbGxsg4ODg4ODjIyMXl5ejY2Nd3d3iIiIsrKyfn5+ycnJe3t7kJCQhYWFj4+PpqamFCC2sAAAABR0Uk5T/wD///6X/0j///tu/7z/3gaFJ5RWfO2aAAAAw0lEQVR4nIXQ2xaEIAgFUEA0b2mX///XgaJZ5jzMeVJ2CxLAOytbVisAbsV7fxJYSG6+bAIlEVGDb5pc0/7AlFQEUFtNuVohLj+5hiNymGOQYUo26DP0f7DquzKHWhNnfek6QHYuhhCdyxOwE5G64wG8LIRUtC6t2mmw64X0cxd1a+QHqOGGUAV2g5IAUrxbRT2XAa7hfA//whIApBOT/EHU87PEI+sMptaIdcYLXjs8DDZ+A28G2OtYrx0fWDoP6ToCP5HeB/Sxx091AAAAAElFTkSuQmCC");
-		--img_download:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAADxQTFRFAAAA////////////+f783ffv/v//3ffv3ffv5Pnz8fz56vr16/r23ffv9v377/v4////3vfw5Pny3ffvbBfD6AAAABR0Uk5TAP+TRfsGWm8m6uDv0U/LfyiIepVDO0gQAAAAbElEQVR4nNWPuQ6AIBAFF+S+j///V0FjWJTEwsqpyEzxFoBXKGnQvwcuQw9B8kkLIRzrgbn2ROGQFwwFbYe3GgUfR4gejyRqzg1D0+2q2gszdb6ql9x2bH54AFW0Lmrxc1BSPvw2gQKZ+BQW7MaRAtfJQ2l0AAAAAElFTkSuQmCC");
-		--img_mic:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkAgMAAACcbnALAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAAxQTFRFAQEB/f39W1tbsrKyhr4L4QAAAAR0Uk5TBv+O8t7TK14AAACVSURBVHicY2BAAatgDK7/C6As3dAKKGtqaByEwXQ1NLyBtizuJiCr6QGQxXsIyGouQGU5AVmNIBZ3EpDVCVLHXTA1NIwXxGKO2Boap3oAZFycduiLrWADpzfta7oGtsP0AQN3DMRrdau2QjzHFBoaCnEBw9bQKKh/maY1wIJjGgM6i+n/9f8Yrt///x9Ui9aqFQzIAACxbkd5KhPnwgAAAABJRU5ErkJggg==");
-		--img_mic_live:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkAgMAAACcbnALAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAAxQTFRFAAAAHvoBSldJTaRCcSDH5wAAAAR0Uk5TBv1875jbENYAAACVSURBVHicY2BAAatgDO7/D6As3dAKKGtqaBiEwXQ1NLyBtizuJiCrCeQG3kNAVnMBkMUKZgWAWE5AViOIxZ0EZHWC1HEWAFm8CUAWc8TW0DjVAyDj4oCu3wo28HrX/0XXwXaYPtDgj4F4LXzVVYjnmENDQw9APLc3tA7qX6brDbDgmMaAzsLq+v///0O1rFoFD0owAADWKEefP5UQnwAAAABJRU5ErkJggg==");
-		--img_mic_off:url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkAgMAAACcbnALAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAAxQTFRFAQEBoKCgW1tbmpqa1zTSqAAAAAR0Uk5TBfGLNb6PCuwAAADJSURBVHicXdCxDoIwEAbgi4YBjeEpGHRnNzqbOHgtMSRldOQFCFAnHwBmR8M7mPASfZSOJN7RMmCnL7n/mrsDWLx+xgbfEA2sGFNIjqwWBRjWChGfOHh9M3CSpvBSU5E1SnCStvDyRVIpvaStaieF46RQl9LqnBScrMLmyjqb0esirVNolcEX57amRBGwIiqKmAdN1B4fLX9oKt1pQVijzSG8kXZZLPo25VjBe3AsGWjLOw8Q0TBdPZ+jg3/NHQvRhXzLof8sDvsDMJVHBpRtjD4AAAAASUVORK5CYII=");
-		--img_chat_cust_btn:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAA7AAAAOwBeShxvQAAAB5QTFRF////AAAA////////////////////////////////+ZDkTwAAAAp0Uk5T/wAM8dK2SHAtiuAmg50AAADMSURBVHicbZFNEoIwDIUztjjjMvUH3VlH0SXeAPECegPLDeQGsHHLcGJNWxqmmAVJPyZvkjzAKMB+LxpRtQzOeYl4FPUANjnIKitAGA868LHwIB8ANA4UMQgtwrc8IqBijVN4Q0ngQ5pJlVGjrBFS++uN6AoDa0oJDtpPWFGaE3hRdYMlpRmBPVXXKZi0OFHNolu7Wo+4s8MbQNXxYElLo6c8eu+WC/cQOlpfxvfwQLGG/g/sTeUd2AYyqvmNE4xyVqZspTMbDyP3R/EFHDwlDSXkmSQAAAAASUVORK5CYII=');
-		--img_chat_abort_btn:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAA7AAAAOwBeShxvQAAAB5QTFRF////AAAA////////////////////////////////+ZDkTwAAAAp0Uk5T/wAGyhCtf+a2XPn1V7sAAADISURBVHicRdE7DoJQEEbhkxh8lJcYewqtLWgsDRswrEArWytqwgpM3LDM/DNAAcnJR3JnLuU3NCWe+n0rnGDKcIYXX6iC1A848AH6BbDzIGJgDvYWMUBFRxAHtByv9p0CbO4UJ/smQKEECTCHIKOABZEAFkQCeEhiwEMSAwoiDhTqUWdZwlm/TBl0yCCsQIQViJBj5tDkHmLoOcSYuRdyD7kXcg9x3J7nMoWTrV+DpnCie2l1UZ2HZwKRLZcFOOmp39U9w/ExNH9CeSgHcv95sAAAAABJRU5ErkJggg==');
-		--img_chat_send_btn:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAAXNSR0IB2cksfwAAAAlwSFlzAAABigAAAYoBM5cwWAAAAB5QTFRFAAAA////////////////////////////////////JHyblQAAAAp0Uk5TAP9vDPYrvduISRPAj7AAAAB4SURBVHichdK7CcAgFIVhVzgg2scFbLKDpZAZQkibFUIWiGTfQArh/hax/EDv4+jcvCVnzq3QDExSqQAdGaA1A/wJUGwAhQpQyYBeqoP2DPAXQDEBFBbAV8qAnj/gFT7KskNjbJ3DcXwuiCsclswYGJSNcggb3+EFzkgkYRPincoAAAAASUVORK5CYII=');
-		--img_corpo_send_btn:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAE69gABOvYBOrFXOgAAADxQTFRFAAAA////////////////////////////////////////////////////////////////////////////2EloEwAAABR0Uk5TAP+Ns8QMEdZ1KgY6hEGpWfHSYnJ1JXggAAAAjklEQVR4nO3SyxaAEBCA4VG6KNLl/d81xUwMWbZqFo7T/y0cAkjHzFCbfhNCdpU+CFETvr8L7G/i6WUR95JIey545wL7SksqsI/ttTYNF9TBA+Biw46AhO+GOgEU6gYz9QcE4QFItz0gBbdYwhm6XYe/IAJgtJ2y+45BcX7wGdAXsBUwuZdf8jeMRyn24QQTAQPJbL/N8QAAAABJRU5ErkJggg==');
-		--img_corpo_abort_btn:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAAXNSR0IB2cksfwAAAAlwSFlzAAABFAAAARQB+zng/wAAABtQTFRFAAAA////////////////////////////////600+wgAAAAl0Uk5TAAMbfdr6//TxAeIJjAAAAFJJREFUeJxjZEADjGQJCCkpCUDYd+7dBwkoJz+AyjKdOgcSsNCDq5etBQm4KcAF/s0BCZR9QJg4EySQhmTHrGEvgOF9jADCCEKMQMaIBlRAhgAAIUIkIRvVXjIAAAAASUVORK5CYII=');
-		--img_corpo_edit:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAAnQAAAJ0Bj3LnbgAAADxQTFRFAAAAmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZa/DskgAAABR0Uk5TAP7x64ADDhfktXFmeJMyotNKwj87K0aQAAAA70lEQVR4nLWT3Y6FMAiEC6W2aH/U8/7vurTVNWvRq7NzYYhfgGGMxvyPNg4YeHvkxUJVIB07QsC97AhBn0EWbMo+JwR+mG/JS5F3CMr8GQE419IXwIFPc/X3PKFy5L7DKx4an6fqknJ93q7wnfc7OAAWhS+uXSpOAZMb5y9HzcLphS9yS/nLXby4W3DodxHP/cZonA7/J4/TwG184ZKZjf7af9S/ootPGjcsmbxxs8K6XVnc9tfXAbg1taxp4OaD0FL3Navb/d2jRGCc31LQuXi0aU68jvkdkkZbP+/wfU91GFbW++VK+cvoM5r/ln4AY8EH0Qkc978AAAAASUVORK5CYII=');
-		--img_corpo_retry:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAA7AAAAOwBeShxvQAAADZQTFRFAAAAmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYB0vbbgAAABJ0Uk5TAP+OCnz5/ZjdwtU8JsqwVWW2UONGYgAAAOZJREFUeJy9U4sOgyAMBFosguj8/59dAXmOuWRZdokJXI8+8BDit9geiI/tXdR5LSO0d7PDRjYwL2lwYXoxJ9Fu4hIFrCuUOIXM6toDhVoKpcRynglf5QIsE/yp3B4n3fuSZ2wlC7g/PzZlG4Hj+tBFARU1grXmEoVpS2i5wFxwpHx8L0MDXCLguLbKzq72H3Amz3bEjnCYJFxfoo5rprWPwyJ1Wqm5gAoTBTSWAP7lrhHYsUVbuVTi7OM7m2qrguiP1jBe9nbCkEVTb7kqD+a8TLsTndm0AzZ7b3vx8eGkNLdP70s8ASe+BWpoHN76AAAAAElFTkSuQmCC');
-		--img_corpo_delete:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAA7AAAAOwBeShxvQAAADxQTFRFAAAAmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZa/DskgAAABR0Uk5TAP8ZE8/k2cbhH56BdA9kAixGQ1txX8NpAAAAuElEQVR4nL2TyRbDIAhFAxqTOiQd/v9fmzikgNhd60qQd8F3dJr+s54+JpkzMdzb/gEAzvBznI9kq/DHHhZWgfbMhRqFM2CMrAfYWrsVOKPowSWRWJHpaVMsDItUrwyVGYqeMVQ9Zeh6whjoCWOgpwxd/7k/zDg4v1rY2zd9ZigV7f5lDtdVXP7VQskg/qHGYP4rDOF/xzDSf8nw/ZMrDF9DO3q0S42i4n9mxBrsm/JxUvSvXSZ/s96e2ATDYcXDVgAAAABJRU5ErkJggg==');
-		--img_corpo_theme:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAOxAAADsQBlSsOGwAAAEtQTFRFAAAAmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZCNPppgAAABl0Uk5TAP9EmbvlZocD/vsGPIjPfaJbLtdJl+Y6R35RHH0AAACySURBVHictZPJFoMgDEV5WoqA89D6/19aLIg1yaq1d4OPc48Jk1IX4JsHIrrxLAYaHBgWAxrP9K8amsUAkKttnyReIlhUaaKClYQJXRHpMEnCYPOy7CAJquhvkb7gLXEEYTRlxIyiMLvcg5slocVyjyxolXIfq3bvkcwcfrn5vCipKHR17vmbha9531ZRIDvPBXJ2XCCnz4V/XDmNOk2ka3+KAXN+KSQGvNH7WzOexd95AaOkBtmsQk/EAAAAAElFTkSuQmCC');
-		--img_corpo_clip:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgBAMAAACBVGfHAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAA7AAAAOwBeShxvQAAAC1QTFRFAAAA////////////////////////////////////////////////////////oUirmwAAAA90Uk5TAP6GZ90GEyLL6J1QL7RBWlveQAAAALlJREFUeJxjYMABghtFliPzeRoFBQVNkQRSBLt0Jwoj+KwXhQNYTwgeQOgQXMrAwDdxAVyAGSx5cQKUW6HKJBjA3hSgKAAVMHRjEmRgFikYLgIJTCIJSALcgst3yiJ8u3E660VBQTmGhbDwOCjNkCsoacra2AAViJQIYCh+ysAnaAAPQFUQdVIkABbmjUIJwDBuRETDScHushxFiDpILDQKTpkoODkALsBQ5CgoKPuUAQnEaSknMGAHAC9ZNIJ+mLnNAAAAAElFTkSuQmCC');
-		--img_gear:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAMAAABEpIrGAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAA7AAAAOwBeShxvQAAADxQTFRFiYmJAAAAiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJiYmJ1owGHwAAABR0Uk5T/wAOBObNRLP0Fih22YC+ZVE1n4prfQ+hAAAA7UlEQVR4nJWT2xaEIAhFEbxk2v3//3WsmUCLVmt4It15kCNgXgIkpZ4uSQNgsuDinkUHNuEVmC2UyDPinPfM+hYY4BZbA3R3APoacG/Aet+35h8ArSKxCEBB2QeHP6CfuMTgI3qm8xR3YJJ/0lc28UI3F2Dkz3C2VxTHAmT+OrtrPC/lAkgT2SAUDR2IDSAteJCoiqRbkaEAixg10MV7uxydRF4JHqPnI8NCpxdVsyRWErNIMavD2m7FLde8h/EFQO1N1hJR2YdYS/BFszsPG5oajD/u4cpLxu1o0WVw6tEzqbOJp1MbXkPa8D7FB+prBiyq3W6BAAAAAElFTkSuQmCC');
-		--img_corpo_left:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAAnQAAAJ0Bj3LnbgAAADxQTFRFAAAAmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZa/DskgAAABR0Uk5TAP0C1vSFKA1oFwjrPK3DS6DRtVwhct1aAAAAhUlEQVR4nKWRyRIDIQhEaXfFZdT//9eY68CkkgrH1w3VANF/ZYK3Pv4gHM6wQeGXA/uscD48mBuP9YKz0l9qY8yUFb/Kn/wUuoPdUXAKDPQqN6OYLLBqkUp+K63KWSbuqfeYnCZcG8q0kqbDHEq0Mk7ovrWefZQlz35Sj8VNnJE+vPabegE7dATMPe9UFwAAAABJRU5ErkJggg==');
-		--img_corpo_right:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABgAAAAYCAMAAADXqc3KAAAAAXNSR0IB2cksfwAAAAlwSFlzAAAAnQAAAJ0Bj3LnbgAAADxQTFRFAAAAmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZmZa/DskgAAABR0Uk5TAP0C1oUoDfRoFwjqPK3DS6DRtVyphxJ2AAAAg0lEQVR4nJ2RSxLEIAhERVRE/ES9/13H2QYyVRmW/eyiW5z7b1LAEP0bEBHEJBwE6DKIj4eIRY4HCa6atIfzBGm1PJBHD5metBGoR6NO7QCiQakLALNa4mv76my+nzvdO5bRCGbmm+7TOFFnVlHL7ifo0BXiOvrWuuMma+jP+HHBN/MBKVwEvjDYz2QAAAAASUVORK5CYII=');
-		--img_theme_1:url('data:image/png;base64,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');
-		--img_theme_2:url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAKAAAACIBAMAAACSHv1FAAAAAXNSR0IB2cksfwAAAAlwSFlzAAALEwAACxMBAJqcGAAAAB5QTFRFEBQiKzM6O3+5HSEmSkpScGxzqJCMusLLKFN2HJEVZFN6bwAABfBJREFUeJztms9v2zYUxyUoLnoUQTrrcckK2EcRcocezYk0dqwQUt2OxUwKO85oxGsTDKj/gHVY/9u9RymJ06KrYzFAg+UFES2J/ojv8YfIr5n8dBrV5skjMA5wtoGD9xuPhud+59PGz24ubr5I2gDEXwH9LnDzGdDvA4QsG/9wYvg/Az7bRrWLpEiiWvZAgJwQUnKaxwIujGn8uVE2QmkDUBnTds4Ys4wDzJQ23neakAg+XwE759ZCLSMBpQRgZ7U5iwNMAOictdr9Fg3YON9Z08YEOmN1E8lliOFr55Q1sWKYKdV6B2WUsYAGmqFvO71G4GQqhTFreWA8r4Ft263XCHnSNKptXDMK2CDQ6+mVy+ww2DXQNZ3voIQ6UtdLoSO3tnE2DA4TLZUUQgabylpL0Z8qWYUPTGu5rPCcCYKZGB4rXe0AoScbY617hUCjla61MlobqQxUkLaqNgaGpFpqbbX6BdoXXIBLGrIZPVVw88zUO0DnWgCuAzBJrhz/QgBS6Arl11x2HoDOocspJYyLM8opIZyVnHHKeI4nOK4vaM0wZaRkhJIjki1KQjmpPgF6AELTDu0QfJFvnLYNpPiY48bY2jTgnVxbW1sjrQUfZdM09shMoMdqY28BM+9aBGrVl5ASXlBKS4rvGV7ykvKcVJTzRSk43mWcp5zDxxIOmI3y4jbQth2TXscaYFO/9h0hrY72CmgD0NU8HrA7p9xpGQvodXde8iYe0OnubUmiAt1bwlbQReMAk5V2aNFKmKQwAhhnBB3PezDzwx0rx9g1cDjHcJIxlg9AGOAoDmqkCHPZw40OQPi0KGGghCdEA2q3rmMCF9Cuz3k8YLkCYCd4NOATNnWOHccr4YsGXlFqXSEQ3u1iNHDhcMZ5Hlz+rvVvRgOZWcHwoPsYwnxjNPCFQ5dtvEo5xrmNcyGGTGoiGYNyakVCIuW+Rb6pZWcVDLKhhFPrZGMaZ7Rr7LTRa2vcvkG9BtIfYcbuaO8yYwL/IJIwURNEsP2DutP1TGPeROwphDqz+iNmXyYw+Yk62gwWC3g9TCeRgDs2Dph/DsxGAYt7e41mkYFHMNR0VkodCwirl9cos9hlPOD9yCzRhKAHI7PoqDJLaweZJU0SmtP8S2vRfYC3ZZbJyggIgBmjOQSZpRlklgms1F8zdajkciOzwCpgfXZ99WDblVm0RTdTnsNym/e3YZKbQ1CLLDwEnwNz0jx8L8Mo8zQJUcf/LL8BDjIL62OojVHMTGEqgX/QjV5JBS1LQSyCsqFRf4D7qDtAXnMsYTkOGW+ArkFdxK/1Ep8FcxGGi2w44muUCFH1ox1nKQkvVHizQh5BBeoignAhQsbiCjjILNAQl4fHbjeGQWaxKLOgy0fgVK6DHgNVLXFWAhM8KJKSQldGSqJrCeekV3ZWL7SmRuOEZaeELug2vcwyUVoLVUNcpkadaQNYUyuja4WHysCJVkJpCGUN0YRom0opvJvfAHdllv7qYGXfX/pjmmefdJ88VPtgyx2Xd2WWFKoCa4MJWR8Q00FmCcBeGJ80GluCha64PhCY3pJZ0pubhyx371NmaXVEmcWfU+K0+GZllvabl1kaWAFYF6+EyZGwQWgn43kPUWZ5BD4CH4HfAPCua0n6VeCwC2J+2afPh/RkSC8+9vbXsMvh4qvAy9vA+fDF50N6MgD/uRNwE4CzzSwAQwrAGV4/+fjhw+/mAwJnuGlnDyDk8z4AcbPNvN+Bg8Cw9+bko2t+dU0A+v2A+7j89x1djhrDYWvKnz8PW0u2n6QDkAznIgD5fzQseTer7rGnjPoNoCxuA5/RJB0HLIuX8zx5ti36Ced2W9CRwPzy9Ifs/em7AHzq5+8oHwd8OdvMn878SQC+nCGQyapChVjIw4D+9KmfzfsSbrc5LWHswQP+0HuAcSzhe39xFcOEHkLZMYjh98nlEMMkK8bWMi/SC/wl+Z7aIS8zSmHdVhJOiwxvl2VaFkWBUc2yu3UlBOIClnG5oCSVFV/gPgOGR6hvJhhbHtb1Yln2Ly/TwWyxhPWeAAAAAElFTkSuQmCC');
-		--img_theme_3:url('data:image/png;base64,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');
-	}
-
-	/* Global appearances */
-	body {
-		background-color: #303030;
-		background-image: none;
-		background-size: cover;
-		background-position: center center;
-		background-attachment: fixed;
-	}
-	hr {
-		padding: 0px;
-		margin: 0px;
-	}
-	button, html input[type=button], input[type=reset], input[type=submit] {
-		-webkit-appearance: button;
-		appearance: button;
-		cursor: pointer;
-	}
-	.invert_colors
-	{
-		filter: invert(1);
-	}
-	.unselectable {
-		-webkit-touch-callout: none !important;
-		-webkit-user-select: none !important;
-		-khtml-user-select: none !important;
-		-moz-user-select: none !important;
-		-ms-user-select: none !important;
-		user-select: none !important;
-	}
-	.flex {
-		display: flex;
-		align-items: center;
-	}
-	.flex-push-right {
-		margin-left: auto;
-	}
-	.justifyleft {
-		text-align: left;
-	}
-	.justifyright {
-		text-align: right;
-	}
-	.hidden {
-		display: none;
-	}
-
-	/* Outer container */
-	#outerbodybg
-	{
-		z-index:-1;
-		position: absolute;
-		top: 0;
-		right: 0;
-		bottom: 0;
-		left: 0;
-	}
-	#outerbody
-	{
-		z-index:-2;
-		position:relative;
-	}
-
-	/* Responsive containers */
-	.maincontainer {
-		padding-right: 4px;
-		padding-left: 4px;
-		margin-right: auto;
-		margin-left: auto;
-	}
-	@media (min-width: 768px) {
-	.adaptivecontainer {
-		width: 750px;
-	}}
-	@media (min-width: 992px) {
-	.adaptivecontainer {
-		width: 970px;
-	}}
-	@media (min-width: 1200px) {
-	.adaptivecontainer {
-		width: 1170px;
-	}}
-
-	@media (min-width: 1200px) {
-	.clampedcontainer {
-		width: 1170px;
-	}}
-	@media (min-width: 1800px) {
-	.bigclampedcontainer {
-		width: 1770px;
-	}}
-	.centeredcontainer {
-		width: calc(100% - 662px)!important;
-	}
-	@media (max-width: 960px) {
-		.centeredcontainer {
-			width: 33%!important;
-		}
-	}
-
-
-	/* Viewports */
-	.normal_viewport_height
-	{
-		height: calc(98vh - 240px);
-	}
-	@media (max-width: 534px) {
-		.normal_viewport_height
-		{
-			height: calc(98vh - 260px);
-		}
-	}
-	@media (max-width: 342px) {
-		.normal_viewport_height
-		{
-			height: calc(98vh - 280px);
-		}
-	}
-	@media print {
-		#inputrow, #actionmenu, #actionmenu2,.topmenu,.lastreq,.corpolastreq,.cht_inp_hold_outer
-		{
-			display: none;
-		}
-		#gamescreen, .chat_msg_history
-		{
-			display: inline;
-			height: auto;
-			overflow-y: hidden;
-		}
-	}
-	.aesthetic_viewport_height
-	{
-		height: calc(98vh - 160px);
-	}
-	.aesthetic_viewport_height.withmenu
-	{
-		height: calc(98vh - 198px);
-	}
-	.aesthetic_viewport_height.withtyping
-	{
-		height: calc(98vh - 210px);
-	}
-	.aesthetic_viewport_height.withmenu.withtyping
-	{
-		height: calc(98vh - 248px);
-	}
-
-	/* Top nav menu */
-	#connectstatusdiv {
-		text-align: center;
-		font-size: 14px;
-		font-weight: bold;
-		display: flex;
-		flex-direction: column;
-		justify-content: center;
-		align-items: center;
-		width: 100px;
-		color:#cccccc
-	}
-	.topmenu {
-		background-color: #757575;
-		padding: 8px;
-		display: flex;
-		line-height: normal;
-	}
-	body.connected .topmenu {
-		background-color: #337ab7;
-	}
-	.nav-link {
-		color: #f2f2f2;
-		font-weight: bold;
-		margin-right: 5px;
-		background-color: #828282;
-		border-radius: 5px;
-	}
-	body.connected .nav-link{
-		color: #f2f2f2;
-		background-color: #4787be;
-	}
-	body.connected .nav-link:hover {
-		background-color: #4db4ea;
-	}
-	body.connected .nav-link:focus {
-		background-color: #98bcdb;
-	}
-	.navtoggler {
-		background-color: #337ab7;
-		border: 1px solid #bababa;
-		height: 45px;
-		width: 60px;
-		border-radius: 6px;
-	}
-	.navtoggler:hover {
-		background-color: #4db4ea;
-	}
-	@media (min-width: 768px) {
-		.navtoggler {
-			display: none;
-		}
-	}
-	@media (max-width: 768px) {
-		.nav-item {
-			margin-bottom: 3px;
-		}
-	}
-	/* Hamburger decoration */
-	.navbar-button-bar {
-		display: block;
-		height: 2px;
-		width: 42px;
-		border: 1px solid #fff;
-		margin: auto;
-	}
-	.navbar-button-bar+.navbar-button-bar {
-		margin-top: 4px;
-	}
-
-	/* Buttons disabled modifier */
-	body:not(.connected) .btn-primary {
-		background-color: #757575;
-		border-color: #4a4a4a;
-	}
-	body:not(.connected) .btn-primary.focus,
-	body:not(.connected) .btn-primary:focus {
-		background-color: #5c5c5c;
-		border-color: #292929;
-	}
-	body:not(.connected) .btn-primary:hover {
-		background-color: #5c5c5c;
-		border-color: #4a4a4a;
-	}
-
-	/* Settings and Context menu */
-	.settinglabel {
-		color: #ffffff;
-		display: flex;
-		flex-flow: wrap;
-	}
-	.settinglabel input {
-		width: 6ch;
-		background-color: #1a3364;
-		outline: none;
-	}
-	.settinglabel input[type=checkbox] {
-		width: 3ch;
-	}
-	.settinglabel.miniinput {
-		background-color: #ffffff;
-		color:#555;
-		border:0px solid #ccc;
-		border-radius: 4px;
-		width: 100%;
-		padding: 2px;
-	}
-	.settinglabel.miniinput:focus {
-		color:#555;
-	}
-	.settingsmall{
-		font-size: 10px;
-	}
-	.settingsmall.widerinput {
-		width: 8ch;
-	}
-	.settinglabel input:focus {
-		color: #cdf;
-	}
-	.settingsmenu {
-		display: flex;
-		flex-wrap: wrap;
-		padding: 6px;
-	}
-	.settingsbody
-	{
-		height: calc(86vh - 94px);
-		overflow-y: auto;
-		overflow-x: hidden;
-		text-align: center;
-	}
-	.settingitem {
-		width: 50%;
-		padding-left: 6px;
-		padding-right: 6px;
-		padding-bottom: 5px;
-		padding-top: 5px;
-		display: inline-block;
-		border-bottom: 1px solid #465d73;
-	}
-	.settingitem.wide{
-		width: 100%;
-	}
-	.settingcell
-	{
-		padding: 3px;
-		width: 100%;
-	}
-	.settingsdesctxt
-	{
-		width:100%;
-		font-size:11px;
-		color:#ffffff;
-		padding:3px;
-	}
-	.settingminmax {
-		display: grid;
-		grid-template-columns: 50% 50%;
-	}
-	.settingminmax div {
-		font-size: 8pt;
-		color: #ffffff;
-	}
-	.inlinelabel {
-		color: #ffffff;
-		display: flex;
-		flex-flow: wrap;
-	}
-
-	.inlinelabel input
-	{
-		border-radius: 4px;
-		background-color: #ffffff;
-		color:#555;
-		border:0px solid #ccc;
-		margin: 4px;
-	}
-	.inlinelabel .rowitem
-	{
-		padding: 4px;
-	}
-	.menuinput_multiline{
-		overflow: auto;
-		background-color: #404040;
-		color: #ffffff;
-		resize: vertical;
-	}
-	.menuinput_inline {
-		background-color: #404040;
-		color: #ffffff;
-		resize: none;
-		overflow: auto;
-		display: inline;
-		width: 100%;
-	}
-	.menutext {
-		text-align: center;
-		font-size: 10pt;
-		color: #ffffff;
-		padding-top: 10px;
-	}
-	.box-label {
-		color: #ffffff;
-		padding-left: 10px;
-		padding-right: 10px;
-		padding-bottom: 5px;
-		padding-top: 5px;
-		display: inline-block;
-		font-size: 12px;
-	}
-	.context_tab_container
-	{
-		padding:3px;
-	}
-	.settingsnav
-	{
-		margin-top: 6px;
-		margin-left: 6px;
-		font-size: 12px;
-	}
-	.settingsnav>li.active>a {
-		color: #0063ff!important;
-	}
-	.settingsnav>li>a{
-		border-radius: 8px 8px 0 0;
-		padding: 5px;
-		padding-top: 6px!important;
-		padding-bottom: 2px!important;
-		color: #666;
-		background-color: #b1b1b1;
-	}
-
-
-	/* Save menu */
-	.saveloadpopup {
-		width: 660px;
-		background-color: #263040;
-		margin-top: 120px;
-	}
-	@media (max-width: 768px) {
-		.saveloadpopup {
-			width: 100%;
-			background-color: #263040;
-			margin-top: 120px;
-		}
-	}
-	.saveloadgrid
-	{
-		height: auto;
-		overflow-y: auto;
-		margin-top: 4px;
-		padding: 4px;
-		display: grid;
-		gap: 2px;
-		font-size: 12px;
-	}
-	@media (max-width: 340px) {
-		.saveloadgrid {
-			font-size: 8px;
-		}
-	}
-	.btnicon-save
-	{
-		width: 16px;
-		height: 16px;
-		content:var(--img_save);
-	}
-	.btnicon-load
-	{
-		width: 16px;
-		height: 16px;
-		content:var(--img_load);
-	}
-	.btnicon-delete
-	{
-		width: 16px;
-		height: 16px;
-		content:var(--img_delete);
-	}
-	.btnicon-download
-	{
-		width: 16px;
-		height: 16px;
-		content:var(--img_download);
-	}
-	.btnicon-websearch, .btnicon-websearch:active, .btnicon-websearch:hover, .btnicon-websearch:focus, .btnicon-websearch:active:focus
-	{
-		background-size: 80% 80%;
-		background-position: center;
-		background-repeat: no-repeat;
-		background-image: var(--img_websearch);
-		background-color: #15a0ad;
-	}
-	.btnicon-websearch.inactive, .btnicon-websearch.inactive:active, .btnicon-websearch.inactive:hover, .btnicon-websearch.inactive:focus, .btnicon-websearch.inactive:active:focus
-	{
-		background-color: #6a6a6a;
-	}
-
-	/* Help tooltips */
-	.helpicon {
-		display: inline-block;
-		font-family: sans-serif;
-		font-weight: bold;
-		text-align: center;
-		width: 2.2ex;
-		height: 2.4ex;
-		font-size: 1.4ex;
-		line-height: 1.8ex;
-		border-radius: 1.2ex;
-		margin-right: 4px;
-		margin-left: 1px;
-		padding: 1px;
-		color: #295071;
-		background: #ffffff;
-		border: 1px solid white;
-		text-decoration: none;
-	}
-	.helpicon:hover {
-		cursor: pointer;
-	}
-	.helpicon:hover .helptext {
-		display: inline-block;
-		width: 260px;
-		background-color: #1f2931;
-		color: #ffffff;
-		font-size: 10pt;
-		font-weight: normal;
-		line-height: normal;
-		border-radius: 6px;
-		padding: 10px;
-		margin-left: 10px;
-		border: 1px solid #337ab7;
-	}
-	@media (max-width: 680px) {
-		.helpicon:hover .helptext {
-			margin: 0 0 auto;
-			position: fixed;
-			top: 20%;
-			left: 50%;
-			transform: translate(-50%, -50%);
-		}
-	}
-	.helptext {
-		display: none;
-		font-family: sans-serif;
-		position: absolute;
-		z-index: 1;
-		text-shadow: none !important;
-	}
-
-	/* Classic UI Main Text */
-	#gamescreen {
-		overflow-x: hidden;
-		display: flex;
-		vertical-align: bottom;
-		color: #ffffff;
-		font-size: 12pt;
-		font-family: "Helvetica";
-	}
-	#gamescreen span {
-		align-self: flex-end;
-	}
-	#gametext {
-		max-height: 100%;
-		width: 100%;
-		word-wrap: break-word;
-		padding: 10px;
-		overflow-y: auto;
-		white-space: pre-wrap;
-	}
-	#gametext, chunk, chunk * {
-		outline: 0px solid transparent;
-	}
-	#gametext img {
-		max-width: 100%;
-		height: auto;
-	}
-	.txtchunk{
-		white-space: pre-wrap;
-	}
-	.lastreq
-	{
-		font-size:9pt;
-		padding-top: 2px;
-		text-shadow: 1px 1px 1px #000000;
-	}
-
-	/* Horizontal action bar */
-	#actionmenuitems button,#actionmenuitems2 button {
-		width: 78px;
-	}
-	#actionmenuitems button.slim,#actionmenuitems2 button.slim {
-		width: 38px;
-	}
-	@media (max-width: 666px) {
-		#actionmenuitems button,#actionmenuitems2 button {
-			width: 60px;
-			padding: 4px 4px;
-			font-size: 12px;
-		}
-		#actionmenuitems button.slim,#actionmenuitems2 button.slim {
-			width: 30px;
-			padding: 4px 4px;
-			font-size: 12px;
-		}
-	}
-	.borderbox {
-		border-radius: 5px;
-		border: 1px solid #646464;
-		padding: 4px;
-		background: #373737;
-	}
-
-	/* Classic UI bottom rows */
-	#inputrow {
-		margin-top: 10px;
-		padding: 0px;
-		width: 100%;
-		display: flex;
-	}
-	#inputrow > :nth-child(1) {
-		flex: 0 0 0%; /* Effectively hides the first column */
-	}
-	#inputrow > :nth-child(2) {
-		flex: 1; /* Flexible, takes up remaining space */
-	}
-	#inputrow > :nth-child(3) {
-		flex: 0 0 64px; /* Fixed width for the third column */
-	}
-	#inputrow.show_mode > :nth-child(1) {
-		flex: 0 0 50px; /* Fixed width for the first column */
-	}
-	#inputrow.show_mode > :nth-child(2) {
-		flex: 1; /* Flexible, takes up remaining space */
-	}
-	#inputrow.show_mode > :nth-child(3) {
-		flex: 0 0 64px; /* Fixed width for the third column */
-	}
-	.input_action
-	{
-		content:var(--img_sword);
-	}
-	.input_story
-	{
-		content:var(--img_paper);
-	}
-	.input_dice
-	{
-		content:var(--img_dice);
-	}
-	.input_chat
-	{
-		content:var(--img_chat);
-	}
-	#btnmode_chat, #btnmode_adventure {
-		width: 100%;
-		height: 100%;
-		overflow: auto;
-		overflow-x: hidden;
-	}
-	#btnsend {
-		width: 100%;
-		height: 100%;
-		font-size: 11px;
-		font-weight: bold;
-		padding: 6px;
-	}
-	#btnsend.wait {
-		background-color: #6c6c6e;
-	}
-	#btnsend.wait:hover {
-		background-color: #98989a;
-	}
-	.showmicbig{
-		width: 32px;
-		height: 32px;
-		margin:auto;
-		background-repeat: no-repeat !important;
-		background-position: center !important;
-		background-image: var(--img_mic) !important;
-	}
-	.showmiclivebig{
-		width: 32px;
-		height: 32px;
-		margin:auto;
-		background-repeat: no-repeat !important;
-		background-position: center !important;
-		background-image: var(--img_mic_live) !important;
-	}
-	.showmicoffbig{
-		width: 32px;
-		height: 32px;
-		margin:auto;
-		background-repeat: no-repeat !important;
-		background-position: center !important;
-		background-image: var(--img_mic_off) !important;
-	}
-	.token-budget {
-		right: 20px;
-		bottom: 3px;
-		color: gray;
-		position: absolute;
-		font-size: 8px;
-		-webkit-user-select: none;
-		-moz-user-select: none;
-		-ms-user-select: none;
-		user-select: none;
-	}
-
-
-	/* Popup dialogs */
-	.workerpopup {
-		background-color: #263040;
-		margin-top: 100px;
-	}
-	@media (max-width: 768px) {
-		.workerpopup {
-			width: 100%;
-			background-color: #263040;
-			margin-top: 100px;
-		}
-	}
-	.nspopup {
-		background-color: #263040;
-		margin-top: 200px;
-	}
-	.nspopup.moderate {
-		margin-top: 170px;
-	}
-	.nspopup.higher {
-		margin-top: 120px;
-	}
-	.nspopup.evenhigher {
-		margin-top: 70px;
-	}
-	.nspopup.highest {
-		margin-top: 40px;
-	}
-	.nspopup.fixsize {
-		width: 330px;
-	}
-	.nspopup.sidepanelsize {
-		width: 330px!important;
-		margin-top: 0px!important;
-	}
-	@media (max-width: 960px) {
-		.nspopup.sidepanelsize {
-			width: 33vw!important;
-			margin-top: 0px!important;
-		}
-	}
-	.nspopup.flexsize {
-		width: 600px;
-	}
-	@media (max-width: 620px) {
-		.nspopup.flexsize {
-		width: 100%;
-		}
-	}
-	.nspopup.flexsizesmall {
-		width: 440px;
-	}
-	@media (max-width: 520px) {
-		.nspopup.flexsizesmall {
-		width: 100%;
-		}
-	}
-	.nspopup.flexsizevsmall {
-		width: 380px;
-	}
-	@media (max-width: 400px) {
-		.nspopup.flexsizevsmall {
-		width: 100%;
-		}
-	}
-	.nspopup.flexsizebig {
-		width: 940px;
-	}
-	@media (max-width: 992px) {
-		.nspopup.flexsizebig {
-		width: 740px;
-		}
-	}
-	@media (max-width: 750px) {
-		.nspopup.flexsizebig {
-		width: 100%;
-		}
-	}
-	.msgboxtxt
-	{
-		max-height: 320px;
-		overflow-y: auto;
-		overflow-wrap: break-word;
-	}
-	.popupcontainer{
-		position: absolute;
-		top: 0px;
-		left: 0px;
-		z-index: 3;
-		width: 100%;
-		height: 100%;
-		flex-direction: column;
-		align-items: center;
-	}
-	.popupcontainer.side{
-		width: unset;
-	}
-	.popupcontainer.sideright{
-		width: unset;
-		left:unset;
-		right:0px;
-	}
-	.popupbg {
-		position: fixed;
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		z-index: -1;
-		background-color: rgba(0, 0, 0, 0.5);
-		flex-direction: column;
-		align-items: center;
-	}
-	.popuptitlebar {
-		padding: 10px;
-		background-color: #757575;
-	}
-	body.connected .popuptitlebar {
-		background-color: #337ab7;
-	}
-	.popuptitletext {
-		display: flex;
-		align-items: center;
-		color: #ffffff;
-		font-size: 12pt;
-	}
-	.popupfooter {
-		width: 100%;
-		padding: 10px;
-		display: flex;
-		justify-content: center;
-		background-color: #4d4d4d;
-	}
-	body.connected .popupfooter{
-		background-color: #295071;
-	}
-	.popupfooter button {
-		width: 100px;
-		margin-left: 10px;
-		margin-right: 10px;
-	}
-
-	/* World info table */
-	.widelbtn
-	{
-		font-size: 12px;
-		height: 24px;
-		padding: 5px;
-		margin: 2px;
-		font-weight: bolder;
-	}
-	.wiarrowbtn
-	{
-		font-size: 12px;
-		height: 18px;
-		padding: 2px;
-		margin: 0px 1px 0px 1px;
-		font-weight: bolder;
-	}
-	.wiinputkeycol
-	{
-		min-width: 70px;
-		width: 15%;
-	}
-	.wiinputkey
-	{
-		font-size: 14px;
-		height: 24px;
-		padding: 2px;
-		margin: 0px;
-	}
-	.wiinputvalcol
-	{
-		width: 85%;
-	}
-	.wiinputval
-	{
-		font-size: 14px;
-		height: 24px;
-		padding: 2px;
-		margin: 0px;
-		resize: vertical;
-	}
-	.wilist
-	{
-		background-color: #434343;
-		overflow-y: auto;
-		max-height: 320px;
-		min-height: 60px;
-	}
-	.witoggleroff,.witoggleroff:hover,.witoggleroff:focus
-	{
-		color: transparent;
-		text-shadow: 0 0 0 gray;
-		text-decoration:none;
-	}
-	.witoggleron,.witoggleron:hover,.witoggleron:focus
-	{
-		color: transparent;
-		text-shadow: 0 0 0 #0cdb0c;
-		text-decoration:none;
-	}
-
-	/* Worker table */
-	.workerTableDiv,.shareStory{
-		max-height: 420px;
-		overflow-y: auto;
-		overflow-x: hidden;
-	}
-	.workerTable{
-		color: #ffffff;
-		font-size: min(1.4vw,14px);
-	}
-	.workerTable>tbody>tr>td{
-		padding: min(0.4vw, 5px);
-	}
-
-	/* Logprobs table */
-	.logprobstable
-	{
-		font-size: 11px;
-		width: 100%;
-		border-spacing: 2px;
-	}
-	.logprobstable table, th, td {
-		border: 2px solid #5d5d5d;
-	}
-	.logprobstable>tbody>tr>td
-	{
-		width: 16.4%;
-	}
-	.tablelines
-	{
-		border: 1px solid;
-	}
-
-	/* Scenario menu */
-	.scenariopopup {
-		width: 600px;
-		background-color: #263040;
-		margin-top: 60px;
-	}
-
-	@media (max-width: 768px) {
-		.scenariopopup {
-			width: 100%;
-			background-color: #263040;
-			margin-top: 70px;
-		}
-	}
-	.scenariosearch
-	{
-		margin-top: 8px;
-		margin-left: 8px;
-		width: calc(100% - 16px);
-		padding: 4px;
-	}
-	.scenariosearchbox1
-	{
-		display: inline;
-		width: calc(100% - 100px);
-	}
-	.scenariosearchbox2
-	{
-		display: inline;
-		width: 94px;
-		padding: 6px 3px;
-	}
-	.scenariogrid
-	{
-		height: 260px;
-		overflow-y: auto;
-		margin-top: 4px;
-		padding: 8px;
-		display: grid;
-		gap: 8px;
-		grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-		grid-auto-rows: 55px;
-	}
-	.scenariodesc
-	{
-		padding: 4px 12px;
-		width: 100%;
-		height: 160px;
-		color: #b7e2ff;
-		overflow-y: auto;
-	}
-	.scenarioitem
-	{
-		font-size: 14px;
-		color: white;
-		font-weight: 500;
-		font-family: 'Segoe UI', Tahoma;
-		background-repeat: no-repeat;
-		background-position: top 4px left 4px, center;
-		background-size: 24px, 100%;
-		padding: 2px 2px;
-	}
-	.scenarioitem.blue
-	{
-		background-image: var(--img_paper),linear-gradient(to right, #63aae7, #337ab7);
-	}
-	.scenarioitem.blue:hover
-	{
-		background-image: var(--img_paper),linear-gradient(to right, #7ebbf0, #438ac7);
-	}
-	.scenarioitem.blue:focus
-	{
-		background-image: var(--img_paper),linear-gradient(to right, #4c7aa3, #4c7aa3);
-	}
-	.scenarioitem.green
-	{
-		background-image: var(--img_sword),linear-gradient(to right, #58db6e, #2ba04e);
-	}
-	.scenarioitem.green:hover
-	{
-		background-image: var(--img_sword),linear-gradient(to right, #68e47d, #37b85e);
-	}
-	.scenarioitem.green:focus
-	{
-		background-image: var(--img_sword),linear-gradient(to right, #53a34c, #4ca353);
-	}
-	.scenarioitem.red
-	{
-		background-image: var(--img_chat),linear-gradient(to right, #e76363, #b73333);
-	}
-	.scenarioitem.red:hover
-	{
-		background-image: var(--img_chat),linear-gradient(to right, #f07e7e, #c74343);
-	}
-	.scenarioitem.red:focus
-	{
-		background-image: var(--img_chat),linear-gradient(to right, #a34c4c, #a34c4c);
-	}
-	.scenarioitem.purple
-	{
-		background-image: none,linear-gradient(to right, #dc63e7, #ac33b7);
-	}
-	.scenarioitem.purple:hover
-	{
-		background-image: none,linear-gradient(to right, #f07ee6, #c743c7);
-	}
-	.scenarioitem.purple:focus
-	{
-		background-image: none,linear-gradient(to right, #a34c9c, #a34ca3);
-	}
-	.scenarioitem.yellow
-	{
-		background-image: var(--img_compass),linear-gradient(to right, #daae5d, #ad8823);
-	}
-	.scenarioitem.yellow:hover
-	{
-		background-image: var(--img_compass),linear-gradient(to right, #e0c56e, #bba632);
-	}
-	.scenarioitem.yellow:focus
-	{
-		background-image: var(--img_compass),linear-gradient(to right, #a38c4c, #a38c4c);
-	}
-
-	/* Welcome splash */
-	.welcome-theme-selector {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		gap: 16px;
-	}
-	.welcome-theme-option {
-		border: 2px solid #666666;
-		padding: 8px;
-		border-radius: 6px;
-		cursor: pointer;
-	}
-	.welcome-theme-option:hover {
-		border-color: #eeeeee;
-	}
-	.welcome-theme-image {
-		display: block;
-		width: min(23vw, 150px);
-		height: min(23vw, 150px);
-		margin-bottom: 8px;
-	}
-	.welcomeimg1
-	{
-		content:var(--img_theme_1);
-	}
-	.welcomeimg2
-	{
-		content:var(--img_theme_2);
-	}
-	.welcomeimg3
-	{
-		content:var(--img_theme_3);
-	}
-
-	/* Spinning load circle for requests */
-	.outerloader {
-		display: flex;
-		margin: auto;
-		align-items: center;
-		justify-content: center;
-	}
-	.outerloadernum
-	{
-		position: absolute;
-		color:white;
-		font-size: 11px;
-	}
-	.innerloader {
-		width: 32px;
-		height: 32px;
-		border: 5px solid #f3f3f3;
-		border-top: 5px solid #3498db;
-		border-radius: 50%;
-		animation: spin 4s linear infinite;
-	}
-	.innerloader.greenloader
-	{
-		border-top: 5px solid #0dcc2d;
-	}
-	.innerloader.redloader
-	{
-		border-top: 5px solid #f7610a;
-	}
-
-	/* Spinning load circle for images and inline images */
-	.imgloader
-	{
-		border: 5px solid #8a8686;
-		border-top: 5px solid peru;
-		border-radius: 50%;
-		width: 32px;
-		height: 32px;
-		display: flex;
-		margin: auto;
-		align-items: center;
-		justify-content: center;
-		animation: spin 4s linear infinite;
-
-		top: 0;
-		bottom: 0;
-		left: 0;
-		right: 0;
-		position: absolute;
-		margin: auto;
-	}
-	.imagelabel
-	{
-		bottom: 20%;
-		left: 0;
-		right: 0;
-		position: absolute;
-		margin: auto;
-		text-align: center;
-		color:peru;
-		font-weight: bold;
-	}
-	.storyimgfloat
-	{
-		width: fit-content;
-		float: right;
-		position: relative;
-		padding: 4px;
-		clear: both;
-	}
-	.storyimgsidevertical
-	{
-		width: fit-content;
-		text-align: center;
-		position: relative;
-		padding: 4px;
+	const BLTOOLspecificstyles = `
+		.BLTOOL-body {
 		margin: 0;
-	}
-	.storyimgsidehorizontal
-	{
-		display: table-cell;
-		width: fit-content;
-		text-align: center;
-		position: relative;
-		padding: 4px;
+		padding: 20px;
+		font-family: Arial, sans-serif;
+		background-color: #f0f0f0;
+		}
+		.BLTOOL-sample-content {
+		max-width: 800px;
 		margin: 0 auto;
-	}
-	.storyimgcenter
-	{
-		width: fit-content;
-		text-align: center;
-		position: relative;
-		padding: 4px;
-		margin: 0 auto;
-	}
-
-	/* Clicked in image preview window */
-	.zoomedimgdiv
-	{
-		text-align: center;
-		position: relative;
-		margin: 0 auto;
-		padding-top: 6px;
-		padding-bottom: 4px;
-	}
-	.zoomedimgdesc{
-		max-height: 120px;
-		overflow-y: auto;
-		overflow-x: hidden;
-		font-size: 12px;
-	}
-	.zoomedimg
-	{
-		border-radius: 6%;
-		width:462px;
-		height:462px;
-	}
-	.zoomedimg.portrait
-	{
-		width:308px;
-		height:462px;
-	}
-	.zoomedimg.portrait_long
-	{
-		width:231px;
-		height:462px;
-	}
-	.zoomedimg.landscape
-	{
-		width:462px;
-		height:308px;
-	}
-	.zoomedimg.landscape_long
-	{
-		width:462px;
-		height:231px;
-	}
-	@media (max-width: 620px) {
-		.zoomedimg {
-			width:min(96vw, 420px);
-			height:min(96vw, 420px);
-		}
-		.zoomedimg.portrait
-		{
-			width:min(64vw, 280px);
-			height:min(96vw, 420px);
-		}
-		.zoomedimg.landscape
-		{
-			width:min(96vw, 420px);
-			height:min(64vw, 280px);
-		}
-		.zoomedimg.portrait_long
-		{
-			width:min(48vw, 210px);
-			height:min(96vw, 420px);
-		}
-		.zoomedimg.landscape_long
-		{
-			width:min(96vw, 420px);
-			height:min(48vw, 210px);
-		}
-	}
-
-	/* Spinning circle animation */
-	@keyframes spin {
-		0% {
-			transform: rotate(0deg);
-		}
-		12.4% {
-			transform: rotate(0deg);
-		}
-		12.5% {
-			transform: rotate(45deg);
-		}
-		24.9% {
-			transform: rotate(45deg);
-		}
-		25% {
-			transform: rotate(90deg);
-		}
-		37.4% {
-			transform: rotate(90deg);
-		}
-		37.5% {
-			transform: rotate(135deg);
-		}
-		49.9% {
-			transform: rotate(135deg);
-		}
-		50% {
-			transform: rotate(180deg);
-		}
-		62.4% {
-			transform: rotate(180deg);
-		}
-		62.5% {
-			transform: rotate(225deg);
-		}
-		74.9% {
-			transform: rotate(225deg);
-		}
-		75% {
-			transform: rotate(270deg);
-		}
-		87.4% {
-			transform: rotate(270deg);
-		}
-		87.5% {
-			transform: rotate(315deg);
-		}
-		99.9% {
-			transform: rotate(315deg);
-		}
-		100% {
-			transform: rotate(360deg);
-		}
-	}
-
-	/* no custom scrollbars on mobile */
-	@media screen and (hover: hover) and (any-pointer: fine)
-	{
-		::-webkit-scrollbar {
-		width: 8px;
-		}
-		::-webkit-scrollbar-track {
-		background: transparent;
-		}
-		::-webkit-scrollbar-thumb {
-		background-color: #9191915e;
-		border-radius: 10px;
-		border: transparent;
-		}
-		::-webkit-scrollbar-thumb:hover {
-		background: #9494948a;
-		}
-	}
-
-	/* Background images */
-	.gamescreenbgnormal
-	{
-		background-color: #262626;
-	}
-	.translucentbg
-	{
-		background-color: #00000066;
-	}
-	.transparentbg
-	{
-		background-color: #00000000 !important;
-	}
-
-	/* Messenger UI */
-	.chat_received_msg {
-		display: inline-block;
-		padding: 0 0 0 10px;
-		vertical-align: top;
-		width: 92%;
-	}
-
-	.chat_received_withd_msg p {
-		font-size: 14px;
-		margin: 0;
-		padding: 5px 10px 5px 12px;
-		width: 100%;
-		white-space: pre-wrap;
-	}
-
-	.chat_received_withd_msg {
-		width: 75%;
-		background: #1d282f none repeat scroll 0 0;
-		border-radius: 0 15px 15px 15px;
-		color: #dde6e7;
-		overflow:auto;
-	}
-	.chat_mesgs{
-		width:100%;
-		background: #0b141a;
-	}
-	.chat_mesgs_inner{
-		padding: 12px 20px 12px 20px;
-	}
-	.chat_sent_msg p {
-		font-size: 14px;
-		margin: 0;
-		color: #dde6e7;
-		padding: 5px 10px 5px 12px;
-		width: 100%;
-		white-space: pre-wrap;
-	}
-	.chat_sent_msg {
-		float: right;
-		width: 75%;
-		overflow:auto;
-		background:#005c4b;
-		border-radius: 12px 15px 0px 15px;
-	}
-	.chat_outgoing_msg {
-		overflow: hidden;
-		margin: 8px 0 8px;
-	}
-	.incoming_msg
-	{
-		margin: 8px 0 8px;
-	}
-	.cht_inp_bg
-	{
-		display: inline-block;
-		width: calc(100% - 84px);
-		background: #222222aa none repeat scroll 0 0;
-		margin-top: 8px;
-		margin-left: 2px;
-		border-radius: 16px;
-		padding-left: 10px;
-		padding-right: 10px;
-		padding-top: 7px;
-        border: 1px solid #bbbbbbaa;
-	}
-	.cht_inp_bg_inner
-	{
-		width: 100%;
-		resize: none;
-		overflow-x:hidden;
-		background: #00000000 none repeat scroll 0 0;
-		border: medium none;
-		color: #bebebe;
-		font-size: 15px;
-		outline:none;
-	}
-	.cht_inp_bg.shorter
-	{
-		width: calc(100% - 114px);
-	}
-	.cht_inp_hold_outer {
-		border-top: 1px solid #c4c4c4;
-		position: relative;
-	}
-	.chat_btnmode_chat {
-		background: #143574 none repeat scroll 0 0;
-		border:none;
-		border-radius: 50%;
-		color: #fff;
-		cursor: pointer;
-		font-size: 15px;
-		height: 33px;
-		position: relative;
-		vertical-align: top;
-		top: 11px;
-		width: 33px;
-		background-size: 50% !important;
-		background-repeat: no-repeat !important;
- 		background-position: center !important;
-		background-image: var(--img_chat) !important;
-	}
-	.chat_btnmode_adventure{
-		background: #3263be none repeat scroll 0 0;
-		border:none;
-		border-radius: 50%;
-		color: #fff;
-		cursor: pointer;
-		font-size: 15px;
-		height: 33px;
-		position: relative;
-		vertical-align: top;
-		top: 11px;
-		width: 33px;
-		background-size: 50% !important;
-		background-repeat: no-repeat !important;
- 		background-position: center !important;
-	}
-	.chat_btnmode_adventure.storymode
-	{
-		background-image: var(--img_paper) !important;
-	}
-	.chat_btnmode_adventure.actionmode
-	{
-		background-image: var(--img_sword) !important;
-	}
-	.chat_btnmode_adventure.dicemode
-	{
-		background-image: var(--img_dice) !important;
-	}
-	.chat_msg_send_btn {
-		background: #337ab7 none repeat scroll 0 0;
-		border:none;
-		border-radius: 50%;
-		color: #fff;
-		cursor: pointer;
-		font-size: 15px;
-		height: 33px;
-		position: absolute;
-		right: 40px;
-		top: 11px;
-		width: 33px;
-		background-size: 50% !important;
-		background-repeat: no-repeat !important;
- 		background-position: center !important;
-		background-image: var(--img_chat_send_btn) !important;
-	}
-	.chat_msg_send_btn:hover {
-		background: #3f94df none repeat scroll 0 0;
-	}
-	.chat_msg_send_btn:disabled {
-		background: #838383 none repeat scroll 0 0;
-	}
-	.chat_msg_send_btn.showmic{
-		background-image: var(--img_mic) !important;
-	}
-	.chat_msg_send_btn.showmiclive{
-		background-image: var(--img_mic_live) !important;
-	}
-	.chat_msg_send_btn.showmicoff{
-		background-image: var(--img_mic_off) !important;
-	}
-	.chat_msg_send_btn_abort {
-		background: #b73333 none repeat scroll 0 0;
-		border:none;
-		border-radius: 50%;
-		color: #fff;
-		cursor: pointer;
-		font-size: 15px;
-		height: 33px;
-		position: absolute;
-		right: 40px;
-		top: 11px;
-		width: 33px;
-		background-size: 50% !important;
-		background-repeat: no-repeat !important;
- 		background-position: center !important;
-		background-image: var(--img_chat_abort_btn) !important;
-	}
-	.chat_msg_send_btn_abort:hover {
-		background: #df3f3f none repeat scroll 0 0;
-	}
-	.chat_msg_send_btn_abort:disabled {
-		background: #838383 none repeat scroll 0 0;
-	}
-	.chat_msg_cust_btn {
-		background: #169c7b none repeat scroll 0 0;
-		border:none;
-		border-radius: 50%;
-		color: #fff;
-		cursor: pointer;
-		font-size: 15px;
-		height: 33px;
-		position: absolute;
-		right: 0;
-		top: 11px;
-		width: 33px;
-		background-size: 64% !important;
-		background-repeat: no-repeat !important;
-  		background-position: center !important;
-		background-image: var(--img_chat_cust_btn) !important ;
-
-	}
-	.chat_msg_cust_btn:hover {
-		background: #18b991 none repeat scroll 0 0;
-	}
-	.chat_msg_cust_btn:disabled {
-		background: #838383 none repeat scroll 0 0;
-	}
-	.chat_msg_history {
-		overflow-y: auto;
-	}
-	.chat_msg_history img {
-		max-width: 100%;
-		height: auto;
-	}
-
-	/* Chat typing effect with flashing dots */
-	.dot-flashing {
-		position: relative;
-		left: -15px;
-		width: 8px;
-		height: 8px;
-		border-radius: 5px;
-		background-color: #9e9e9e;
-		color: #9e9e9e;
-		animation: dot-flashing 1s infinite linear alternate;
-		animation-delay: 0.5s;
-	}
-	.dot-flashing::before, .dot-flashing::after {
-		content: "";
-		display: inline-block;
-		position: absolute;
-		top: 0;
-	}
-	.dot-flashing::before {
-		left: -15px;
-		width: 8px;
-		height: 8px;
-		border-radius: 5px;
-		background-color: #9e9e9e;
-		color: #9e9e9e;
-		animation: dot-flashing 1s infinite alternate;
-		animation-delay: 0s;
-	}
-	.dot-flashing::after {
-		left: 15px;
-		width: 8px;
-		height: 8px;
-		border-radius: 5px;
-		background-color: #9e9e9e;
-		color: #9e9e9e;
-		animation: dot-flashing 1s infinite alternate;
-		animation-delay: 1s;
-	}
-	@keyframes dot-flashing {
-		0% {
-			background-color: #9e9e9e;
-		}
-		29.9% {
-			background-color: #9e9e9e;
-		}
-		30%, 100% {
-			background-color: #9e9e9e33;
-		}
-	}
-
-	/* Aesthetic UI */
-	.ui-settings-inline { font-size: 12px; display:flex; flex-direction: row; }
-	.instruct-settings-input { margin: 0px 2px; font-size:10px; }
-	.instruct-settings-input input { width:40px; height:20px; }
-	#code-block-background-colorselector, #code-block-foreground-colorselector { text-align: center; margin: 0px 5px; }
-	#you-text-colorselector, #you-speech-colorselector, #you-action-colorselector, #AI-text-colorselector, #AI-speech-colorselector, #AI-action-colorselector, #sys-text-colorselector, #sys-speech-colorselector, #sys-action-colorselector { text-align: center; margin: 0px 5px; }
-	#you-bubble-colorselector, #AI-bubble-colorselector, #sys-bubble-colorselector, #you-portrait, #AI-portrait { text-align: center; margin: 0px 10px; border-radius: 1rem; padding: 1px 6px; }
-	@media screen and (max-width: 880px) {
-		#aesthetic_text_preview_panel { display: none; }
-	}
-	.aui_nametag
-	{
-		margin: 0 0 3px;
-		font-weight: bold;
-	}
-
-	/* Corpo UI */
-	.corpostyle
-	{
-		background-color: #ffffff;
-		overflow-x: hidden;
-		max-height: 100%;
-		width: 100%;
-		word-wrap: break-word;
-		font-size: 18px;
-		font-family: Inter, sans-serif;
-		tab-size: 4;
-		line-height: 32px;
-		color: rgb(55, 65, 81);
-		display: flex;
-	}
-	@media (max-width: 400px)
-	{
-		.corpostyle
-		{
-			font-size: 16px;
-			line-height: 26px;
-		}
-		.corpostyleinner
-		{
-			padding-left: 6px;
-			padding-right: 6px;
-			margin-top: 0px;
-		}
-		.corpostyleitem
-		{
-			padding-left: 6px;
-			padding-right: 6px;
-			padding-top: 8px;
-			padding-bottom: 8px;
-		}
-	}
-	body.darkmode .corpostyle {
-		background-color: #222222;
-		color: #ececec;
-	}
-	.corpo_edit_outer
-	{
-		display: inline-block;
-		background: #f4f4f4aa none repeat scroll 0 0;
-		margin-top: 6px;
-		margin-bottom: 6px;
-		border-radius: 16px;
-		padding-left: 12px;
-		padding-right: 12px;
-		padding-top: 8px;
-		width:100%;
-        border: 1px solid #bbbbbbaa;
-		position: relative;
-	}
-	.corpo_edit_inner
-	{
-		width: 100%;
-		resize: none;
-		overflow-x:hidden;
-		background: #00000000 none repeat scroll 0 0;
-		border: medium none;
-		color: #0d0d0d;
-		font-size: 20px;
-		font-weight: 400;
-		outline:none;
-		line-height: 28px;
-	}
-	.corpo_chat_outer
-	{
-		width: calc(100% - 24px);
-		max-width: 860px;
-		background: #f4f4f4aa none repeat scroll 0 0;
-		margin-top: 6px;
-		margin-bottom: 4px;
-		margin-left: auto;
-		margin-right: auto;
-		border-radius: 16px;
-		padding-left: 52px;
-		padding-right: 52px;
-		padding-top: 8px;
-        border: 1px solid #bbbbbbaa;
-		position: relative;
-	}
-	body.darkmode .corpo_chat_outer
-	{
-		background: #3b3b3baa none repeat scroll 0 0;
-	}
-	.corpo_chat_inner
-	{
-		width: 100%;
-		resize: none;
-		overflow-x:hidden;
-		background: #00000000 none repeat scroll 0 0;
-		border: medium none;
-		color: #0d0d0d;
-		font-size: 20px;
-		font-weight: 400;
-		outline:none;
-		line-height: 28px;
-	}
-	body.darkmode .corpo_chat_inner
-	{
-		color: #dddddd;
-	}
-	.corpo_chat_img_btn
-	{
-		background: #000000 none repeat scroll 0 0;
-		border:none;
-		border-radius: 50%;
-		color: #fff;
-		cursor: pointer;
-		font-size: 15px;
-		height: 33px;
-		position: absolute;
-		left: 12px;
-		bottom: 10px;
-		width: 33px;
-		background-size: 50% !important;
-		background-repeat: no-repeat !important;
- 		background-position: center !important;
-		background-image: var(--img_corpo_clip) !important;
-	}
-	.corpo_chat_img_btn:hover {
-		background: #555555 none repeat scroll 0 0;
-	}
-	.corpo_chat_img_btn:disabled {
-		background: #838383 none repeat scroll 0 0;
-	}
-	.corpo_chat_send_btn {
-		background: #000000 none repeat scroll 0 0;
-		border:none;
-		border-radius: 50%;
-		color: #fff;
-		cursor: pointer;
-		font-size: 15px;
-		height: 33px;
-		position: absolute;
-		right: 12px;
-		bottom: 10px;
-		width: 33px;
-		background-size: 50% !important;
-		background-repeat: no-repeat !important;
- 		background-position: center !important;
-		background-image: var(--img_corpo_send_btn) !important;
-	}
-	.corpo_chat_send_btn:hover {
-		background: #555555 none repeat scroll 0 0;
-	}
-	.corpo_chat_send_btn:disabled {
-		background: #838383 none repeat scroll 0 0;
-	}
-	.corpo_chat_send_btn_abort {
-		background: #000000 none repeat scroll 0 0;
-		border:none;
-		border-radius: 50%;
-		color: #fff;
-		cursor: pointer;
-		font-size: 15px;
-		height: 33px;
-		position: absolute;
-		right: 12px;
-		bottom: 12px;
-		width: 33px;
-		background-size: 50% !important;
-		background-repeat: no-repeat !important;
- 		background-position: center !important;
-		background-image: var(--img_corpo_abort_btn) !important;
-	}
-	.corpo_btn_text
-	{
-		display: inline-block;
-		padding-top: 8px;
-		vertical-align: top;
-		color:#666666;
-		font-size: 17px;
-	}
-	.corpo_hover_btn {
-		background: #ffffff00 none repeat scroll 0 0;
-		border:none;
-		border-radius: 20%;
-		cursor: pointer;
-		height: 32px;
-		width: 32px;
-		background-size: 60% !important;
-		background-repeat: no-repeat !important;
- 		background-position: center !important;
-	}
-	.corpo_hover_btn:hover {
-		background: #eeeeee none repeat scroll 0 0;
-	}
-	body.darkmode .corpo_hover_btn:hover {
-		background: #454545 none repeat scroll 0 0;
-	}
-	.corpoleftpanel
-	{
-		width:256px;
-		background-color: #e2e5e6;
-		padding-left: 8px;
-		padding-right: 8px;
-		transition: transform 0.3s ease;
-		height: calc(100vh - 68px);
-		z-index: 1;
-	}
-	body.darkmode .corpoleftpanel
-	{
-		background-color: #161616;
-	}
-	.corpoendeditbutton {
-      position: fixed;
-      top: 75px;
-      right: 25px;
-	  width: 40px;
-      padding: 8px 6px;
-      background-color: #de5b5b;
-      color: white;
-      border-radius: 24px;
-	  opacity: 0.65;
-      cursor: pointer;
-      box-shadow: 1 2px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    .corpoendeditbutton:hover {
-      background-color: #f67676;
-    }
-	.corpoleftpanelitems
-	{
-		display: flex;
-		flex-direction: column;
-		margin-top: 16px;
-		padding: 2px;
-		height: calc(100% - 20px);
-	}
-	.corpoleftpanelitemsinner
-	{
-		display: flex;
-		flex-direction: column;
-		padding: 2px;
-		overflow-y: auto;
-		overflow-x: hidden;
-		text-overflow: ellipsis;
-		display: inline-block;
-		margin: 2px;
-		margin-top: 4px;
-		margin-bottom: 4px;
-	}
-	.corpoleftpanelitemstopper
-	{
-		display: flex;
-		flex-direction: column;
-		padding: 2px;
-		display: inline-block;
-	}
-	.corpo_leftpanel_btn
-	{
-		padding: 4px;
-		margin: 2px;
-		background: #f4f4f400;
-		border:none;
+		padding: 20px;
+		background-color: white;
 		border-radius: 8px;
-		cursor: pointer;
-		font-size: 17px;
-		background-repeat: no-repeat;
-    	background-position: 8px;
-		background-size: 24px;
-		overflow: hidden;
-    	text-overflow: ellipsis;
-		white-space: nowrap;
-		user-select: none;
-		width: 100%;
-	}
-	.corpo_leftpanel_btn:hover {
-		background: #9dcef5;
-		background-repeat: no-repeat;
-    	background-position: 8px;
-		background-size: 24px;
-	}
-	.corpo_leftpanel_btn.red:hover {
-		color: #000000;
-		background: #f5767f;
-		background-repeat: no-repeat;
-    	background-position: 8px;
-		background-size: 24px;
-	}
-	.corpo_leftpanel_btn:active {
-		transform: translateY(1px);
-	}
-	body.darkmode .corpo_leftpanel_btn:hover
-	{
-		color: #76a8ee;
-		background: #454545;
-		background-repeat: no-repeat;
-    	background-position: 8px;
-		background-size: 24px;
-	}
-	body.darkmode .corpo_leftpanel_btn.red:hover
-	{
-		color: #000000;
-		background: #f5767f;
-		background-repeat: no-repeat;
-    	background-position: 8px;
-		background-size: 24px;
-	}
-	.corporightpanel
-	{
-		width: 100%;
-		height: calc(100vh - 68px);
-		display: flex;
-    	flex-direction: column;
-		padding-left: 2px;
-		padding-right: 2px;
-	}
-	.corpo_leftpanel_close
-	{
-		display: none;
+		box-shadow: 0 2px 5px rgb(51, 51, 51);
+		}
+		.BLTOOL-h1 {
+		color: #333;
+		}
+		.BLTOOL-button {
+		padding: 6px 12px;
+		font-size: 14px;
 		border: none;
-		font-size: 28px;
-		padding: 8px;
-		padding-left: 0px;
-		float: right;
-		background-color: #00000000;
-	}
-	.corpo_leftpanel_open
-	{
-		display: none;
-		background: #f0f0f0;
-		border:none;
-	}
-	.corpo_leftpanel_open:hover
-	{
-		background: #dddddd;
-	}
-	body.darkmode .corpo_leftpanel_open
-	{
-		background: #333333;
-	}
-	body.darkmode .corpo_leftpanel_open:hover
-	{
-		background: #444444;
-	}
-	.corpo_arrow_right {
-		display: inline-block;
-		width: 0;
-		height: 0;
-		border-top: 16px solid transparent;
-		border-bottom: 16px solid transparent;
-		border-left: 10px solid #aaaaaa;
-	}
-	@media (max-width: 768px)
-	{
-		.corpostylemain
-		{
-			margin-top: 0px;
+		border-radius: 4px;
+		background-color:rgb(51, 122, 183);
+		color: white;
+		cursor: pointer;
+		margin: 2px 0;
+		transition: background-color 0.3s ease;
+		white-space: nowrap;
 		}
-		.corpoleftpanel {
-			position: fixed;
-			left: 0;
-			top: 0;
-			height: 100%;
-			transform: translateX(-100%);
+		.BLTOOL-button:hover {
+		opacity: 0.9;
 		}
-		.corpoleftpanel.open {
-			transform: translateX(0);
+		@media (max-width: 768px) {
+		.BLTOOL-button {
+		width: 100%;
 		}
-		.corpo_leftpanel_close {
-			display: block;
 		}
-		.corpo_leftpanel_open {
-			display: block;
+        .BLTOOL-blacklite-tools {
+            position: fixed !important;
+            top: 0 !important;
+            right: 0 !important;
+            width: 350px !important;
+            height: 100vh !important;
+            max-height: 100vh !important;
+            background-color: rgb(51, 51, 51) !important;
+            color: white !important;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+            z-index: 99999 !important;
+            padding: 10px !important;
+            font-family: sans-serif !important;
+            overflow: visible !important;
+            display: flex !important;
+            flex-direction: column !important;
+            resize: none !important;
+            min-width: 300px !important;
+            transform: translateX(0);
+            transition: transform 0.3s ease;
+        }
+        .BLTOOL-blacklite-tools.collapsed {
+            transform: translateX(100%);
+        }
+		.BLTOOL-blacklite-tools .BLTOOL-header {
+			cursor: move;
+			padding: 5px 10px;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			background-color: rgb(38, 38, 38);
+			border-radius: 5px;
+			margin-bottom: 10px;
 		}
-	}
-	.corpowelcome
-	{
-		font-size: 26px;
-		font-weight: 550;
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		height: 75vh;
-		flex-direction: column;
-		text-align: center;
-	}
-	.corpomainbtm
-	{
-		padding-left: 2px;
-		padding-right: 2px;
-		margin-top: auto;
-	}
-	.corpostylemain
-	{
-		overflow-y: auto;
-		padding-left: 2px;
-		padding-right: 2px;
-		margin-top: 12px;
-	}
-	.corpostyleinner
-	{
-		max-width: 860px;
-		margin-left: auto;
-    	margin-right: auto;
-		padding-left: 8px;
-		padding-right: 8px;
-	}
-	.corpostyleitem
-	{
-		padding-left: 10px;
-		padding-right: 10px;
-		padding-top: 10px;
-		padding-bottom: 10px;
-		display: flex;
-	}
-	.corpoavatar
-	{
-		height:34px;
-		width:auto;
-		padding:4px;
-		margin-right:6px;
-		border-radius:50%;
-		cursor:pointer;
-	}
-	.corpostyleitemheading
-	{
-		color: rgb(33, 33, 33);
-		font-weight: 600;
-	}
-	body.darkmode .corpostyleitemheading
-	{
-		color: rgb(230,230,230);
-	}
-	.corpostyleitemcontent
-	{
-		white-space: pre-wrap;
-	}
-	.corpostyleitemcontent img {
-		max-width: 100%;
-		height: auto;
-	}
-	.corpolastreq
-	{
-		text-align:center;
-		font-size:14px;
-		line-height:1.1;
-		margin:4px;
-		margin-bottom:6px;
-		margin-left:12px;
-	}
+		.BLTOOL-blacklite-tools .BLTOOL-header h3 {
+			margin: 0;
+			font-size: 18px;
+		}
+		.BLTOOL-blacklite-tools .BLTOOL-header .BLTOOL-collapse-toggle {
+			cursor: pointer;
+			font-size: 14px;
+			padding: 5px;
+			transition: transform 0.3s ease;
+		}
+		.BLTOOL-blacklite-tools.collapsed .BLTOOL-content {
+			display: none;
+		}
+		.BLTOOL-blacklite-tools.collapsed .BLTOOL-header .BLTOOL-collapse-toggle {
+        	transform: rotate(180deg);
+    	}
+		.BLTOOL-tab-button {
+			flex: 1;
+			text-align: center;
+			padding: 5px;
+			cursor: pointer;
+			background-color:rgb(38, 38, 38);;
+			border: none;
+		}
+		.BLTOOL-tab-button.BLTOOL-active-tab {
+			background-color: #337ab7;
+		}
+		.BLTOOL-content-wrapper {
+			flex: 1;
+			display: flex;
+			flex-direction: column;
+			min-height: 0;
+		}
+		.BLTOOL-scroll-container {
+			overflow-y: auto !important;
+			width: 100% !important;
+			box-sizing: border-box !important;
+			flex-grow: 1 !important;
+			padding-bottom: 10px !important;
+			margin-bottom: 10px !important;
+		}
+		.BLTOOL-section {
+			margin-bottom: 10px;
+			border-bottom: 1px solid #444 !important; ;
+			border-radius: 5px;
+			overflow: hidden;
+		}
+		.BLTOOL-section-header {
+			padding: 8px 10px;
+			background-color: rgb(38, 38, 38) !important;
+			border-left: none !important;
+			cursor: pointer;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+            user-select: none;
+		}
+        .BLTOOL-section-header span:last-child {
+            margin-left: 10px;
+        }
+		.BLTOOL-section-content {
+			padding: 10px;
+			background-color: rgb(64, 64, 64);
+		}
+		.BLTOOL-section.collapsed .BLTOOL-section-content {
+			display: none;
+			border-bottom: 1px solid #444 !important;
+		}
+        .BLTOOL-toggle-handle {
+            position: absolute !important;
+            left: -20px !important;
+            top: 50% !important;
+            transform: translateY(-50%) !important;
+            width: 20px !important;
+            height: 100% !important;
+            background-color: rgb(38, 38, 38) !important;
+            border-radius: 5px 0 0 5px !important;
+            cursor: pointer !important;
+            z-index: 1 !important;
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            padding: 0 !important;
+            margin: 0 !important;
+            border: none !important;
+            color: white !important;
+            font-size: 14px !important;
+            pointer-events: auto !important;
+            transition: all 0.3s ease !important;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.2); 
+        }
+        /* Arrow styles */
+        .BLTOOL-toggle-handle::after {
+            content: "◀";
+            position: relative;
+            transition: all 0.2s ease;
+        }
 
-	/* Colors */
-	.hlchunk
-	{
-		color:#cedaf0;
-	}
-	.color_blueurl {
-		color: #d3e7ff;
-	}
-	.color_blueurl:hover {
-		color: #ffffff;
-	}
-	.color_blueurl:focus {
-		color: #d3e7ff;
-	}
-	.color_orangeurl {
-		color: #f7a223;
-	}
-	.color_orangeurl:hover {
-		color: #ffe8d6;
-	}
-	.color_orangeurl:focus {
-		color: #ffedd3;
-	}
-	.color_grayurl {
-		color: #9e9e9e;
-	}
-	.color_grayurl:hover {
-		color: #9f9f9f;
-	}
-	.color_grayurl:focus {
-		color: #9e9e9e;
-	}
+        .BLTOOL-blacklite-tools.collapsed .BLTOOL-toggle-handle::after {
+            content: "▶";
+            left: 1px;
+        }
 
-	.color_orange {
-		color: #f7a223;
-	}
-	.color_green {
-		color: #3bf723;
-	}
-	.color_lightgreen {
-		color: #6db95e;
-	}
-	.color_offwhite {
-		color: #bedae9;
-	}
-	.color_darkgreen {
-		color: #63975c;
-	}
-	.color_cyan {
-		color: #7afaff;
-	}
-	.color_gray {
-		color: #9b9b9b;
-	}
-	.color_lightgray {
-		color: #bbbbbb;
-	}
-	.color_red {
-		color: #ff7967;
-	}
-	.color_chat1 {
-		color: #da6060;
-	}
-	.color_chat2 {
-		color: #e0c158;
-	}
-	.color_chat3 {
-		color: #53c753;
-	}
-	.color_chat4 {
-		color: #b469ae;
-	}
-	.color_blue {
-		color: #828eff;
-	}
-	.color_yellow {
-		color: #f1dd21;
-	}
-	.color_pink {
-		color: #ffbdbd;
-	}
-
-	.bg_black {
-		background-color: #202020;
-	}
-	.bg_black:hover {
-		background-color: #202020;
-	}
-	.bg_black:focus {
-		background-color: #202020;
-	}
-	.bg_black:disabled {
-		background-color: #202020;
-	}
-	.bg_black:disabled:hover {
-		background-color: #202020;
-	}
-	.bg_green {
-		background-color: #129c00;
-	}
-	.bg_green:hover {
-		background-color: #058105;
-	}
-	.bg_green:active:focus {
-		background-color: #105e10;
-	}
-	.bg_green:focus {
-		background-color: #058105;
-	}
-	.bg_green:disabled {
-		background-color: #8a8a8a;
-	}
-	.bg_green:disabled:hover {
-		background-color: #8a8a8a;
-	}
-	.bg_red {
-		background-color: #c40000;
-	}
-	.bg_red:hover {
-		background-color: #da0000;
-	}
-	.bg_red:active:focus {
-		background-color: #970606;
-	}
-	.bg_red:focus {
-		background-color: #da0000;
-	}
-	.bg_red:disabled {
-		background-color: #8a8a8a;
-	}
-	.bg_red:disabled:hover {
-		background-color: #8a8a8a;
-	}
-	.bg_orange {
-		background-color: #cc7e09;
-	}
-	.bg_orange:hover {
-		background-color: #db8e1a;
-	}
-	.bg_orange:active:focus {
-		background-color: #ac8314;
-	}
-	.bg_orange:focus {
-		background-color: #b37b15;
-	}
-	.bg_orange:disabled {
-		background-color: #8a8a8a;
-	}
-	.bg_orange:disabled:hover {
-		background-color: #8a8a8a;
-	}
-	.bg_purple {
-		background-color: #b900b0;
-	}
-	.bg_purple:hover {
-		background-color: #99009e;
-	}
-	.bg_purple:active:focus {
-		background-color: #7a137a;
-	}
-	.bg_purple:focus {
-		background-color: #81057b;
-	}
-	.bg_purple:disabled {
-		background-color: #8a8a8a;
-	}
-	.bg_purple:disabled:hover {
-		background-color: #8a8a8a;
-	}
-	.bg_teal {
-		background-color: #008f9c;
-	}
-	.bg_teal:hover {
-		background-color: #058181;
-	}
-	.bg_teal:active:focus {
-		background-color: #105e5e;
-	}
-	.bg_teal:focus {
-		background-color: #057b81;
-	}
-	.bg_teal:disabled {
-		background-color: #8a8a8a;
-	}
-	.bg_teal:disabled:hover {
-		background-color: #8a8a8a;
-	}
-	.bg_primary {
-		background-color: #337ab7;
-	}
-	.bg_primary:hover {
-		background-color: #286090;
-	}
-	.bg_primary:active:focus {
-		background-color: #23527c;
-	}
-	.bg_primary:focus {
-		background-color: #23527c;
-	}
-	.bg_primary:disabled {
-		background-color: #8a8a8a;
-	}
-	.bg_primary:disabled:hover {
-		background-color: #8a8a8a;
-	}
-
-	.bluebtn {
-		color: #fff;
-		background-color: #5bc0de;
-		border-color: #46b8da
-	}
-	.bluebtn.focus,.bluebtn:focus {
-		color: #fff;
-		background-color: #31b0d5;
-		border-color: #1b6d85
-	}
-	.bluebtn:hover {
-		color: #fff;
-		background-color: #31b0d5;
-		border-color: #269abc
-	}
-	.bluebtn.active,.bluebtn:active{
-		color: #fff;
-		background-color: #31b0d5;
-		background-image: none;
-		border-color: #269abc
-	}
-	.purplebtn {
-		color: #fff;
-		background-color: #9a5bde;
-		border-color: #c946da
-	}
-	.purplebtn.focus,.purplebtn:focus {
-		color: #fff;
-		background-color: #9a5bde;
-		border-color: #6c1b85
-	}
-	.purplebtn:hover {
-		color: #fff;
-		background-color: #9a5bde;
-		border-color: #c946da
-	}
-	.purplebtn.active,.purplebtn:active{
-		color: #fff;
-		background-color: #9a5bde;
-		background-image: none;
-		border-color: #c946da
-	}
-	.lightpurplebtn {
-		color: #fff;
-		background-color: #b888eb;
-		border-color: #dd60ee
-	}
-	.lightpurplebtn.focus,.lightpurplebtn:focus {
-		color: #fff;
-		background-color: #b888eb;
-		border-color: #9035ac
-	}
-	.lightpurplebtn:hover {
-		color: #fff;
-		background-color: #b888eb;
-		border-color: #dd60ee
-	}
-	.lightpurplebtn.active,.lightpurplebtn:active{
-		color: #fff;
-		background-color: #b888eb;
-		background-image: none;
-		border-color: #dd60ee
-	}
-	.redbtn {
-		color: #fff;
-		background-color: #d9534f;
-		border-color: #d43f3a
-	}
-	.redbtn.focus,.redbtn:focus {
-		color: #fff;
-		background-color: #c9302c;
-		border-color: #761c19
-	}
-	.redbtn:hover {
-		color: #fff;
-		background-color: #c9302c;
-		border-color: #ac2925
-	}
-	.redbtn.active,.redbtn:active {
-		color: #fff;
-		background-color: #c9302c;
-		background-image: none;
-		border-color: #ac2925
-	}
-    `;
-
-    const BLTOOLspecificstyles = `
-        .BLTOOL-body {
-        margin: 0;
-        padding: 20px;
-        font-family: Arial, sans-serif;
-        background-color: #f0f0f0;
-        }
-        .BLTOOL-sample-content {
-        max-width: 800px;
-        margin: 0 auto;
-        padding: 20px;
-        background-color: white;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-        }
-        .BLTOOL-h1 {
-        color: #333;
-        }
-        .BLTOOL-button {
-        padding: 6px 12px;
-        font-size: 14px;
-        border: none;
-        border-radius: 4px;
-        color: white;
-        cursor: pointer;
-        margin: 2px 0;
-        transition: background-color 0.3s ease;
-        white-space: nowrap;
-        }
-        .BLTOOL-button-primary {
-        background-color: #129c00;
-        }
-        .BLTOOL-button-secondary {
-        background-color: #337ab7;
-        }
-        .BLTOOL-button-danger {
-        background-color: #d9534f;
-        }
-        .BLTOOL-button-toggle {
-        background-color: #337ab7;
-        }
-        .BLTOOL-button:hover {
-        opacity: 0.9;
+        .BLTOOL-blacklite-tools:not(.collapsed) .BLTOOL-toggle-handle::after {
+            content: "◀";
+            left: -1px;
         }
         @media (max-width: 768px) {
-        .BLTOOL-button {
-        width: 100%;
-        }
-        }
-        .BLTOOL-blacklite-tools {
-        all: initial !important;
-        position: fixed !important;
-        top: 50px !important;
-        right: 20px !important;
-        width: 350px !important;
-        max-height: 90vh !important;
-        background-color: #1e1e1e !important;
-        color: white !important;
-        border-radius: 8px !important;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
-        z-index: 99999 !important;
-        padding: 10px !important;
-        font-family: sans-serif !important;
-        overflow: hidden !important;
-        display: flex !important;
-        flex-direction: column !important;
-        }
-        .BLTOOL-tab-button {
-        flex: 1;
-        text-align: center;
-        padding: 5px;
-        cursor: pointer;
-        background-color: #2e2e2e;
-        border: none;
-        }
-        .BLTOOL-tab-button.BLTOOL-active-tab {
-        background-color: #337ab7;
-        }
-        .BLTOOL-scroll-container {
-        max-height: 500px;
-        overflow-y: auto;
-        width: 100%;
-        box-sizing: border-box;
-        }
-        @media (max-width: 768px) {
-        .BLTOOL-blacklite-tools {
-        width: 90%;
-        left: 5%;
-        right: auto;
-        top: 10px;
-        max-height: 95vh;
-        }
-        .BLTOOL-tab-button {
-        flex: 1 1 33%;
-        font-size: 12px;
-        padding: 3px;
-        }
-        }
-    `;
-
-    const CONFIG = {
-        MOBILE_BREAKPOINT: 768,
-        PRESERVED_STYLES: ['align-items', 'animation', 'animation-delay', 'appearance', 'background-attachment', 
-                          'background-color', 'background-image', 'background-position', 'background-repeat', 
-                          'background-size', 'border', 'border-bottom', 'border-color', 'border-left', 
-                          'border-radius', 'border-right', 'border-top', 'border-width', 'bottom', 'box-shadow', 
-                          'box-sizing', 'clear', 'color', 'content', 'cursor', 'display', 'filter', 'flex', 
-                          'flex-direction', 'flex-flow', 'flex-wrap', 'float', 'font-family', 'font-size', 
-                          'font-weight', 'gap', 'grid-auto-rows', 'grid-template-columns', 'height', 
-                          'justify-content', 'left', 'line-height', 'margin', 'margin-bottom', 'margin-left', 
-                          'margin-right', 'margin-top', 'max-height', 'max-width', 'min-height', 'min-width', 
-                          'opacity', 'outline', 'overflow', 'overflow-wrap', 'overflow-x', 'overflow-y', 
-                          'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top', 
-                          'position', 'resize', 'right', 'tab-size', 'text-align', 'text-decoration', 
-                          'text-overflow', 'text-shadow', 'top', 'transform', 'transition', 'user-select', 
-                          'vertical-align', 'visibility', 'white-space', 'width', 'word-wrap', 'z-index'],
-        UNSUITABLE_FOR_BACKGROUND: new Set(['select', 'option', 'small', 'pre', 'p', 'script', 'a', 'label']),
-        EXCLUDED_SELECTORS: ['head', 'body'],
-        EXCLUDED_ELEMENTS: ['blacklite-tools'],
-        BACKGROUND_FILTERS: {
-            opacity: { min: 0, max: 1, step: 0.01, default: 1, unit: '' },
-            blur: { min: 0, max: 20, step: 0.1, default: 0, unit: 'px' },
-            brightness: { min: 0, max: 2, step: 0.05, default: 1, unit: '' },
-            contrast: { min: 0, max: 2, step: 0.05, default: 1, unit: '' },
-            grayscale: { min: 0, max: 1, step: 0.01, default: 0, unit: '' },
-            'hue-rotate': { min: 0, max: 360, step: 1, default: 0, unit: 'deg' },
-            invert: { min: 0, max: 1, step: 0.01, default: 0, unit: '' },
-            saturate: { min: 0, max: 2, step: 0.05, default: 1, unit: '' },
-            sepia: { min: 0, max: 1, step: 0.01, default: 0, unit: '' }
-        }
-    };
-
-    const TOOL_ID = 'blacklite-tools';
-    const State = {
-        activeTab: 'theme',
-        themes: {
-            default: null,
-            savedThemes: {},
-            activeTheme: 'Default Theme'
-        },
-        backgrounds: {
-            elements: {},
-            filters: {}
-        }
-    };
-
-    // =============================================
-    // UTILITY FUNCTIONS
-    // =============================================
-    function escapeSelector(selector) {
-        return selector.replace(/([!"#$%&'()*+,.\/:;<=>?@[\]^`{|}~])/g, '\\$&').replace(/\*/g, '.*');
-    }
-
-    function debounce(func, delay) {
-        let timeout;
-        return (...args) => {
-            clearTimeout(timeout);
-            timeout = setTimeout(() => func.apply(this, args), delay);
-        };
-    }
-
-    function isExcludedElement(selector) {
-        return selector.includes(TOOL_ID) ||
-               selector === '.background-overlay' ||
-               CONFIG.EXCLUDED_ELEMENTS.some(excluded => selector.includes(excluded));
-    }
-
-    function isElementSuitableForBackground(selector) {
-        try {
-            if (isExcludedElement(selector)) {
-                return false;
+            .BLTOOL-blacklite-tools {
+                width: 90% !important;
+                left: 5% !important;
+                right: auto !important;
+                top: 10px !important;
+                max-height: 95vh !important;
+                border-left: 20px solid #333 !important;
             }
+			.BLTOOL-tab-button {
+				flex: 1 1 33%;
+				font-size: 12px;
+				padding: 3px;
+			}
+			.BLTOOL-scroll-container {
+				padding-bottom: 15px !important;
+			}
+		}
+	`;
 
-            const baseSelector = selector.split(':')[0].toLowerCase();
-            
-            const unsuitableElements = CONFIG.UNSUITABLE_FOR_BACKGROUND;
-            
-            const cleanSelector = baseSelector.replace(/[.#[\]]/g, '').toLowerCase();
-            
-            if (/^[a-z]/.test(cleanSelector)) {
-                return !unsuitableElements.has(cleanSelector);
-            }
-            
-            const elements = document.querySelectorAll(selector);
-            if (elements.length === 0) return true;
-            
-            return Array.from(elements).every(el => {
-                const tagName = el.tagName.toLowerCase();
-                return !unsuitableElements.has(tagName);
-            });
-            
-        } catch (e) {
-            console.error('Error checking background suitability:', e);
-            return false;
-        }
-    }
+	const CONFIG = {
+		MOBILE_BREAKPOINT: 768,
+		PRESERVED_STYLES: ['align-items', 'animation', 'animation-delay', 'appearance', 'background-attachment', 
+						'background-image', 'background-position', 'background-repeat', 'background-color',
+						'background-size', 'border', 'border-bottom', 'border-color', 'border-left', 
+						'border-radius', 'border-right', 'border-top', 'border-width', 'bottom', 'box-shadow', 
+						'box-sizing', 'clear', 'color', 'content', 'cursor', 'display', 'filter', 'flex', 
+						'flex-direction', 'flex-flow', 'flex-wrap', 'float', 'font-family', 'font-size', 
+						'font-weight', 'gap', 'grid-auto-rows', 'grid-template-columns', 'height', 
+						'justify-content', 'left', 'line-height', 'margin', 'margin-bottom', 'margin-left', 
+						'margin-right', 'margin-top', 'max-height', 'max-width', 'min-height', 'min-width', 
+						'opacity', 'outline', 'overflow', 'overflow-wrap', 'overflow-x', 'overflow-y', 
+						'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top', 
+						'position', 'resize', 'right', 'tab-size', 'text-align', 'text-decoration', 
+						'text-overflow', 'text-shadow', 'top', 'transform', 'transition', 'user-select', 
+						'vertical-align', 'visibility', 'white-space', 'width', 'word-wrap', 'z-index'],
+		UNSUITABLE_FOR_BACKGROUND: new Set(['select', 'option', 'small', 'pre', 'p', 'script', 'a', 'label']),
+		EXCLUDED_SELECTORS: ['head', 'body'],
+		EXCLUDED_ELEMENTS: ['blacklite-tools'],
+		BACKGROUND_FILTERS: {
+			opacity: { min: 0, max: 1, step: 0.01, default: 1, unit: '' },
+			blur: { min: 0, max: 20, step: 0.1, default: 0, unit: 'px' },
+			brightness: { min: 0, max: 2, step: 0.05, default: 1, unit: '' },
+			contrast: { min: 0, max: 2, step: 0.05, default: 1, unit: '' },
+			grayscale: { min: 0, max: 1, step: 0.01, default: 0, unit: '' },
+			'hue-rotate': { min: 0, max: 360, step: 1, default: 0, unit: 'deg' },
+			invert: { min: 0, max: 1, step: 0.01, default: 0, unit: '' },
+			saturate: { min: 0, max: 2, step: 0.05, default: 1, unit: '' },
+			sepia: { min: 0, max: 1, step: 0.01, default: 0, unit: '' }
+		}
+	};
 
-    // =============================================
-    // CORE MANAGERS
-    // =============================================
+	const TOOL_ID = 'blacklite-tools';
+	const State = {
+		activeTab: 'theme',
+		themes: {
+			default: null,
+			savedThemes: {},
+			activeTheme: 'Default Theme'
+		},
+		backgrounds: {
+			elements: {},
+			filters: {}
+		},
+		toolState: {
+			collapsed: false,
+			position: { x: null, y: null },
+			minimized: false
+		}
+	};
 
-    // 1. UIManager - Handles all UI rendering and tab management
-    const UIManager = {
-        toolsContainer: null,
-        handleCoreClick: null,
-        lastAppliedStyles: null,
-        
-        init() {
-            console.log('Initializing UIManager');
-            this.createToolContainer();
-            this.setupBaseStyles();
-            this.attachGlobalEvents();
-            this.render();
-        },
-        
+	// =============================================
+	// UTILITY FUNCTIONS
+	// =============================================
+	function escapeSelector(selector) {
+		return selector.replace(/([!"#$%&'()*+,.\/:;<=>?@[\]^`{|}~])/g, '\\$&').replace(/\*/g, '.*');
+	}
+
+	function debounce(func, delay) {
+		let timeout;
+		return (...args) => {
+			clearTimeout(timeout);
+			timeout = setTimeout(() => func.apply(this, args), delay);
+		};
+	}
+
+	function isExcludedElement(selector) {
+		return selector.includes(TOOL_ID) ||
+			selector === '.background-overlay' ||
+			CONFIG.EXCLUDED_ELEMENTS.some(excluded => selector.includes(excluded));
+	}
+
+	function parseDocumentStyles() {
+		let cssText = '';
+		const styleSheets = document.styleSheets;
+		const toolStyleIds = ['bltool-default-styles', 'bltool-tool-styles', 'bltool-theme-styles', 'bltool-bg-styles'];
+		
+		for (let i = 0; i < styleSheets.length; i++) {
+			const sheet = styleSheets[i];
+
+			if (sheet.ownerNode && toolStyleIds.includes(sheet.ownerNode.id)) {
+				continue;
+			}
+			
+			try {
+				if (sheet.href && !sheet.href.startsWith(window.location.origin)) {
+					continue;
+				}
+				
+				const rules = sheet.cssRules || sheet.rules;
+				if (!rules) continue;
+				
+				for (let j = 0; j < rules.length; j++) {
+					const rule = rules[j];
+					
+					if (rule instanceof CSSStyleRule) {
+						if (!rule.selectorText.includes(TOOL_ID) && 
+							!rule.selectorText.includes('BLTOOL')) {
+							cssText += `${rule.selectorText} { ${rule.style.cssText} }\n`;
+						}
+					} else if (rule instanceof CSSMediaRule) {
+						let mediaCss = '';
+						for (let k = 0; k < rule.cssRules.length; k++) {
+							const mediaRule = rule.cssRules[k];
+							if (mediaRule instanceof CSSStyleRule && 
+								!mediaRule.selectorText.includes(TOOL_ID) &&
+								!mediaRule.selectorText.includes('BLTOOL')) {
+								mediaCss += `  ${mediaRule.selectorText} { ${mediaRule.style.cssText} }\n`;
+							}
+						}
+						if (mediaCss) {
+							cssText += `@media ${rule.conditionText} {\n${mediaCss}}\n`;
+						}
+					}
+				}
+			} catch (e) {
+				console.warn('Could not read styles from stylesheet:', sheet.href, e);
+			}
+		}
+		
+		// Store the parsed styles once
+		BLTOOLdynamicDefaultThemeCSS = cssText;
+		return cssText;
+	}
+
+	function isElementSuitableForBackground(selector) {
+		try {
+			if (isExcludedElement(selector)) {
+				return false;
+			}
+
+			const baseSelector = selector.split(':')[0].toLowerCase();
+			
+			const unsuitableElements = CONFIG.UNSUITABLE_FOR_BACKGROUND;
+			
+			const cleanSelector = baseSelector.replace(/[.#[\]]/g, '').toLowerCase();
+			
+			if (/^[a-z]/.test(cleanSelector)) {
+				return !unsuitableElements.has(cleanSelector);
+			}
+			
+			const elements = document.querySelectorAll(selector);
+			if (elements.length === 0) return true;
+			
+			return Array.from(elements).every(el => {
+				const tagName = el.tagName.toLowerCase();
+				return !unsuitableElements.has(tagName);
+			});
+			
+		} catch (e) {
+				console.error('Error checking background suitability:', e);
+				return false;
+		}
+	}
+
+	// =============================================
+	// CORE MANAGERS
+	// =============================================
+
+	// 1. UIManager - Handles all UI rendering and tab management
+	const UIManager = {
+		toolsContainer: null,
+		handleCoreClick: null,
+		lastAppliedStyles: null,
+		isDragging: false,
+		dragStartX: 0,
+		dragStartY: 0,
+		initialLeft: 0,
+		initialTop: 0,
+		toggleHandle: null,
+		
+		init() {
+			console.log('Initializing UIManager');
+			this.createToolContainer();
+			this.setupBaseStyles();
+			this.attachGlobalEvents();
+			this.render();
+		},
+		
         createToolContainer() {
             this.toolsContainer = document.createElement('div');
             this.toolsContainer.id = TOOL_ID;
             this.toolsContainer.className = 'BLTOOL-blacklite-tools';
-            document.body.appendChild(this.toolsContainer);
-        },
-        
-        setupBaseStyles() {
-            const defaultThemeStyleSheet = document.createElement('style');
-            defaultThemeStyleSheet.type = 'text/css';
-            defaultThemeStyleSheet.innerText = BLTOOLSLitedefaultThemeCSS;
-            defaultThemeStyleSheet.id = 'bltool-default-styles';
-            document.head.appendChild(defaultThemeStyleSheet);
-
-            const toolSpecificStyleSheet = document.createElement('style');
-            toolSpecificStyleSheet.type = 'text/css';
-            toolSpecificStyleSheet.innerText = BLTOOLspecificstyles;
-            toolSpecificStyleSheet.id = 'bltool-tool-styles';
-            document.head.appendChild(toolSpecificStyleSheet);
-
-            this.dynamicStyleElement = document.createElement('style');
-            this.dynamicStyleElement.id = 'bltool-theme-styles';
-            this.dynamicStyleElement.type = 'text/css';
-            document.head.appendChild(this.dynamicStyleElement);
-        },
-        
-        attachGlobalEvents() {
-            window.addEventListener('resize', debounce(this.handleResize.bind(this), 250));
-        },
-
-        handleResize() {
-            if (window.innerWidth <= CONFIG.MOBILE_BREAKPOINT) {
-                this.toolsContainer.style.width = '90%';
-                this.toolsContainer.style.left = '5%';
+            
+            // Create toggle handle - now acts as the visual border
+            this.toggleHandle = document.createElement('div');
+            this.toggleHandle.className = 'BLTOOL-toggle-handle';
+            this.toggleHandle.title = 'Click to toggle';  // Accessibility hint
+            
+            // Robust click handler
+            this.toggleHandle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.toggleMinimize();
+            });
+            
+            // Make sure it's the first child
+            this.toolsContainer.insertBefore(this.toggleHandle, this.toolsContainer.firstChild);
+            
+            // Rest of your existing container setup...
+            if (State.toolState.position.x !== null && State.toolState.position.y !== null) {
+                this.toolsContainer.style.left = `${State.toolState.position.x}px`;
+                this.toolsContainer.style.top = `${State.toolState.position.y}px`;
                 this.toolsContainer.style.right = 'auto';
-            } else {
-                this.toolsContainer.style.width = '350px';
-                this.toolsContainer.style.left = 'auto';
-                this.toolsContainer.style.right = '20px';
             }
+            
+            if (State.toolState.collapsed) {
+                this.toolsContainer.classList.add('collapsed');
+            }
+			
+			// Add resize observer to handle scroll container height
+			const resizeObserver = new ResizeObserver(() => {
+				const scrollContainer = this.toolsContainer.querySelector('.BLTOOL-scroll-container');
+				if (scrollContainer) {
+					const headerHeight = this.toolsContainer.querySelector('.BLTOOL-header')?.offsetHeight || 50;
+					const tabsHeight = this.toolsContainer.querySelector('.BLTOOL-tabs')?.offsetHeight || 30;
+					const availableHeight = this.toolsContainer.offsetHeight - headerHeight - tabsHeight - 20;
+					scrollContainer.style.maxHeight = `${Math.max(availableHeight, 100)}px`;
+					scrollContainer.style.overflow = 'auto';
+				}
+			});
+			
+			document.body.appendChild(this.toolsContainer);
+			resizeObserver.observe(this.toolsContainer);
+		},
+		
+        toggleMinimize() {
+            State.toolState.collapsed = !State.toolState.collapsed;
+            this.toolsContainer.classList.toggle('collapsed');
+            
+            // Force a re-render to update the arrow
+            setTimeout(() => {
+                this.toolsContainer.style.display = 'none';
+                this.toolsContainer.offsetHeight;
+                this.toolsContainer.style.display = 'flex';
+            }, 0);
         },
-        
+
+		setupBaseStyles() {
+		parseDocumentStyles();
+		
+		const defaultThemeStyleSheet = document.createElement('style');
+		defaultThemeStyleSheet.type = 'text/css';
+		defaultThemeStyleSheet.innerText = BLTOOLdynamicDefaultThemeCSS;
+		defaultThemeStyleSheet.id = 'bltool-default-styles';
+		document.head.appendChild(defaultThemeStyleSheet);
+
+		const toolSpecificStyleSheet = document.createElement('style');
+		toolSpecificStyleSheet.type = 'text/css';
+		toolSpecificStyleSheet.innerText = BLTOOLspecificstyles;
+		toolSpecificStyleSheet.id = 'bltool-tool-styles';
+		document.head.appendChild(toolSpecificStyleSheet);
+
+		this.dynamicStyleElement = document.createElement('style');
+		this.dynamicStyleElement.id = 'bltool-theme-styles';
+		this.dynamicStyleElement.type = 'text/css';
+		document.head.appendChild(this.dynamicStyleElement);
+		},
+		
+		attachGlobalEvents() {
+			window.addEventListener('resize', debounce(this.handleResize.bind(this), 250));
+		},
+
+		handleResize() {
+			if (window.innerWidth <= CONFIG.MOBILE_BREAKPOINT) {
+				this.toolsContainer.style.width = '90%';
+				this.toolsContainer.style.left = '5%';
+				this.toolsContainer.style.right = 'auto';
+				this.toolsContainer.style.top = '10px';
+			} else {
+				// Only reset position if not manually positioned
+				if (State.toolState.position.x === null || State.toolState.position.y === null) {
+					this.toolsContainer.style.width = '350px';
+					this.toolsContainer.style.left = 'auto';
+					this.toolsContainer.style.right = '0';
+					this.toolsContainer.style.top = '0';
+				}
+			}
+		},
+		
         render() {
-            try {
-                console.log('Starting UI render for tab:', State.activeTab);
-                
-                const scrollContainer = this.toolsContainer.querySelector('.BLTOOL-scroll-container');
-                const scrollPosition = scrollContainer ? scrollContainer.scrollTop : 0;
+                try {
+                    console.log('Starting UI render for tab:', State.activeTab);
+                    
+                    const scrollContainer = this.toolsContainer.querySelector('.BLTOOL-scroll-container');
+                    const scrollPosition = scrollContainer ? scrollContainer.scrollTop : 0;
 
-                const content = `
-                    <div style="margin-bottom: 5px;">
-                        <h3 style="font-size: 22px; margin: 0; padding: 0; width: 100%;">BlackLite UI Customization Tool</h3>
-                    </div>
-                    <div style="display: flex; margin-bottom: 10px;">
-                        <div class="BLTOOL-tab-button ${State.activeTab === 'theme' ? 'BLTOOL-active-tab' : ''}" data-tab="theme">Theme</div>
-                        <div class="BLTOOL-tab-button ${State.activeTab === 'backgrounds' ? 'BLTOOL-active-tab' : ''}" data-tab="backgrounds">Backgrounds</div>
-                        <div class="BLTOOL-tab-button ${State.activeTab === 'presets' ? 'BLTOOL-active-tab' : ''}" data-tab="presets">Presets</div>
-                    </div>
-                    ${this.renderTabContent()}
-                `;
+                    // Store reference to existing toggle handle
+                    const toggleHandle = this.toggleHandle;
+                    
+                    // Clear container but preserve the toggle handle
+                    const children = Array.from(this.toolsContainer.children);
+                    children.forEach(child => {
+                        if (child !== toggleHandle) {
+                            this.toolsContainer.removeChild(child);
+                        }
+                    });
 
-                this.toolsContainer.innerHTML = content;
-                console.log('UI content rendered');
+                    // Build the new content
+                    const content = `
+                        <div class="BLTOOL-header">
+                            <h3>BlackLite UI Customization Tool v2</h3>
+                        </div>
+                        <div class="BLTOOL-content" style="${State.toolState.collapsed ? 'display: none;' : ''}">
+                            <div style="display: flex; margin-bottom: 10px;">
+                                <div class="BLTOOL-tab-button ${State.activeTab === 'theme' ? 'BLTOOL-active-tab' : ''}" data-tab="theme">Theme</div>
+                                <div class="BLTOOL-tab-button ${State.activeTab === 'backgrounds' ? 'BLTOOL-active-tab' : ''}" data-tab="backgrounds">Backgrounds</div>
+                                <div class="BLTOOL-tab-button ${State.activeTab === 'presets' ? 'BLTOOL-active-tab' : ''}" data-tab="presets">Presets</div>
+                            </div>
+                            <div class="BLTOOL-content-wrapper">
+                                ${this.renderTabContent()}
+                            </div>
+                        </div>
+                    `;
 
-                const newScrollContainer = this.toolsContainer.querySelector('.BLTOOL-scroll-container');
-                if (newScrollContainer) {
-                    newScrollContainer.scrollTop = scrollPosition;
+                    // Create temporary container and insert content
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = content;
+                    
+                    // Append all new content
+                    while (tempDiv.firstChild) {
+                        this.toolsContainer.appendChild(tempDiv.firstChild);
+                    }
+
+                    console.log('UI content rendered');
+
+                    const newScrollContainer = this.toolsContainer.querySelector('.BLTOOL-scroll-container');
+                    if (newScrollContainer) {
+                        newScrollContainer.scrollTop = scrollPosition;
+                    }
+
+                    this.attachCoreEventListeners();
+                    console.log('Core listeners attached');
+
+                    console.log('Attaching tab-specific listeners');
+                    switch (State.activeTab) {
+                        case 'theme':
+                            ThemeManager.attachEventListeners();
+                            break;
+                        case 'backgrounds':
+                            BackgroundManager.attachEventListeners();
+                            break;
+                        case 'presets':
+                            PresetManager.attachEventListeners();
+                            break;
+                    }
+
+                } catch (e) {
+                    console.error('Error during render:', e);
                 }
+            },
+		
+		renderTabContent() {
+			switch (State.activeTab) {
+				case 'theme':
+					return ThemeManager.renderThemeTab();
+				case 'backgrounds':
+					return BackgroundManager.renderBackgroundsTab();
+				case 'presets':
+					return PresetManager.renderPresetsTab();
+				default:
+					return ThemeManager.renderThemeTab();
+			}
+		},
+		
+		attachCoreEventListeners() {
+			console.log('Attaching core event listeners...');
+			
+			if (this.handleCoreClick) {
+				this.toolsContainer.removeEventListener('click', this.handleCoreClick);
+			}
+			
+			this.handleCoreClick = (e) => {
+				const tabButton = e.target.closest('.BLTOOL-tab-button');
+				if (tabButton) {
+					e.preventDefault();
+					State.activeTab = tabButton.dataset.tab;
+					this.render();
+				}
+				
+				const collapseToggle = e.target.closest('.BLTOOL-collapse-toggle');
+				if (collapseToggle) {
+					State.toolState.collapsed = !State.toolState.collapsed;
+					this.toolsContainer.classList.toggle('collapsed', State.toolState.collapsed);
+					this.render();
+				}
+				
+				// Handle section toggles
+				const sectionHeader = e.target.closest('.BLTOOL-section-header');
+				if (sectionHeader) {
+					const section = sectionHeader.closest('.BLTOOL-section');
+					section.classList.toggle('collapsed');
+					const arrow = sectionHeader.querySelector('span:last-child');
+					arrow.textContent = section.classList.contains('collapsed') ? '▶' : '▼';
+				}
+			};
+			
+			this.toolsContainer.addEventListener('click', this.handleCoreClick);
+			
+			// Setup drag functionality
+			const header = this.toolsContainer.querySelector('.BLTOOL-header');
+			if (header) {
+				header.addEventListener('mousedown', (e) => {
+					if (e.target.classList.contains('BLTOOL-collapse-toggle')) return;
+					
+					this.isDragging = true;
+					this.dragStartX = e.clientX;
+					this.dragStartY = e.clientY;
+					
+					// Get current computed position
+					const style = window.getComputedStyle(this.toolsContainer);
+					this.initialLeft = parseInt(style.left, 10) || 0;
+					this.initialTop = parseInt(style.top, 10) || 0;
+					
+					// Prevent text selection during drag
+					document.body.style.userSelect = 'none';
+					this.toolsContainer.style.cursor = 'grabbing';
+				});
+			}
 
-                this.attachCoreEventListeners();
-                console.log('Core listeners attached');
+			document.addEventListener('mousemove', (e) => {
+				if (!this.isDragging) return;
+				
+				const dx = e.clientX - this.dragStartX;
+				const dy = e.clientY - this.dragStartY;
+				
+				let newLeft = this.initialLeft + dx;
+				let newTop = this.initialTop + dy;
+				
+				// Ensure the tool stays within viewport bounds
+				const maxLeft = window.innerWidth - this.toolsContainer.offsetWidth;
+				const maxTop = window.innerHeight - this.toolsContainer.offsetHeight;
+				
+				newLeft = Math.max(0, Math.min(newLeft, maxLeft));
+				newTop = Math.max(0, Math.min(newTop, maxTop));
+				
+				this.toolsContainer.style.left = `${newLeft}px`;
+				this.toolsContainer.style.top = `${newTop}px`;
+				this.toolsContainer.style.right = 'auto';
+				
+				// Update state with new position
+				State.toolState.position = { 
+					x: newLeft,
+					y: newTop
+				};
+			});
 
-                console.log('Attaching tab-specific listeners');
-                switch (State.activeTab) {
-                    case 'theme':
-                        ThemeManager.attachEventListeners();
-                        break;
-                    case 'backgrounds':
-                        BackgroundManager.attachEventListeners();
-                        break;
-                    case 'presets':
-                        PresetManager.attachEventListeners();
-                        break;
-                }
+			document.addEventListener('mouseup', () => {
+				if (this.isDragging) {
+					this.isDragging = false;
+					document.body.style.userSelect = '';
+					this.toolsContainer.style.cursor = '';
+				}
+			});
+			
+			// Handle resize events to update scroll container height
+			const resizeObserver = new ResizeObserver(() => {
+				const scrollContainer = this.toolsContainer.querySelector('.BLTOOL-scroll-container');
+				if (scrollContainer) {
+					const headerHeight = this.toolsContainer.querySelector('.BLTOOL-header')?.offsetHeight || 50;
+					const tabsHeight = this.toolsContainer.querySelector('[style*="display: flex; margin-bottom: 10px;"]')?.offsetHeight || 30;
+					const availableHeight = this.toolsContainer.offsetHeight - headerHeight - tabsHeight - 25; // 25px padding
+					scrollContainer.style.maxHeight = `${Math.max(availableHeight, 100)}px`;
+				}
+			});
+			resizeObserver.observe(this.toolsContainer);
+		},
+	
+		cleanup() {
+			if (this.handleCoreClick) {
+				this.toolsContainer.removeEventListener('click', this.handleCoreClick);
+				this.handleCoreClick = null;
+			}
+			
+			document.removeEventListener('mousemove', this.handleDragMove);
+			document.removeEventListener('mouseup', this.handleDragEnd);
+			
+			if (this.toolsContainer && this.toolsContainer.parentNode) {
+				this.toolsContainer.parentNode.removeChild(this.toolsContainer);
+			}
+		}
+	};
 
-            } catch (e) {
-                console.error('Error during render:', e);
-            }
-        },
-        
-        renderTabContent() {
-            switch (State.activeTab) {
-                case 'theme':
-                    return ThemeManager.renderThemeTab();
-                case 'backgrounds':
-                    return BackgroundManager.renderBackgroundsTab();
-                case 'presets':
-                    return PresetManager.renderPresetsTab();
-                default:
-                    return ThemeManager.renderThemeTab();
-            }
-        },
-        
-        attachCoreEventListeners() {
-            console.log('Attaching core event listeners...');
-            
-            if (this.handleCoreClick) {
-                this.toolsContainer.removeEventListener('click', this.handleCoreClick);
-            }
-            
-            this.handleCoreClick = (e) => {
-                const tabButton = e.target.closest('.BLTOOL-tab-button');
-                if (tabButton) {
-                    e.preventDefault();
-                    State.activeTab = tabButton.dataset.tab;
-                    this.render();
-                }
-            };
-            
-            this.toolsContainer.addEventListener('click', this.handleCoreClick);
-        },
-        
-        cleanup() {
-            if (this.handleCoreClick) {
-                this.toolsContainer.removeEventListener('click', this.handleCoreClick);
-                this.handleCoreClick = null;
-            }
-            
-            if (this.toolsContainer && this.toolsContainer.parentNode) {
-                this.toolsContainer.parentNode.removeChild(this.toolsContainer);
-            }
-        }
-    };
 
     // 2. InspectorManager - Unified inspector functionality
     const InspectorManager = {
@@ -2800,22 +770,22 @@
             UIManager.render();
         },
         
-        generateSelector(element) {
-            let selectorParts = [];
-            if (element.id) {
-                selectorParts.push(`#${escapeSelector(element.id)}`);
-            }
-            if (element.className && typeof element.className === 'string') {
-                const classes = element.className.split(' ').filter(c => c.trim() !== '');
-                if (classes.length > 0) {
-                    selectorParts.push(classes.map(c => `.${escapeSelector(c)}`).join(''));
-                }
-            }
-            if (selectorParts.length === 0) {
-                selectorParts.push(element.tagName.toLowerCase());
-            }
-            return selectorParts.join('');
-        },
+		generateSelector(element) {
+			let selectorParts = [];
+			if (element.id) {
+				selectorParts.push(`#${escapeSelector(element.id)}`);
+			}
+			if (element.className && typeof element.className === 'string') {
+				const classes = element.className.split(' ').filter(c => c.trim() !== '');
+				if (classes.length > 0) {
+					selectorParts.push(classes.map(c => `.${escapeSelector(c)}`).join(''));
+				}
+			}
+			if (selectorParts.length === 0) {
+				selectorParts.push(element.tagName.toLowerCase());
+			}
+			return selectorParts.join('');
+		},
         
         cleanup() {
             this.stopInspector();
@@ -2902,55 +872,94 @@
             }
         },
 
-        generateAllPossibleSelectors(el) {
-            const selectors = [];
-            
-            // 1. ID selector
-            if (el.id && !el.id.includes(TOOL_ID)) {
-                selectors.push(`#${el.id}`);
-            }
-            
-            // 2. Class selector(s)
-            if (el.className && typeof el.className === 'string') {
-                const classes = el.className.split(' ').filter(c => c.trim() !== '');
-                if (classes.length > 0) {
-                    selectors.push(classes.map(c => `.${escapeSelector(c)}`).join(''));
-                    classes.forEach(c => selectors.push(`.${escapeSelector(c)}`));
-                }
-            }
-            
-            // 3. Tag selector
-            selectors.push(el.tagName.toLowerCase());
-            
-            // 4. Combined selector (tag.class)
-            if (el.className && typeof el.className === 'string') {
-                const classes = el.className.split(' ').filter(c => c.trim() !== '');
-                if (classes.length > 0) {
-                    selectors.push(`${el.tagName.toLowerCase()}${classes.map(c => `.${escapeSelector(c)}`).join('')}`);
-                }
-            }
-            
-            return selectors.filter((v, i, a) => a.indexOf(v) === i);
-        },
-        
-        captureElementStyles(selector, element) {
-            try {
-                const computedStyle = window.getComputedStyle(element);
-                this.originalStyles[selector] = {};
-                this.currentStyles[selector] = {};
+		generateAllPossibleSelectors(el) {
+			const selectors = [];
+			const tag = el.tagName.toLowerCase();
+			
+			// Always include ID selector if element has an ID
+			if (el.id && !el.id.includes(TOOL_ID)) {
+				selectors.push(`#${escapeSelector(el.id)}`);
+			}
+			
+			// Get all class combinations if element has classes
+			if (el.className && typeof el.className === 'string') {
+				const classes = el.className.split(' ').filter(c => c.trim() !== '');
+				if (classes.length > 0) {
+					// Add each individual class
+					classes.forEach(c => {
+						selectors.push(`.${escapeSelector(c)}`);
+					});
+					
+					// Add all classes combined
+					if (classes.length > 1) {
+						selectors.push(`.${classes.map(c => escapeSelector(c)).join('.')}`);
+					}
+					
+					// Add tag with classes
+					if (classes.length > 1) {
+						selectors.push(`${tag}.${classes.map(c => escapeSelector(c)).join('.')}`);
+					}
+				}
+			}
+			
+			// Simple tag selector (only if no ID or classes exist)
+			if (!el.id && (!el.className || el.className.trim() === '')) {
+				selectors.push(tag);
+			}
+			
+			// Filter out duplicates and tool-related selectors
+			return selectors.filter((v, i, a) => 
+				v && 
+				!v.includes(TOOL_ID) && 
+				!v.includes('BLTOOL') &&
+				a.indexOf(v) === i
+			);
+		},
 
-                CONFIG.PRESERVED_STYLES.forEach(prop => {
-                    const value = computedStyle.getPropertyValue(prop);
-                    if (value && value !== 'initial' && value !== 'inherit') {
-                        this.originalStyles[selector][prop] = value;
-                        this.currentStyles[selector][prop] = value;
-                    }
-                });
-            } catch (error) {
-                console.warn(`Error capturing styles for ${selector}:`, error);
-            }
-        },
+		isBetterSelectorAvailable(selector, element) {    
+			// If we already have this selector, we don't need to capture it again
+			if (this.originalStyles[selector]) {
+				return true;
+			}
+			
+			// If this is an ID selector, it's always the best
+			if (selector.startsWith('#')) {
+				return false;
+			}
+			
+			// Check if we have a more specific selector for this element
+			const elementSelectors = this.generateAllPossibleSelectors(element);
+			return elementSelectors.some(s => 
+				s !== selector && 
+				this.originalStyles[s] && 
+				(s.startsWith('#') || s.split('.').length > selector.split('.').length)
+			);
+		},
         
+		captureElementStyles(selector, element) {
+			try {
+				const computedStyle = window.getComputedStyle(element);
+				
+				// Only capture if this is the best available selector for the element
+				if (this.isBetterSelectorAvailable(selector, element)) {
+					return;
+				}
+				
+				this.originalStyles[selector] = {};
+				this.currentStyles[selector] = {};
+
+				CONFIG.PRESERVED_STYLES.forEach(prop => {
+					const value = computedStyle.getPropertyValue(prop);
+					if (value && value !== 'initial' && value !== 'inherit') {
+						this.originalStyles[selector][prop] = value;
+						this.currentStyles[selector][prop] = value;
+					}
+				});
+			} catch (error) {
+				console.warn(`Error capturing styles for ${selector}:`, error);
+			}
+		},
+       
         isElementExcluded(element) {
             if (!element || !element.tagName) return true;
             const tagName = element.tagName.toLowerCase();
@@ -2980,37 +989,68 @@
         },
         
         renderThemeTab() {
-            try {
-                return `
-                    <div style="display: flex; margin-bottom: 5px; align-items: center;">
-                        <input type="text" id="theme-filter" placeholder="Filter selectors..." 
-                            style="flex:1; padding: 4px 6px; color: black; height: 28px;" 
-                            value="${this.searchTerm}">
-                        <button id="clear-filter" class="BLTOOL-button BLTOOL-button-danger" 
-                                style="margin-left: 5px; height: 28px;" 
-                                ${!this.searchTerm ? 'disabled' : ''}>X</button>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
-                        <button class="BLTOOL-button BLTOOL-button-${InspectorManager.activeInspector === 'theme' ? 'danger' : 'primary'}" 
-                                id="toggle-inspector">
-                            ${InspectorManager.activeInspector === 'theme' ? 'Stop Inspector' : 'Inspector 🔍'}
-                        </button>
-                        <button id="toggle-collapse" class="BLTOOL-button BLTOOL-button-secondary" style="flex: 1 1 48%;">
-                            ${this.collapsedSelectors.size === Object.keys(this.originalStyles).length ? 'Open ALL' : 'Close ALL'}
-                        </button>
-                        <button id="filter-changes-button" class="BLTOOL-button BLTOOL-button-toggle" style="flex: 1 1 100%;">
-                            ${this.showOnlyChangedElements ? 'Show All Elements' : 'Show Only Changed Elements'}
-                        </button>
-                    </div>
-                    <div class="BLTOOL-scroll-container" style="max-height: 475px; overflow-y: auto; width: 100%; box-sizing: border-box;">
-                        ${this.renderStyleGroups()}
-                    </div>
-                `;
-            } catch (e) {
-                console.error('Error rendering theme tab:', e);
-                return '<div>Error rendering theme tab</div>';
-            }
-        },
+		try {
+				const isAllCollapsed = Object.keys(this.originalStyles).every(selector => 
+					this.collapsedSelectors.has(selector)
+				);
+				
+				return `
+					<div class="BLTOOL-scroll-container">
+						<div class="BLTOOL-section">
+							<div class="BLTOOL-section-header" data-section="filter">
+								<span>Search & Inspector</span>
+								<span>▼</span>
+							</div>
+							<div class="BLTOOL-section-content">
+								<div style="display: flex; margin-bottom: 5px; align-items: center;">
+									<input type="text" id="theme-filter" placeholder="Filter selectors..." 
+										style="flex:1; padding: 4px 6px; color: black; height: 28px;" 
+										value="${this.searchTerm}">
+									<button id="clear-filter" class="BLTOOL-button" 
+											style="margin-left: 5px; height: 28px;" 
+											${!this.searchTerm ? 'disabled' : ''}>X</button>
+								</div>
+								<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
+									<button class="BLTOOL-button" id="toggle-inspector">
+										${InspectorManager.activeInspector === 'theme' ? 'Stop Inspector' : 'Inspector'}
+									</button>
+								</div>
+							</div>
+						</div>
+						
+						<div class="BLTOOL-section">
+							<div class="BLTOOL-section-header" data-section="controls">
+								<span>Controls</span>
+								<span>▼</span>
+							</div>
+							<div class="BLTOOL-section-content">
+								<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
+									<button id="toggle-collapse" class="BLTOOL-button" style="flex: 1 1 48%;">
+										${isAllCollapsed ? 'Open ALL' : 'Close ALL'}
+									</button>
+									<button id="filter-changes-button" class="BLTOOL-button" style="flex: 1 1 48%;">
+										${this.showOnlyChangedElements ? 'Show All' : 'Show Changed'}
+									</button>
+								</div>
+							</div>
+						</div>
+						
+						<div class="BLTOOL-section">
+							<div class="BLTOOL-section-header" data-section="elements">
+								<span>Elements</span>
+								<span>▼</span>
+							</div>
+							<div class="BLTOOL-section-content">
+								${this.renderStyleGroups()}
+							</div>
+						</div>
+					</div>
+				`;
+			} catch (e) {
+				console.error('Error rendering theme tab:', e);
+				return '<div>Error rendering theme tab</div>';
+			}
+		},
     
         renderStyleGroups() {
             try {
@@ -3042,43 +1082,63 @@
                     return `<div style="padding: 10px; color: #aaa;">No matching elements found.</div>`;
                 }
 
-                return filteredSelectors.map(selector => {
-                    const isCollapsed = this.collapsedSelectors.has(selector);
-                    const styles = this.currentStyles[selector] || {};
-                    const originalStyles = this.originalStyles[selector] || {};
-                    
-                    const filteredProps = Object.keys(styles).filter(prop => {
-                        return CONFIG.PRESERVED_STYLES.includes(prop);
-                    });
+				return filteredSelectors.map(selector => {
+						const isCollapsed = this.collapsedSelectors.has(selector);
+						const styles = this.currentStyles[selector] || {};
+						const originalStyles = this.originalStyles[selector] || {};
+						
+						const filteredProps = Object.keys(styles).filter(prop => {
+							return CONFIG.PRESERVED_STYLES.includes(prop);
+						});
 
-                    return `
-                        <div style="margin-top: 5px;">
-                            <div class="BLTOOL-selector-toggle" data-selector="${selector}"
-                                style="cursor: pointer; padding: 5px; background-color: #2e2e2e; color: white;">
-                                ${selector}
-                                <span style="float:right;">${isCollapsed ? '▶' : '▼'}</span>
-                            </div>
-                            ${isCollapsed ? '' : `
-                                <div style="background-color: #3e3e3e; margin: 5px 0; padding: 5px;">
-                                    ${filteredProps.map(prop => `
-                                        <div style="display: flex; align-items: center; margin: 5px 0;">
-                                            <span style="flex-grow: 1; margin-right: 10px; color: #aaa;">${prop}</span>
-                                            <input
-                                                type="${prop.includes('color') ? 'color' : 'text'}"
-                                                value="${styles[prop] || ''}"
-                                                style="width: 100px; padding: 2px; color: black;"
-                                                data-selector="${selector}"
-                                                data-prop="${prop}"
-                                                class="BLTOOL-style-input"
-                                            >
-                                            ${styles[prop] !== originalStyles[prop] ? '<span style="color: #91C121; margin-left: 5px;">✓</span>' : ''}
-                                        </div>
-                                    `).join('')}
-                                </div>
-                            `}
-                        </div>
-                    `;
-                }).join('');
+						return `
+							<div style="margin-top: 5px;">
+								<div class="BLTOOL-selector-toggle" data-selector="${selector}"
+									style="cursor: pointer; padding: 5px; background-color:rgb(51, 51, 51); color: white;">
+									${selector}
+									<span style="float:right;">${isCollapsed ? '▶' : '▼'}</span>
+								</div>
+								${isCollapsed ? '' : `
+									<div style="background-color: #3e3e3e; margin: 5px 0; padding: 5px;">
+										${filteredProps.map(prop => {
+											const isColorProp = prop.includes('color');
+											const changed = styles[prop] !== originalStyles[prop];
+											
+											return `
+												<div style="display: flex; align-items: center; margin: 5px 0;">
+													<span style="flex-grow: 1; margin-right: 10px; color: #aaa;">${prop}</span>
+													${isColorProp ? `
+														<input
+															type="color"
+															value="${styles[prop] || ''}"
+															style="width: 30px; height: 30px; padding: 2px;"
+															data-selector="${selector}"
+															data-prop="${prop}"
+															class="BLTOOL-style-color-input"
+														>
+													` : ''}
+													<input
+														type="${isColorProp ? 'text' : 'text'}"
+														value="${styles[prop] || ''}"
+														style="width: 100px; padding: 2px; color: black; ${isColorProp ? 'margin-left: 5px;' : ''}"
+														data-selector="${selector}"
+														data-prop="${prop}"
+														class="BLTOOL-style-input"
+													>
+													${changed ? `
+														<button class="BLTOOL-reset-button" data-selector="${selector}" data-prop="${prop}"
+															style="background: none; border: none; color: #ff6b6b; cursor: pointer; margin-left: 5px; font-weight: bold;">
+															X
+														</button>
+													` : ''}
+												</div>
+											`;
+										}).join('')}
+									</div>
+								`}
+							</div>
+						`;
+					}).join('');
             } catch (e) {
                 console.error('Error rendering style groups:', e);
                 return '<div>Error rendering style groups</div>';
@@ -3190,49 +1250,127 @@
                     return;
                 }
                 
-                if (e.target.classList.contains('BLTOOL-selector-toggle')) {
-                    const selector = e.target.dataset.selector;
-                    if (this.collapsedSelectors.has(selector)) {
-                        this.collapsedSelectors.delete(selector);
-                    } else {
-                        this.collapsedSelectors.add(selector);
+				const selectorToggle = e.target.closest('.BLTOOL-selector-toggle, .BLTOOL-section-header');
+                if (selectorToggle) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Handle both old and new class names
+                    const selector = selectorToggle.dataset.selector || 
+                                    selectorToggle.closest('[data-selector]')?.dataset.selector;
+                    
+                    if (selector) {
+                        if (this.collapsedSelectors.has(selector)) {
+                            this.collapsedSelectors.delete(selector);
+                        } else {
+                            this.collapsedSelectors.add(selector);
+                        }
+                        UIManager.render();
+                        return;
                     }
-                    UIManager.render();
                 }
+				if (selectorToggleArrow) {
+					e.preventDefault();
+					e.stopPropagation();
+					const selectorToggle = selectorToggleArrow.closest('.BLTOOL-selector-toggle');
+					const selector = selectorToggle.dataset.selector;
+					if (this.collapsedSelectors.has(selector)) {
+						this.collapsedSelectors.delete(selector);
+					} else {
+						this.collapsedSelectors.add(selector);
+					}
+					UIManager.render();
+					return;
+				}
             };
 
-            this.handleThemeChange = (e) => {
-                if (e.target.classList.contains('BLTOOL-style-input')) {
-                    const selector = e.target.dataset.selector;
-                    const prop = e.target.dataset.prop;
-                    const value = e.target.value;
-                    this.updateStyle(selector, prop, value);
-                }
-            };
+			this.handleThemeChange = (e) => {
+				if (e.target.classList.contains('BLTOOL-style-input') || 
+					e.target.classList.contains('BLTOOL-style-color-input')) {
+					
+					const selector = e.target.dataset.selector;
+					const prop = e.target.dataset.prop;
+					const value = e.target.value;
+					
+					// Update both color picker and text input if this is a color property
+					if (prop.includes('color')) {
+						const isColorInput = e.target.classList.contains('BLTOOL-style-color-input');
+						const otherInput = isColorInput 
+							? container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`)
+							: container.querySelector(`.BLTOOL-style-color-input[data-selector="${selector}"][data-prop="${prop}"]`);
+						
+						if (otherInput) {
+							otherInput.value = value;
+						}
+					}
+					
+					this.updateStyle(selector, prop, value);
+				}
+			};
+
+			container.addEventListener('click', (e) => {
+				if (e.target.classList.contains('BLTOOL-reset-button')) {
+					const selector = e.target.dataset.selector;
+					const prop = e.target.dataset.prop;
+					
+					// Reset to original value
+					const originalValue = this.originalStyles[selector]?.[prop];
+					if (originalValue !== undefined) {
+						// Find and update both inputs if it's a color property
+						if (prop.includes('color')) {
+							const colorInput = container.querySelector(`.BLTOOL-style-color-input[data-selector="${selector}"][data-prop="${prop}"]`);
+							const textInput = container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
+							
+							if (colorInput) colorInput.value = originalValue;
+							if (textInput) textInput.value = originalValue;
+						} else {
+							const input = container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
+							if (input) input.value = originalValue;
+						}
+						
+						this.updateStyle(selector, prop, originalValue);
+					}
+				}
+			});
 
             container.addEventListener('click', this.handleThemeClick);
             container.addEventListener('change', this.handleThemeChange);
         },
         
-        updateStyle(selector, prop, value) {
-            try {
-                if (!this.currentStyles[selector]) {
-                    this.currentStyles[selector] = {};
-                }
-                this.currentStyles[selector][prop] = value;
-                
-                if (!this.applyDebounce) {
-                    this.applyDebounce = debounce(() => {
-                        this.applyAllStylesToDOM();
-                        PresetManager.markAsUnsaved();
-                        this.applyDebounce = null;
-                    }, 100);
-                }
-                this.applyDebounce();
-            } catch (e) {
-                console.warn(`Could not apply style for selector: ${selector}`, e);
-            }
-        },
+		updateStyle(selector, prop, value) {
+			try {
+				if (!this.currentStyles[selector]) {
+					this.currentStyles[selector] = {};
+				}
+				this.currentStyles[selector][prop] = value;
+				
+				// Update color preview if this is a color property
+				if (prop.includes('color')) {
+					const previewDiv = document.querySelector(`.BLTOOL-selector-toggle[data-selector="${selector}"]`)
+						?.closest('div')
+						?.querySelector(`[data-selector="${selector}"] + div [style*="background-color"]`);
+					
+					if (previewDiv) {
+						previewDiv.style.backgroundColor = value;
+						const textSpan = previewDiv.nextElementSibling;
+						if (textSpan) {
+							textSpan.textContent = value || 'Not set';
+						}
+					}
+				}
+				
+				if (!this.applyDebounce) {
+					this.applyDebounce = debounce(() => {
+						this.applyAllStylesToDOM();
+						PresetManager.markAsUnsaved();
+						this.applyDebounce = null;
+					}, 100);
+				}
+				this.applyDebounce();
+			} catch (e) {
+				console.warn(`Could not apply style for selector: ${selector}`, e);
+			}
+		},
         
         showChanges() {
             try {
@@ -3394,44 +1532,71 @@
             bgStyleElement.textContent = cssText;
         },
         
-        renderBackgroundsTab() {
-            try {
-                const isAllCollapsed = Object.keys(ThemeManager.currentStyles)
-                    .filter(selector => isElementSuitableForBackground(selector))
-                    .every(selector => this.collapsedSelectors.has(selector));
-                    
-                const toggleText = isAllCollapsed ? 'Open ALL' : 'Close ALL';
-                
-                return `
-                    <div style="display: flex; margin-bottom: 5px; align-items: center;">
-                        <input type="text" id="bg-filter" placeholder="Filter elements..." 
-                            style="flex:1; padding: 4px 6px; color: black; height: 28px;" 
-                            value="${this.searchTerm}">
-                        <button id="clear-bg-filter" class="BLTOOL-button BLTOOL-button-danger" 
-                                style="margin-left: 5px; height: 28px;" 
-                                ${!this.searchTerm ? 'disabled' : ''}>X</button>
-                    </div>
-                    <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
-                        <button class="BLTOOL-button BLTOOL-button-${InspectorManager.activeInspector === 'background' ? 'danger' : 'primary'}" 
-                                id="toggle-bg-inspector">
-                            ${InspectorManager.activeInspector === 'background' ? 'Stop Inspector' : 'Inspector 🔍'}
-                        </button>
-                        <button id="toggle-bg-collapse" class="BLTOOL-button BLTOOL-button-secondary" style="flex: 1 1 48%;">
-                            ${toggleText}
-                        </button>
-                        <button id="filter-images-button" class="BLTOOL-button BLTOOL-button-toggle" style="flex: 1 1 100%;">
-                            ${this.showOnlyWithBackground ? 'Show All Elements' : 'Show Only Elements With Backgrounds'}
-                        </button>
-                    </div>
-                    <div class="BLTOOL-scroll-container" style="max-height: 475px; overflow-y: auto; width: 100%; box-sizing: border-box;">
-                        ${this.renderBackgroundSelectors()}
-                    </div>
-                `;
-            } catch (e) {
-                console.error('Error rendering backgrounds tab:', e);
-                return '<div>Error rendering backgrounds tab</div>';
-            }
-        },
+		renderBackgroundsTab() {
+			try {
+				const isAllCollapsed = Object.keys(ThemeManager.currentStyles)
+					.filter(selector => isElementSuitableForBackground(selector))
+					.every(selector => this.collapsedSelectors.has(selector));
+					
+				const toggleText = isAllCollapsed ? 'Open ALL' : 'Close ALL';
+				
+				return `
+					<div class="BLTOOL-scroll-container">
+						<div class="BLTOOL-section">
+							<div class="BLTOOL-section-header" data-section="filter">
+								<span>Search & Inspector</span>
+								<span>▼</span>
+							</div>
+							<div class="BLTOOL-section-content">
+								<div style="display: flex; margin-bottom: 5px; align-items: center;">
+									<input type="text" id="bg-filter" placeholder="Filter elements..." 
+										style="flex:1; padding: 4px 6px; color: black; height: 28px;" 
+										value="${this.searchTerm}">
+									<button id="clear-bg-filter" class="BLTOOL-button" 
+											style="margin-left: 5px; height: 28px;" 
+											${!this.searchTerm ? 'disabled' : ''}>X</button>
+								</div>
+								<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
+									<button class="BLTOOL-button" id="toggle-bg-inspector">
+										${InspectorManager.activeInspector === 'background' ? 'Stop Inspector' : 'Inspector'}
+									</button>
+								</div>
+							</div>
+						</div>
+						
+						<div class="BLTOOL-section">
+							<div class="BLTOOL-section-header" data-section="controls">
+								<span>Controls</span>
+								<span>▼</span>
+							</div>
+							<div class="BLTOOL-section-content">
+								<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
+									<button id="toggle-bg-collapse" class="BLTOOL-button" style="flex: 1 1 48%;">
+										${toggleText}
+									</button>
+									<button id="filter-images-button" class="BLTOOL-button" style="flex: 1 1 48%;">
+										${this.showOnlyWithBackground ? 'Show All' : 'Show With BGs'}
+									</button>
+								</div>
+							</div>
+						</div>
+						
+						<div class="BLTOOL-section">
+							<div class="BLTOOL-section-header" data-section="elements">
+								<span>Elements</span>
+								<span>▼</span>
+							</div>
+							<div class="BLTOOL-section-content">
+								${this.renderBackgroundSelectors()}
+							</div>
+						</div>
+					</div>
+				`;
+			} catch (e) {
+				console.error('Error rendering backgrounds tab:', e);
+				return '<div>Error rendering backgrounds tab</div>';
+			}
+		},
         
         renderBackgroundSelectors() {
             try {
@@ -3474,7 +1639,7 @@
                                         <div style="margin-bottom: 10px; width: 100%;">
                                             <p style="margin: 5px 0; width: 100%;">Background Image:</p>
                                             <input type="file" class="BLTOOL-bg-file-input" data-selector="${selector}" style="color: white; display: inline-block; width: auto;">
-                                            <button class="BLTOOL-button BLTOOL-button-danger" data-selector="${selector}">X</button>
+                                            <button class="BLTOOL-button" data-selector="${selector}">X</button>
                                             <img id="preview-${selector}" src="${bgImage}" style="max-width: 100%; margin-top: 10px; display: ${bgImage ? 'block' : 'none'}; 
                                                 box-sizing: border-box; filter: ${Object.entries(filters)
                                                     .map(([f, val]) => `${f}(${val}${CONFIG.BACKGROUND_FILTERS[f]?.unit || ''})`)
@@ -3577,16 +1742,20 @@
             });
 
             this.handleBgClick = (e) => {
-                if (e.target.classList.contains('BLTOOL-bg-selector-toggle')) {
-                    e.stopPropagation();
-                    const selector = e.target.dataset.selector;
-                    if (this.collapsedSelectors.has(selector)) {
-                        this.collapsedSelectors.delete(selector);
-                    } else {
-                        this.collapsedSelectors.add(selector);
-                    }
-                    UIManager.render();
-                }
+				const selectorToggleArrow = e.target.closest('.BLTOOL-bg-selector-toggle span');
+				if (selectorToggleArrow) {
+					e.preventDefault();
+					e.stopPropagation();
+					const selectorToggle = selectorToggleArrow.closest('.BLTOOL-bg-selector-toggle');
+					const selector = selectorToggle.dataset.selector;
+					if (this.collapsedSelectors.has(selector)) {
+						this.collapsedSelectors.delete(selector);
+					} else {
+						this.collapsedSelectors.add(selector);
+					}
+					UIManager.render();
+					return;
+				}
                 
                 if (e.target.closest('button') && e.target.closest('button').dataset.selector) {
                     const selector = e.target.closest('button').dataset.selector;
@@ -3824,7 +1993,7 @@
                 aesthetic: true,
                 corpo: true
             },
-            css: BLTOOLSLitedefaultThemeCSS,
+            css: BLTOOLdynamicDefaultThemeCSS,
             backgrounds: {
                 elements: {},
                 filters: {}
@@ -3833,68 +2002,110 @@
     },
     
     renderPresetsTab() {
-        try {
-            let optionsHtml = '';
-            optionsHtml += `<option value="Default Theme" ${this.currentTheme === 'Default Theme' ? 'selected' : ''}>Default Theme</option>`;
+	try {
+			let optionsHtml = '';
+			optionsHtml += `<option value="Default Theme" ${this.currentTheme === 'Default Theme' ? 'selected' : ''}>Default Theme</option>`;
 
-            Object.keys(this.themes)
-                .filter(name => name !== 'Default Theme')
-                .forEach(name => {
-                    optionsHtml += `<option value="${name}" ${this.currentTheme === name ? 'selected' : ''}>${name}</option>`;
-                });
+			Object.keys(this.themes)
+				.filter(name => name !== 'Default Theme')
+				.forEach(name => {
+					optionsHtml += `<option value="${name}" ${this.currentTheme === name ? 'selected' : ''}>${name}</option>`;
+				});
 
-            if (this.unsavedChanges) {
-                optionsHtml += `<option value="unsaved" selected>Unsaved Changes</option>`;
-            }
+			if (this.unsavedChanges) {
+				optionsHtml += `<option value="unsaved" selected>Unsaved Changes</option>`;
+			}
 
-            const currentTheme = this.themes[this.currentTheme] || this.themes['Default Theme'];
+			const currentTheme = this.themes[this.currentTheme] || this.themes['Default Theme'];
 
-            return `
-                <div style="margin-bottom: 10px; padding: 10px; background-color: #2e2e2e;">
-                    <h4 style="margin-top: 0; margin-bottom: 5px;">Current Theme</h4>
-                    <select id="preset-select" style="width: 100%; padding: 5px; color: black; margin-bottom: 5px;">
-                        ${optionsHtml}
-                    </select>
-                    <div style="display: flex; flex-wrap: wrap; gap: 5px;">
-                        <button id="apply-preset" class="BLTOOL-button BLTOOL-button-primary" style="flex: 1 1 48%;">Apply Theme</button>
-                        <button id="save-preset" class="BLTOOL-button BLTOOL-button-secondary" style="flex: 1 1 48%;">Save Theme</button>
-                        <button id="show-css-button" class="BLTOOL-button BLTOOL-button-secondary" style="width: 100%; margin-top: 0px;">Show changes as CSS</button>
-                        <button id="delete-preset" class="BLTOOL-button BLTOOL-button-danger" style="width: 100%; margin-top: 0px;">Delete Selected Theme</button>
-                    </div>
-                </div>
-                <div style="margin-bottom: 10px; padding: 10px; background-color: #2e2e2e;">
-                    <h4 style="margin-top: 0; margin-bottom: 5px;">Theme Overview</h4>
-                    <input type="text" id="preset-name" placeholder="Theme Name (e.g., My Dark Mode)" style="width: 100%; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;" value="${currentTheme.metadata.name || ''}">
-                    <input type="text" id="preset-creator" placeholder="Author (e.g., Your Name)" style="width: 100%; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;" value="${currentTheme.metadata.creator || ''}">
-                    <textarea id="preset-description" placeholder="Theme Description (optional)" style="width: 100%; height: 60px; resize: vertical; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;">${currentTheme.metadata.description || ''}</textarea>
-                    <div class="BLTOOL-checkbox-container">
-                        <h4 style="margin-top: 10px; margin-bottom: 5px;">Theme is compatible with:</h4>
-                        <label style="display: inline-block; margin-right: 10px;"><input type="checkbox" id="theme-classic" data-theme-type="classic" ${currentTheme.metadata.classic ? 'checked' : ''}> Classic</label>
-                        <label style="display: inline-block; margin-right: 10px;"><input type="checkbox" id="theme-aesthetic" data-theme-type="aesthetic" ${currentTheme.metadata.aesthetic ? 'checked' : ''}> Aesthetic</label>
-                        <label style="display: inline-block;"><input type="checkbox" id="theme-corpo" data-theme-type="corpo" ${currentTheme.metadata.corpo ? 'checked' : ''}> Corpo</label>
-                    </div>
-                </div>
-                <div style="margin-bottom: 10px; padding: 10px; background-color: #2e2e2e;">
-                    <h4 style="margin-top: 0; margin-bottom: 5px;">Theme Actions</h4>
-                    <div style="display: flex; flex-wrap: wrap; gap: 5px;">
-                        <button id="import-preset" class="BLTOOL-button BLTOOL-button-secondary" style="flex: 1 1 48%;">Import CSS Files</button>
-                        <button id="export-preset" class="BLTOOL-button BLTOOL-button-secondary" style="flex: 1 1 48%;">Export All as CSS</button>
-                        <button id="reset-to-default" class="BLTOOL-button BLTOOL-button-danger" style="width: 100%; margin-top: 0px;">Reset Everything</button>
-                    </div>
-                </div>
-                <div style="margin-top: 0px; padding: 10px; background-color: #2e2e2e;">
-                    <h4 style="margin-top: 0; margin-bottom: 5px;">Additional Export Actions</h4>
-                    <button id="export-default" class="BLTOOL-button BLTOOL-button-secondary" style="width: 100%; margin-bottom: 5px;">Export Default Theme as CSS</button>
-                    <button id="export-css-button" class="BLTOOL-button BLTOOL-button-secondary" style="width: 100%; margin-bottom: 5px;">Export Current Changes as CSS</button>
-                    <button id="export-images" class="BLTOOL-button BLTOOL-button-toggle" style="width: 100%;">Export Current Background Images</button>
-                    <div id="BLTOOL-image-download-list-container" style="margin-top:7px;"></div>
-                </div>
-            `;
-        } catch (e) {
-            console.error('Error rendering presets tab:', e);
-            return '<div style="color:red;">Error rendering presets tab. Check console for details.</div>';
-        }
-    },
+			return `
+				<div class="BLTOOL-scroll-container">
+					<div class="BLTOOL-section">
+						<div class="BLTOOL-section-header" data-section="theme-management">
+							<span>Theme Management</span>
+							<span>▼</span>
+						</div>
+						<div class="BLTOOL-section-content">
+							<div style="margin-bottom: 10px;">
+								<h4 style="margin-top: 0; margin-bottom: 5px;">Current Theme</h4>
+								<select id="preset-select" style="width: 100%; padding: 5px; color: black; margin-bottom: 5px;">
+									${optionsHtml}
+								</select>
+								<div style="display: flex; flex-wrap: wrap; gap: 5px;">
+									<button id="apply-preset" class="BLTOOL-button" style="flex: 1 1 48%;">Apply Theme</button>
+									<button id="save-preset" class="BLTOOL-button" style="flex: 1 1 48%;">Save Theme</button>
+									<button id="delete-preset" class="BLTOOL-button" style="width: 100%; margin-top: 5px;">Delete Selected Theme</button>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="BLTOOL-section">
+						<div class="BLTOOL-section-header" data-section="theme-info">
+							<span>Theme Information</span>
+							<span>▼</span>
+						</div>
+						<div class="BLTOOL-section-content">
+							<div style="margin-bottom: 10px;">
+								<input type="text" id="preset-name" placeholder="Theme Name (e.g., My Dark Mode)" 
+									style="width: 100%; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;" 
+									value="${currentTheme.metadata.name || ''}">
+								<input type="text" id="preset-creator" placeholder="Author (e.g., Your Name)" 
+									style="width: 100%; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;" 
+									value="${currentTheme.metadata.creator || ''}">
+								<textarea id="preset-description" placeholder="Theme Description (optional)" 
+									style="width: 100%; height: 60px; resize: vertical; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;">${currentTheme.metadata.description || ''}</textarea>
+								<div class="BLTOOL-checkbox-container">
+									<h4 style="margin-top: 10px; margin-bottom: 5px;">Theme is compatible with:</h4>
+									<label style="display: inline-block; margin-right: 10px;">
+										<input type="checkbox" id="theme-classic" data-theme-type="classic" ${currentTheme.metadata.classic ? 'checked' : ''}> Classic
+									</label>
+									<label style="display: inline-block; margin-right: 10px;">
+										<input type="checkbox" id="theme-aesthetic" data-theme-type="aesthetic" ${currentTheme.metadata.aesthetic ? 'checked' : ''}> Aesthetic
+									</label>
+									<label style="display: inline-block;">
+										<input type="checkbox" id="theme-corpo" data-theme-type="corpo" ${currentTheme.metadata.corpo ? 'checked' : ''}> Corpo
+									</label>
+								</div>
+							</div>
+						</div>
+					</div>
+					
+					<div class="BLTOOL-section">
+						<div class="BLTOOL-section-header" data-section="theme-actions">
+							<span>Theme Actions</span>
+							<span>▼</span>
+						</div>
+						<div class="BLTOOL-section-content">
+							<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
+								<button id="import-preset" class="BLTOOL-button" style="flex: 1 1 48%;">Import CSS</button>
+								<button id="export-preset" class="BLTOOL-button" style="flex: 1 1 48%;">Export All</button>
+								<button id="reset-to-default" class="BLTOOL-button" style="width: 100%;">Reset Everything</button>
+							</div>
+						</div>
+					</div>
+					
+					<div class="BLTOOL-section">
+						<div class="BLTOOL-section-header" data-section="export-actions">
+							<span>Export Actions</span>
+							<span>▼</span>
+						</div>
+						<div class="BLTOOL-section-content">
+							<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
+								<button id="export-default" class="BLTOOL-button" style="flex: 1 1 48%;">Export Default</button>
+								<button id="export-css-button" class="BLTOOL-button" style="flex: 1 1 48%;">Export Current</button>
+								<button id="export-images" class="BLTOOL-button" style="width: 100%;">Export Images</button>
+								<button id="show-css-button" class="BLTOOL-button" style="width: 100%;">Show CSS</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			`;
+		} catch (e) {
+			console.error('Error rendering presets tab:', e);
+			return '<div style="color:red;">Error rendering presets tab. Check console for details.</div>';
+		}
+	},
     
     attachEventListeners() {
         const container = document.getElementById(TOOL_ID);
@@ -3992,7 +2203,7 @@
                     aesthetic: true,
                     corpo: true
                 },
-                css: BLTOOLSLitedefaultThemeCSS,
+                css: BLTOOLdynamicDefaultThemeCSS,
                 backgrounds: {
                     elements: {},
                     filters: {}
@@ -4328,7 +2539,7 @@
                     aesthetic: true,
                     corpo: true
                 },
-                css: BLTOOLSLitedefaultThemeCSS,
+                css: BLTOOLdynamicDefaultThemeCSS,
                 backgrounds: {
                     elements: {},
                     filters: {}
@@ -4379,27 +2590,28 @@
 
     window.initBlackliteTools = function () {
         console.log('Initializing Blacklite Tools');
-        try {
-            // 1. Create container and setup styles
-            UIManager.createToolContainer();
-            UIManager.setupBaseStyles();
-            
-            // 2. Initialize managers
-            ThemeManager.init();
-            BackgroundManager.init();
-            PresetManager.init();
-            
-            // 3. Initial render with slight delay to ensure DOM is ready
-            setTimeout(() => {
-                UIManager.render();
-                console.log('Initial render complete');
-            }, 50);
-            
-            window.blackliteToolsInitialized = true;
-        } catch (error) {
-            console.error('Error initializing Blacklite Tools:', error);
-        }
-    };
+		try {
+			if (!BLTOOLdynamicDefaultThemeCSS) {
+				parseDocumentStyles();
+			}
+			
+			UIManager.createToolContainer();
+			UIManager.setupBaseStyles();
+			
+			ThemeManager.init();
+			BackgroundManager.init();
+			PresetManager.init();
+			
+			setTimeout(() => {
+				UIManager.render();
+				console.log('Initial render complete');
+			}, 50);
+			
+			window.blackliteToolsInitialized = true;
+		} catch (error) {
+			console.error('Error initializing Blacklite Tools:', error);
+		}
+	};
 
     window.cleanupBlackliteTools = function() {
         console.log('Cleaning up Blacklite Tools');
