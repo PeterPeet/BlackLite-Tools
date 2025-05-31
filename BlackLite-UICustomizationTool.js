@@ -333,41 +333,92 @@
 				console.warn('Could not read styles from stylesheet:', sheet.href, e);
 			}
 		}
-		
 		// Store the parsed styles once
 		BLTOOLdynamicDefaultThemeCSS = cssText;
 		return cssText;
 	}
 
-	function isElementSuitableForBackground(selector) {
-		try {
-			if (isExcludedElement(selector)) {
-				return false;
-			}
+    function isElementSuitableForBackground(selector) {
+        try {
+            if (isExcludedElement(selector)) {
+                return false;
+            }
+            
+            // Check if selector is too generic or problematic
+            const problematicSelectors = [
+                'html', 'body', '*', 
+                'input[type="text"]', 'input[type="password"]',
+                'textarea', 'select', 'button',
+                'iframe', 'embed', 'object'
+            ];
+            
+            if (problematicSelectors.some(prob => selector.toLowerCase().includes(prob))) {
+                return false;
+            }
+            
+            const baseSelector = selector.split(':')[0].toLowerCase();
+            const unsuitableElements = CONFIG.UNSUITABLE_FOR_BACKGROUND;
+            const cleanSelector = baseSelector.replace(/[.#[\]]/g, '').toLowerCase();
+            
+            if (/^[a-z]/.test(cleanSelector)) {
+                return !unsuitableElements.has(cleanSelector);
+            }
+            
+            // Test if elements actually exist and are visible
+            const elements = document.querySelectorAll(selector);
+            if (elements.length === 0) return false;
+            
+            return Array.from(elements).every(el => {
+                const tagName = el.tagName.toLowerCase();
+                const computedStyle = window.getComputedStyle(el);
+                
+                // Check if element is suitable for backgrounds
+                return !unsuitableElements.has(tagName) &&
+                    computedStyle.display !== 'none' &&
+                    computedStyle.visibility !== 'hidden' &&
+                    el.offsetWidth > 0 && 
+                    el.offsetHeight > 0;
+            });
+        } catch (e) {
+            console.error('Error checking background suitability:', e);
+            return false;
+        }
+    }
 
-			const baseSelector = selector.split(':')[0].toLowerCase();
-			
-			const unsuitableElements = CONFIG.UNSUITABLE_FOR_BACKGROUND;
-			
-			const cleanSelector = baseSelector.replace(/[.#[\]]/g, '').toLowerCase();
-			
-			if (/^[a-z]/.test(cleanSelector)) {
-				return !unsuitableElements.has(cleanSelector);
-			}
-			
-			const elements = document.querySelectorAll(selector);
-			if (elements.length === 0) return true;
-			
-			return Array.from(elements).every(el => {
-				const tagName = el.tagName.toLowerCase();
-				return !unsuitableElements.has(tagName);
-			});
-			
-		} catch (e) {
-				console.error('Error checking background suitability:', e);
-				return false;
-		}
-	}
+    function initializeConflictFixes() {
+        // Add global CSS to help with common conflicts
+        const conflictFixCSS = `
+            /* Fix common background conflicts */
+            [data-bltool-background]::before {
+                content: "" !important;
+                position: absolute !important;
+                top: 0 !important;
+                left: 0 !important;
+                right: 0 !important;
+                bottom: 0 !important;
+                z-index: -1 !important;
+                pointer-events: none !important;
+            }
+            
+            /* Ensure parent positioning */
+            [data-bltool-background] {
+                position: relative !important;
+            }
+            
+            /* Handle overflow issues */
+            [data-bltool-background] {
+                overflow: visible !important;
+            }
+        `;
+        
+        let fixStyleElement = document.getElementById('bltool-bg-conflict-fixes');
+        if (!fixStyleElement) {
+            fixStyleElement = document.createElement('style');
+            fixStyleElement.id = 'bltool-bg-conflict-fixes';
+            document.head.appendChild(fixStyleElement);
+        }
+        fixStyleElement.textContent = conflictFixCSS;
+    }
 
     const SectionHandlers = {
         handleSectionHeader(e) {
@@ -621,7 +672,7 @@
 				if (scrollContainer) {
 					const headerHeight = this.toolsContainer.querySelector('.BLTOOL-header')?.offsetHeight || 50;
 					const tabsHeight = this.toolsContainer.querySelector('[style*="display: flex; margin-bottom: 10px;"]')?.offsetHeight || 30;
-					const availableHeight = this.toolsContainer.offsetHeight - headerHeight - tabsHeight - 25; // 25px padding
+					const availableHeight = this.toolsContainer.offsetHeight - headerHeight - tabsHeight - 25;
 					scrollContainer.style.maxHeight = `${Math.max(availableHeight, 100)}px`;
 				}
 			});
@@ -1402,6 +1453,10 @@
         
         init() {
             console.log('Initializing BackgroundManager');
+
+            // IMPORTANT: Initialize conflict fixes first
+            initializeConflictFixes();
+
             if (!this.selectorsInitialized) {
                 this.collapsedSelectors.clear();
                 const allInitialSelectors = Object.keys(ThemeManager.currentStyles)
@@ -1425,18 +1480,18 @@
                         }
                         
                         ${selector}::before {
-                            content: ""; !important;
-                            position: absolute; !important;
-                            top: 0; !important;
-                            left: 0; !important; 
-                            right: 0; !important;
-                            bottom: 0; !important;
-                            z-index: -1; !important;
+                            content: "" !important;
+                            position: absolute !important;
+                            top: 0 !important;
+                            left: 0 !important; 
+                            right: 0 !important;
+                            bottom: 0 !important;
+                            z-index: -1 !important;
                             background-image: url('${imageData}') !important;
-                            background-repeat: no-repeat; !important;
-                            background-position: center; !important;
-                            background-size: cover; !important;
-                            pointer-events: none; !important;
+                            background-repeat: no-repeat !important;
+                            background-position: center !important;
+                            background-size: cover !important;
+                            pointer-events: none !important;
                     `;
                     
                     const filters = State.backgrounds.filters[selector] || {};
@@ -1463,6 +1518,24 @@
             }
             
             bgStyleElement.textContent = cssText;
+            this.forceStyleRecalculation();
+        },
+
+        forceStyleRecalculation() {
+            Object.keys(State.backgrounds.elements).forEach(selector => {
+                try {
+                    const elements = document.querySelectorAll(selector);
+                    elements.forEach(element => {
+                        element.offsetHeight;
+                        element.classList.add('bltool-bg-force-update');
+                        setTimeout(() => {
+                            element.classList.remove('bltool-bg-force-update');
+                        }, 10);
+                    });
+                } catch (e) {
+                    console.warn(`Could not force recalculation for ${selector}:`, e);
+                }
+            });
         },
         
 		renderBackgroundsTab() {
@@ -1636,7 +1709,7 @@
                         const reader = new FileReader();
 
                         reader.onload = (e) => {
-                            this.applyBackground(selector, e.target.result);
+                            this.applyBackgroundWithFallback(selector, e.target.result);
                         };
 
                         reader.readAsDataURL(file);
@@ -1759,12 +1832,62 @@
             }
         },
 
+        applyBackgroundWithFallback(selector, imageData) {
+            try {
+                if (isExcludedElement(selector)) return;
+
+                // Try ::before pseudo-element
+                this.applyBackground(selector, imageData);
+                
+                // If ::before doesn't work, try I try direct background application
+                setTimeout(() => {
+                    const elements = document.querySelectorAll(selector);
+                    let backgroundApplied = false;
+                    
+                    elements.forEach(element => {
+                        const pseudoStyles = window.getComputedStyle(element, '::before');
+                        if (pseudoStyles.backgroundImage === 'none' || 
+                            !pseudoStyles.backgroundImage.includes('url')) {
+                            
+                            // Fallback to direct background
+                            element.style.setProperty('background-image', `url('${imageData}')`, 'important');
+                            element.style.setProperty('background-repeat', 'no-repeat', 'important');
+                            element.style.setProperty('background-position', 'center', 'important');
+                            element.style.setProperty('background-size', 'cover', 'important');
+                            backgroundApplied = true;
+                        }
+                    });
+                    
+                    if (backgroundApplied) {
+                        console.log(`Applied fallback background method for ${selector}`);
+                    }
+                }, 100);
+                
+            } catch (e) {
+                console.error(`Could not apply background with fallback to ${selector}`, e);
+            }
+        },
+
         removeBackground(selector) {
             try {
                 delete State.backgrounds.elements[selector];
                 delete State.backgrounds.filters[selector];
+                
+                const elements = document.querySelectorAll(selector);
+                elements.forEach(element => {
+                    const originalBg = element.getAttribute('data-bltool-original-bg');
+                    if (originalBg !== null) {
+                        element.style.backgroundImage = originalBg || '';
+                        element.removeAttribute('data-bltool-original-bg');
+                    }
+                    
+                    element.style.removeProperty('background-repeat');
+                    element.style.removeProperty('background-position');
+                    element.style.removeProperty('background-size');
+                });
+                
                 this.applyBackgroundsToDom();
-                UIManager.render();
+                this.updateUI();
             } catch (e) {
                 console.error(`Could not remove background from ${selector}`, e);
             }
@@ -2542,6 +2665,7 @@
         }
     };
 
+    // IMPORTANT: only this type of instanciation works for user mod
     window.initBlackliteTools();
 
     window.addEventListener('beforeunload', () => {
