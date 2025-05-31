@@ -218,23 +218,132 @@
 
 	const CONFIG = {
 		MOBILE_BREAKPOINT: 768,
-		PRESERVED_STYLES: ['align-items', 'animation', 'animation-delay', 'appearance', 'background-attachment', 
-						'background-image', 'background-position', 'background-repeat', 'background-color',
-						'background-size', 'border', 'border-bottom', 'border-color', 'border-left', 
-						'border-radius', 'border-right', 'border-top', 'border-width', 'bottom', 'box-shadow', 
-						'box-sizing', 'clear', 'color', 'content', 'cursor', 'display', 'filter', 'flex', 
-						'flex-direction', 'flex-flow', 'flex-wrap', 'float', 'font-family', 'font-size', 
-						'font-weight', 'gap', 'grid-auto-rows', 'grid-template-columns', 'height', 
-						'justify-content', 'left', 'line-height', 'margin', 'margin-bottom', 'margin-left', 
-						'margin-right', 'margin-top', 'max-height', 'max-width', 'min-height', 'min-width', 
-						'opacity', 'outline', 'overflow', 'overflow-wrap', 'overflow-x', 'overflow-y', 
-						'padding', 'padding-bottom', 'padding-left', 'padding-right', 'padding-top', 
-						'position', 'resize', 'right', 'tab-size', 'text-align', 'text-decoration', 
-						'text-overflow', 'text-shadow', 'top', 'transform', 'transition', 'user-select', 
-						'vertical-align', 'visibility', 'white-space', 'width', 'word-wrap', 'z-index'],
-		UNSUITABLE_FOR_BACKGROUND: new Set(['select', 'option', 'small', 'pre', 'p', 'script', 'a', 'label']),
-		EXCLUDED_SELECTORS: ['head', 'body'],
-		EXCLUDED_ELEMENTS: ['blacklite-tools'],
+        PRESERVED_STYLES: [
+            /* Layout & Box Model */
+            'align-content', 'align-items', 'align-self', 'all', 'aspect-ratio', 'block-size', 'box-sizing', 'clear', 
+            'columns', 'column-count', 'column-fill', 'column-gap', 'column-rule', 'column-span', 'column-width',
+            'contain', 'contain-intrinsic-size', 'display', 'flex', 'flex-basis', 'flex-direction', 'flex-flow', 
+            'flex-grow', 'flex-shrink', 'flex-wrap', 'float', 'flow', 'gap', 'grid', 'grid-area', 'grid-auto-columns',
+            'grid-auto-flow', 'grid-auto-rows', 'grid-column', 'grid-column-end', 'grid-column-start', 'grid-row', 
+            'grid-row-end', 'grid-row-start', 'grid-template', 'grid-template-areas', 'grid-template-columns', 
+            'grid-template-rows', 'height', 'inline-size', 'isolation', 'justify-content', 'justify-items', 
+            'justify-self', 'line-height', 'margin', 'margin-block', 'margin-block-end', 'margin-block-start', 
+            'margin-bottom', 'margin-inline', 'margin-inline-end', 'margin-inline-start', 'margin-left', 'margin-right', 
+            'margin-top', 'max-block-size', 'max-height', 'max-inline-size', 'max-width', 'min-block-size', 'min-height', 
+            'min-inline-size', 'min-width', 'mix-blend-mode', 'object-fit', 'object-position', 'order', 'overflow', 
+            'overflow-wrap', 'overflow-x', 'overflow-y', 'overscroll-behavior', 'padding', 'padding-block', 
+            'padding-block-end', 'padding-block-start', 'padding-bottom', 'padding-inline', 'padding-inline-end', 
+            'padding-inline-start', 'padding-left', 'padding-right', 'padding-top', 'place-content', 'place-items', 
+            'place-self', 'position', 'resize', 'row-gap', 'scroll-behavior', 'scroll-margin', 'scroll-padding', 
+            'scroll-snap-align', 'scroll-snap-stop', 'scroll-snap-type', 'shape-image-threshold', 'shape-margin', 
+            'shape-outside', 'size', 'text-size-adjust', 'vertical-align', 'visibility', 'width', 'will-change', 
+            'wrap-after', 'wrap-before', 'wrap-flow', 'wrap-inside', 'wrap-through', 'z-index', 'zoom',
+            
+            /* Typography & Text */
+            'direction', 'font', 'font-family', 'font-feature-settings', 'font-kerning', 'font-language-override', 
+            'font-optical-sizing', 'font-palette', 'font-size', 'font-size-adjust', 'font-smooth', 'font-stretch', 
+            'font-style', 'font-synthesis', 'font-variant', 'font-variant-alternates', 'font-variant-caps', 
+            'font-variant-east-asian', 'font-variant-ligatures', 'font-variant-numeric', 'font-variant-position', 
+            'font-weight', 'hanging-punctuation', 'hyphenate-character', 'hyphenate-limit-chars', 'hyphenate-limit-last', 
+            'hyphenate-limit-lines', 'hyphenate-limit-zone', 'hyphens', 'letter-spacing', 'line-break', 'orphans', 
+            'quotes', 'ruby-align', 'ruby-merge', 'ruby-position', 'tab-size', 'text-align', 'text-align-last', 
+            'text-combine-upright', 'text-decoration', 'text-decoration-color', 'text-decoration-line', 
+            'text-decoration-skip', 'text-decoration-skip-ink', 'text-decoration-style', 'text-decoration-thickness', 
+            'text-emphasis', 'text-emphasis-color', 'text-emphasis-position', 'text-emphasis-style', 'text-indent', 
+            'text-justify', 'text-orientation', 'text-overflow', 'text-rendering', 'text-shadow', 'text-transform', 
+            'text-underline-offset', 'text-underline-position', 'transform-text', 'white-space', 'word-break', 
+            'word-spacing', 'word-wrap', 'writing-mode',
+            
+            /* Visual Effects */
+            'accent-color', 'backdrop-filter', 'background', 'background-attachment', 'background-blend-mode', 
+            'background-clip', 'background-color', 'background-image', 'background-origin', 'background-position', 
+            'background-position-x', 'background-position-y', 'background-repeat', 'background-size', 'border', 
+            'border-block', 'border-block-color', 'border-block-end', 'border-block-end-color', 'border-block-end-style', 
+            'border-block-end-width', 'border-block-start', 'border-block-start-color', 'border-block-start-style', 
+            'border-block-start-width', 'border-block-style', 'border-block-width', 'border-bottom', 'border-bottom-color', 
+            'border-bottom-left-radius', 'border-bottom-right-radius', 'border-bottom-style', 'border-bottom-width', 
+            'border-collapse', 'border-color', 'border-end-end-radius', 'border-end-start-radius', 'border-image', 
+            'border-image-outset', 'border-image-repeat', 'border-image-slice', 'border-image-source', 'border-image-width', 
+            'border-inline', 'border-inline-color', 'border-inline-end', 'border-inline-end-color', 'border-inline-end-style', 
+            'border-inline-end-width', 'border-inline-start', 'border-inline-start-color', 'border-inline-start-style', 
+            'border-inline-start-width', 'border-inline-style', 'border-inline-width', 'border-left', 'border-left-color', 
+            'border-left-style', 'border-left-width', 'border-radius', 'border-right', 'border-right-color', 
+            'border-right-style', 'border-right-width', 'border-spacing', 'border-start-end-radius', 
+            'border-start-start-radius', 'border-style', 'border-top', 'border-top-color', 'border-top-left-radius', 
+            'border-top-right-radius', 'border-top-style', 'border-top-width', 'border-width', 'bottom', 'box-decoration-break', 
+            'box-shadow', 'caption-side', 'caret-color', 'clip', 'clip-path', 'color', 'color-scheme', 'content', 
+            'counter-increment', 'counter-reset', 'counter-set', 'cursor', 'empty-cells', 'filter', 'forced-color-adjust', 
+            'image-orientation', 'image-rendering', 'image-resolution', 'inset', 'inset-block', 'inset-block-end', 
+            'inset-block-start', 'inset-inline', 'inset-inline-end', 'inset-inline-start', 'left', 'list-style', 
+            'list-style-image', 'list-style-position', 'list-style-type', 'mask', 'mask-border', 'mask-border-mode', 
+            'mask-border-outset', 'mask-border-repeat', 'mask-border-slice', 'mask-border-source', 'mask-border-width', 
+            'mask-clip', 'mask-composite', 'mask-image', 'mask-mode', 'mask-origin', 'mask-position', 'mask-repeat', 
+            'mask-size', 'mask-type', 'offset', 'offset-anchor', 'offset-distance', 'offset-path', 'offset-position', 
+            'offset-rotate', 'opacity', 'outline', 'outline-color', 'outline-offset', 'outline-style', 'outline-width', 
+            'overflow-anchor', 'overflow-clip-margin', 'paint-order', 'perspective', 'perspective-origin', 'pointer-events', 
+            'right', 'rotate', 'scale', 'scrollbar-color', 'scrollbar-gutter', 'scrollbar-width', 'stroke', 'stroke-dasharray', 
+            'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke-width', 
+            'top', 'transform', 'transform-box', 'transform-origin', 'transform-style', 'transition', 'transition-delay', 
+            'transition-duration', 'transition-property', 'transition-timing-function', 'translate', 'unicode-bidi', 
+            'user-select', 'vector-effect', 'view-transition-name', 
+            
+            /* Animation & Interactivity */
+            'animation', 'animation-composition', 'animation-delay', 'animation-direction', 'animation-duration', 
+            'animation-fill-mode', 'animation-iteration-count', 'animation-name', 'animation-play-state', 
+            'animation-timeline', 'animation-timing-function', 'appearance', 'bookmark-label', 'bookmark-level', 
+            'bookmark-state', 'break-after', 'break-before', 'break-inside', 'clip-rule', 'color-interpolation', 
+            'color-interpolation-filters', 'color-rendering', 'dominant-baseline', 'fill', 'fill-opacity', 'fill-rule', 
+            'flood-color', 'flood-opacity', 'lighting-color', 'marker-end', 'marker-mid', 'marker-start', 'nav-down', 
+            'nav-left', 'nav-right', 'nav-up', 'order', 'page', 'pause', 'pause-after', 'pause-before', 'pitch', 
+            'pitch-range', 'play-during', 'richness', 'speak', 'speak-header', 'speak-numeral', 'speak-punctuation', 
+            'speech-rate', 'stress', 'text-anchor', 'voice-family', 'volume', 'writing-mode'
+        ],
+        UNSUITABLE_FOR_BACKGROUND: new Set([
+            /* Void elements */
+            'area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'keygen', 'link', 'meta', 'param', 
+            'source', 'track', 'wbr',
+            
+            /* Elements with intrinsic rendering */
+            'canvas', 'iframe', 'object', 'picture', 'script', 'style', 'svg', 'video',
+            
+            /* Form elements with OS-level rendering */
+            'button', 'datalist', 'meter', 'optgroup', 'option', 'output', 'progress', 'select', 'textarea',
+            
+            /* Special content elements */
+            'code', 'kbd', 'samp', 'pre', 'var', 'math', 'map',
+            
+            /* Text-level semantics */
+            'a', 'abbr', 'b', 'bdi', 'bdo', 'cite', 'data', 'dfn', 'em', 'i', 'label', 'mark', 'q', 'rp', 'rt', 
+            'ruby', 's', 'small', 'span', 'strong', 'sub', 'sup', 'time', 'u'
+        ]),
+        EXCLUDED_SELECTORS: [
+            /* Document structure */
+            'html', 'head', 'body', ':root',
+            
+            /* Pseudo-elements */
+            '::after', '::before', '::first-letter', '::first-line', '::selection', '::backdrop', '::placeholder', 
+            '::marker', '::spelling-error', '::grammar-error',
+            
+            /* Shadow DOM */
+            '::part', '::slotted',
+            
+            /* Special state selectors */
+            ':fullscreen', ':modal', ':target', ':defined'
+        ],
+        EXCLUDED_ELEMENTS: [
+            /* Non-visual elements */
+            'base', 'link', 'meta', 'script', 'style', 'template', 'title',
+            
+            /* Accessibility/semantic elements */
+            'noscript', 'slot',
+            
+            /* Legacy/obsolete elements */
+            'applet', 'basefont', 'bgsound', 'blink', 'frame', 'frameset', 'isindex', 'keygen', 'menuitem', 
+            'multicol', 'nextid', 'noembed', 'noframes', 'plaintext', 'shadow', 'spacer',
+
+            /* the theme tool itself */
+            'blacklite-tools'
+        ],
 		BACKGROUND_FILTERS: {
 			opacity: { min: 0, max: 1, step: 0.01, default: 1, unit: '' },
 			blur: { min: 0, max: 20, step: 0.1, default: 0, unit: 'px' },
@@ -247,6 +356,21 @@
 			sepia: { min: 0, max: 1, step: 0.01, default: 0, unit: '' }
 		}
 	};
+
+    const SELECTOR_REPLACEMENTS = {
+        // Escape like this: '#navbarNavDropdown\.navbar-collapse\.collapse': '.navbarNavDropdown'
+        // Background Inspector replacements
+        background: {
+            '#gametext': '#gamescreen',
+            '#outerbodybg': '#outerbody',
+            '#navbarNavDropdown': '#topmenu',
+            '#input_text': '#inputrow'
+        },
+        // Theme Inspector replacements
+        theme: {
+            // Add theme-specific replacements here if needed
+        }
+    };
 
 	const TOOL_ID = 'blacklite-tools';
 	const State = {
@@ -268,9 +392,11 @@
 	// =============================================
 	// UTILITY FUNCTIONS
 	// =============================================
-	function escapeSelector(selector) {
-		return selector.replace(/([!"#$%&'()*+,.\/:;<=>?@[\]^`{|}~])/g, '\\$&').replace(/\*/g, '.*');
-	}
+    function escapeSelector(selector) {
+        if (!selector) return '';
+        // Escape all non-alphanumeric characters except - and _
+        return selector.replace(/([^a-zA-Z0-9_-])/g, '\\$&');
+    }
 
 	function debounce(func, delay) {
 		let timeout;
@@ -285,6 +411,15 @@
 			selector === '.background-overlay' ||
 			CONFIG.EXCLUDED_ELEMENTS.some(excluded => selector.includes(excluded));
 	}
+
+    function isValidSelector(selector) {
+        try {
+            document.querySelector(selector);
+            return true;
+        } catch (e) {
+            return false;
+        }
+    }
 
 	function parseDocumentStyles() {
 		let cssText = '';
@@ -339,32 +474,15 @@
 	}
 
     function isElementSuitableForBackground(selector) {
+        // Skip excluded elements
+        if (isExcludedElement(selector)) return false;
+        if (!isValidSelector(selector)) return false;
+        
         try {
-            if (isExcludedElement(selector)) {
+            // Skip if selector is empty or obviously invalid
+            if (!selector || selector.includes('<') || selector.includes('>')) {
                 return false;
             }
-            
-            // Check if selector is too generic or problematic
-            const problematicSelectors = [
-                'html', 'body', '*', 
-                'input[type="text"]', 'input[type="password"]',
-                'textarea', 'select', 'button',
-                'iframe', 'embed', 'object'
-            ];
-            
-            if (problematicSelectors.some(prob => selector.toLowerCase().includes(prob))) {
-                return false;
-            }
-            
-            const baseSelector = selector.split(':')[0].toLowerCase();
-            const unsuitableElements = CONFIG.UNSUITABLE_FOR_BACKGROUND;
-            const cleanSelector = baseSelector.replace(/[.#[\]]/g, '').toLowerCase();
-            
-            if (/^[a-z]/.test(cleanSelector)) {
-                return !unsuitableElements.has(cleanSelector);
-            }
-            
-            // Test if elements actually exist and are visible
             const elements = document.querySelectorAll(selector);
             if (elements.length === 0) return false;
             
@@ -372,15 +490,15 @@
                 const tagName = el.tagName.toLowerCase();
                 const computedStyle = window.getComputedStyle(el);
                 
-                // Check if element is suitable for backgrounds
-                return !unsuitableElements.has(tagName) &&
+                // Check suitability
+                return !CONFIG.UNSUITABLE_FOR_BACKGROUND.has(tagName) &&
                     computedStyle.display !== 'none' &&
                     computedStyle.visibility !== 'hidden' &&
-                    el.offsetWidth > 0 && 
+                    el.offsetWidth > 0 &&
                     el.offsetHeight > 0;
             });
         } catch (e) {
-            console.error('Error checking background suitability:', e);
+            console.error('Invalid selector detected:', e);
             return false;
         }
     }
@@ -580,7 +698,7 @@
 
                     const content = `
                         <div class="BLTOOL-header">
-                            <h3>BlackLite UI Customization Tool v2</h3>
+                            <h3>BlackLite UI Customization Tool v3</h3>
                         </div>
                         <div class="BLTOOL-content" style="${State.toolState.collapsed ? 'display: none;' : ''}">
                             <div style="display: flex; margin-bottom: 10px;">
@@ -720,7 +838,7 @@
                 event.target.style.outline = '2px solid #ff0000';
                 this.lastHighlightedElement = event.target;
                 
-                const selector = this.generateSelector(event.target);
+                const selector = this.generateSelector(event.target, type);
                 if (this.currentFilterInputId) {
                     const filterInput = document.getElementById(this.currentFilterInputId);
                     if (filterInput) filterInput.value = selector;
@@ -732,7 +850,7 @@
                 event.preventDefault();
                 event.stopPropagation();
                 
-                const selector = this.generateSelector(event.target);
+                const selector = this.generateSelector(event.target, type);
                 if (typeof onSelection === 'function') {
                     onSelection(selector);
                 }
@@ -769,22 +887,54 @@
             UIManager.render();
         },
         
-		generateSelector(element) {
-			let selectorParts = [];
-			if (element.id) {
-				selectorParts.push(`#${escapeSelector(element.id)}`);
-			}
-			if (element.className && typeof element.className === 'string') {
-				const classes = element.className.split(' ').filter(c => c.trim() !== '');
-				if (classes.length > 0) {
-					selectorParts.push(classes.map(c => `.${escapeSelector(c)}`).join(''));
-				}
-			}
-			if (selectorParts.length === 0) {
-				selectorParts.push(element.tagName.toLowerCase());
-			}
-			return selectorParts.join('');
-		},
+        generateSelector(element, inspectorType) {
+            // First generate the base selector
+            let selector;
+            if (element.id && !element.id.startsWith('ember') && element.id !== '') {
+                selector = `#${escapeSelector(element.id)}`;
+            } else if (element.classList.length > 0) {
+                const classes = Array.from(element.classList);
+                const validClass = classes.find(c => !c.startsWith('js-'));
+                selector = validClass ? `.${escapeSelector(validClass)}` : element.tagName.toLowerCase();
+            } else {
+                selector = element.tagName.toLowerCase();
+            }
+
+            // Apply replacements for this inspector type
+            return this.applySelectorReplacements(selector, inspectorType);
+        },
+
+        applySelectorReplacements(selector, inspectorType) {
+            const replacements = SELECTOR_REPLACEMENTS[inspectorType] || {};
+            
+            // 1. Check for exact matches
+            if (replacements[selector]) {
+                return replacements[selector];
+            }
+            
+            // 2. Check for regex patterns in keys
+            for (const [pattern, replacement] of Object.entries(replacements)) {
+                try {
+                    const regex = new RegExp(`^${pattern}$`);
+                    if (regex.test(selector)) {
+                        return replacement;
+                    }
+                } catch (e) {
+                    console.warn('Invalid regex in selector replacement:', pattern);
+                }
+            }
+            
+            // 3. Apply special cases
+            if (inspectorType === 'background') {
+                // Special case: prefer class selectors over ID selectors
+                if (selector.startsWith('#') && element.classList.length > 0) {
+                    const firstClass = element.classList[0];
+                    return `.${escapeSelector(firstClass)}`;
+                }
+            }
+            
+            return selector;
+        },
         
         cleanup() {
             this.stopInspector();
@@ -1112,34 +1262,43 @@
 											const changed = styles[prop] !== originalStyles[prop];
 											
 											return `
-												<div style="display: flex; align-items: center; margin: 5px 0;">
-													<span style="flex-grow: 1; margin-right: 10px; color: #aaa;">${prop}</span>
-													${isColorProp ? `
-														<input
-															type="color"
-															value="${styles[prop] || ''}"
-															style="width: 30px; height: 30px; padding: 2px;"
-															data-selector="${selector}"
-															data-prop="${prop}"
-															class="BLTOOL-style-color-input"
-														>
-													` : ''}
-													<input
-														type="${isColorProp ? 'text' : 'text'}"
-														value="${styles[prop] || ''}"
-														style="width: 100px; padding: 2px; color: black; ${isColorProp ? 'margin-left: 5px;' : ''}"
-														data-selector="${selector}"
-														data-prop="${prop}"
-														class="BLTOOL-style-input"
-													>
-													${changed ? `
-														<button class="BLTOOL-reset-button" data-selector="${selector}" data-prop="${prop}"
-															style="background: none; border: none; color: #ff6b6b; cursor: pointer; margin-left: 5px; font-weight: bold;">
-															X
-														</button>
-													` : ''}
-												</div>
-											`;
+                                                <div style="display: flex; align-items: center; margin: 5px 0;">
+                                                    <span style="flex-grow: 1; margin-right: 10px; color: #aaa;">${prop}</span>
+                                                    ${isColorProp ? `
+                                                        <input
+                                                            type="color"
+                                                            value="${styles[prop] || ''}"
+                                                            style="width: 30px; height: 30px; padding: 2px;"
+                                                            data-selector="${selector}"
+                                                            data-prop="${prop}"
+                                                            class="BLTOOL-style-color-input"
+                                                        >
+                                                    ` : ''}
+                                                    <input
+                                                        type="text"
+                                                        value="${styles[prop] || ''}"
+                                                        style="width: 100px; padding: 2px; color: black; ${isColorProp ? 'margin-left: 5px;' : ''}"
+                                                        data-selector="${selector}"
+                                                        data-prop="${prop}"
+                                                        class="BLTOOL-style-input"
+                                                    >
+                                                    ${changed ? `
+                                                        <button class="BLTOOL-reset-button" data-selector="${selector}" data-prop="${prop}"
+                                                            style="background: none; border: none; color: #ff6b6b; cursor: pointer; margin-left: 5px; font-weight: bold;">
+                                                            X
+                                                        </button>
+                                                    ` : ''}
+                                                    ${prop === 'background-color' ? `
+                                                        <button class="BLTOOL-transparent-button" 
+                                                            data-selector="${selector}"
+                                                            data-prop="${prop}"
+                                                            style="background: none; border: none; color: #6b6bff; cursor: pointer; margin-left: 5px; font-weight: bold;"
+                                                            title="Set to transparent">
+                                                            T
+                                                        </button>
+                                                    ` : ''}
+                                                </div>
+                                            `;
 										}).join('')}
 									</div>
 								`}
@@ -1221,6 +1380,22 @@
                         },
                         'theme-filter'
                     );
+                }
+            });
+
+            container.addEventListener('click', (e) => {
+                if (e.target.classList.contains('BLTOOL-transparent-button')) {
+                    const selector = e.target.dataset.selector;
+                    const prop = e.target.dataset.prop;
+                    
+                    // Find the color input and text input
+                    const colorInput = container.querySelector(`.BLTOOL-style-color-input[data-selector="${selector}"][data-prop="${prop}"]`);
+                    const textInput = container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
+                    
+                    if (colorInput) colorInput.value = '#000000';
+                    if (textInput) textInput.value = 'rgba(0,0,0,0)';
+                    
+                    this.updateStyle(selector, prop, 'rgba(0,0,0,0)');
                 }
             });
 
@@ -1887,7 +2062,7 @@
                 });
                 
                 this.applyBackgroundsToDom();
-                this.updateUI();
+                UIManager.render();
             } catch (e) {
                 console.error(`Could not remove background from ${selector}`, e);
             }
