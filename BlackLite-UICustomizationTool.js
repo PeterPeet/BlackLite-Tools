@@ -55,6 +55,7 @@
             position: fixed !important;
             top: 0 !important;
             right: 0 !important;
+            left: auto !important;
             width: 350px !important;
             height: 100vh !important;
             max-height: 100vh !important;
@@ -76,7 +77,7 @@
             transform: translateX(100%);
         }
 		.BLTOOL-blacklite-tools .BLTOOL-header {
-			cursor: move;
+             cursor: default !important;
 			padding: 5px 10px;
 			display: flex;
 			justify-content: space-between;
@@ -148,6 +149,9 @@
 		.BLTOOL-section-content {
 			padding: 10px;
 			background-color: rgb(64, 64, 64);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            will-change: height;
 		}
 		.BLTOOL-section.collapsed .BLTOOL-section-content {
 			display: none;
@@ -258,8 +262,6 @@
 		},
 		toolState: {
 			collapsed: false,
-			position: { x: null, y: null },
-			minimized: false
 		}
 	};
 
@@ -367,6 +369,41 @@
 		}
 	}
 
+    const SectionHandlers = {
+        handleSectionHeader(e) {
+            const sectionHeader = e.target.closest('.BLTOOL-section-header');
+            if (sectionHeader) {
+                e.preventDefault();
+                e.stopImmediatePropagation();
+                const section = sectionHeader.closest('.BLTOOL-section');
+                section.classList.toggle('collapsed');
+                const arrow = sectionHeader.querySelector('span:last-child');
+                arrow.textContent = section.classList.contains('collapsed') ? '▶' : '▼';
+                return true;
+            }
+            return false;
+        },
+
+        handleSelectorToggle(e, manager = null) {
+            const selectorToggle = e.target.closest('.BLTOOL-selector-toggle, .BLTOOL-bg-selector-toggle');
+            if (!selectorToggle) return false;
+            e.preventDefault();
+            e.stopImmediatePropagation();
+            const targetManager = selectorToggle.classList.contains('BLTOOL-bg-selector-toggle') 
+                ? BackgroundManager 
+                : ThemeManager;
+            const selector = selectorToggle.dataset.selector;
+            if (targetManager.collapsedSelectors.has(selector)) {
+                targetManager.collapsedSelectors.delete(selector);
+            } else {
+                targetManager.collapsedSelectors.add(selector);
+            }
+
+            UIManager.render();
+            return true;
+        }
+    }
+
 	// =============================================
 	// CORE MANAGERS
 	// =============================================
@@ -376,11 +413,6 @@
 		toolsContainer: null,
 		handleCoreClick: null,
 		lastAppliedStyles: null,
-		isDragging: false,
-		dragStartX: 0,
-		dragStartY: 0,
-		initialLeft: 0,
-		initialTop: 0,
 		toggleHandle: null,
 		
 		init() {
@@ -395,34 +427,23 @@
             this.toolsContainer = document.createElement('div');
             this.toolsContainer.id = TOOL_ID;
             this.toolsContainer.className = 'BLTOOL-blacklite-tools';
-            
-            // Create toggle handle - now acts as the visual border
+                       
             this.toggleHandle = document.createElement('div');
             this.toggleHandle.className = 'BLTOOL-toggle-handle';
-            this.toggleHandle.title = 'Click to toggle';  // Accessibility hint
+            this.toggleHandle.title = 'Click to toggle';
             
-            // Robust click handler
             this.toggleHandle.addEventListener('click', (e) => {
                 e.preventDefault();
                 e.stopPropagation();
                 this.toggleMinimize();
             });
             
-            // Make sure it's the first child
             this.toolsContainer.insertBefore(this.toggleHandle, this.toolsContainer.firstChild);
-            
-            // Rest of your existing container setup...
-            if (State.toolState.position.x !== null && State.toolState.position.y !== null) {
-                this.toolsContainer.style.left = `${State.toolState.position.x}px`;
-                this.toolsContainer.style.top = `${State.toolState.position.y}px`;
-                this.toolsContainer.style.right = 'auto';
-            }
-            
+                        
             if (State.toolState.collapsed) {
                 this.toolsContainer.classList.add('collapsed');
             }
 			
-			// Add resize observer to handle scroll container height
 			const resizeObserver = new ResizeObserver(() => {
 				const scrollContainer = this.toolsContainer.querySelector('.BLTOOL-scroll-container');
 				if (scrollContainer) {
@@ -442,7 +463,6 @@
             State.toolState.collapsed = !State.toolState.collapsed;
             this.toolsContainer.classList.toggle('collapsed');
             
-            // Force a re-render to update the arrow
             setTimeout(() => {
                 this.toolsContainer.style.display = 'none';
                 this.toolsContainer.offsetHeight;
@@ -482,7 +502,6 @@
 				this.toolsContainer.style.right = 'auto';
 				this.toolsContainer.style.top = '10px';
 			} else {
-				// Only reset position if not manually positioned
 				if (State.toolState.position.x === null || State.toolState.position.y === null) {
 					this.toolsContainer.style.width = '350px';
 					this.toolsContainer.style.left = 'auto';
@@ -499,10 +518,8 @@
                     const scrollContainer = this.toolsContainer.querySelector('.BLTOOL-scroll-container');
                     const scrollPosition = scrollContainer ? scrollContainer.scrollTop : 0;
 
-                    // Store reference to existing toggle handle
                     const toggleHandle = this.toggleHandle;
                     
-                    // Clear container but preserve the toggle handle
                     const children = Array.from(this.toolsContainer.children);
                     children.forEach(child => {
                         if (child !== toggleHandle) {
@@ -510,7 +527,6 @@
                         }
                     });
 
-                    // Build the new content
                     const content = `
                         <div class="BLTOOL-header">
                             <h3>BlackLite UI Customization Tool v2</h3>
@@ -527,11 +543,9 @@
                         </div>
                     `;
 
-                    // Create temporary container and insert content
                     const tempDiv = document.createElement('div');
                     tempDiv.innerHTML = content;
                     
-                    // Append all new content
                     while (tempDiv.firstChild) {
                         this.toolsContainer.appendChild(tempDiv.firstChild);
                     }
@@ -591,83 +605,17 @@
 					State.activeTab = tabButton.dataset.tab;
 					this.render();
 				}
-				
+
 				const collapseToggle = e.target.closest('.BLTOOL-collapse-toggle');
 				if (collapseToggle) {
 					State.toolState.collapsed = !State.toolState.collapsed;
 					this.toolsContainer.classList.toggle('collapsed', State.toolState.collapsed);
 					this.render();
 				}
-				
-				// Handle section toggles
-				const sectionHeader = e.target.closest('.BLTOOL-section-header');
-				if (sectionHeader) {
-					const section = sectionHeader.closest('.BLTOOL-section');
-					section.classList.toggle('collapsed');
-					const arrow = sectionHeader.querySelector('span:last-child');
-					arrow.textContent = section.classList.contains('collapsed') ? '▶' : '▼';
-				}
 			};
 			
 			this.toolsContainer.addEventListener('click', this.handleCoreClick);
-			
-			// Setup drag functionality
-			const header = this.toolsContainer.querySelector('.BLTOOL-header');
-			if (header) {
-				header.addEventListener('mousedown', (e) => {
-					if (e.target.classList.contains('BLTOOL-collapse-toggle')) return;
-					
-					this.isDragging = true;
-					this.dragStartX = e.clientX;
-					this.dragStartY = e.clientY;
-					
-					// Get current computed position
-					const style = window.getComputedStyle(this.toolsContainer);
-					this.initialLeft = parseInt(style.left, 10) || 0;
-					this.initialTop = parseInt(style.top, 10) || 0;
-					
-					// Prevent text selection during drag
-					document.body.style.userSelect = 'none';
-					this.toolsContainer.style.cursor = 'grabbing';
-				});
-			}
-
-			document.addEventListener('mousemove', (e) => {
-				if (!this.isDragging) return;
-				
-				const dx = e.clientX - this.dragStartX;
-				const dy = e.clientY - this.dragStartY;
-				
-				let newLeft = this.initialLeft + dx;
-				let newTop = this.initialTop + dy;
-				
-				// Ensure the tool stays within viewport bounds
-				const maxLeft = window.innerWidth - this.toolsContainer.offsetWidth;
-				const maxTop = window.innerHeight - this.toolsContainer.offsetHeight;
-				
-				newLeft = Math.max(0, Math.min(newLeft, maxLeft));
-				newTop = Math.max(0, Math.min(newTop, maxTop));
-				
-				this.toolsContainer.style.left = `${newLeft}px`;
-				this.toolsContainer.style.top = `${newTop}px`;
-				this.toolsContainer.style.right = 'auto';
-				
-				// Update state with new position
-				State.toolState.position = { 
-					x: newLeft,
-					y: newTop
-				};
-			});
-
-			document.addEventListener('mouseup', () => {
-				if (this.isDragging) {
-					this.isDragging = false;
-					document.body.style.userSelect = '';
-					this.toolsContainer.style.cursor = '';
-				}
-			});
-			
-			// Handle resize events to update scroll container height
+						
 			const resizeObserver = new ResizeObserver(() => {
 				const scrollContainer = this.toolsContainer.querySelector('.BLTOOL-scroll-container');
 				if (scrollContainer) {
@@ -836,6 +784,15 @@
                 this.collapsedSelectors.add(selector);
             });
         },
+
+        toggleSelectorCollapse(selector) {
+            if (this.collapsedSelectors.has(selector)) {
+                this.collapsedSelectors.delete(selector);
+            } else {
+                this.collapsedSelectors.add(selector);
+            }
+            UIManager.render();
+        },
         
         captureBaseStyles() {
             try {
@@ -843,7 +800,6 @@
                 const allElements = document.querySelectorAll('*');
                 const processedSelectors = new Set();
                 
-                // Add body and html elements explicitly
                 if (!this.isElementExcluded(document.body)) {
                     this.captureElementStyles('body', document.body);
                     processedSelectors.add('body');
@@ -1193,7 +1149,7 @@
                 const debouncedFilter = debounce(() => {
                     this.searchTerm = themeFilter.value || '';
                     UIManager.render();
-                }, 300);
+                }, 750);
                 
                 themeFilter.addEventListener('input', debouncedFilter);
                 themeFilter.addEventListener('keypress', (e) => {
@@ -1218,7 +1174,11 @@
             });
 
             this.handleThemeClick = (e) => {
+                if (SectionHandlers.handleSectionHeader(e)) return;
+                if (SectionHandlers.handleSelectorToggle(e)) return;
+
                 if (e.target.id === 'toggle-inspector') {
+                    e.stopPropagation();
                     if (InspectorManager.activeInspector === 'theme') {
                         InspectorManager.stopInspector();
                     } else {
@@ -1249,39 +1209,6 @@
                     UIManager.render();
                     return;
                 }
-                
-				const selectorToggle = e.target.closest('.BLTOOL-selector-toggle, .BLTOOL-section-header');
-                if (selectorToggle) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    // Handle both old and new class names
-                    const selector = selectorToggle.dataset.selector || 
-                                    selectorToggle.closest('[data-selector]')?.dataset.selector;
-                    
-                    if (selector) {
-                        if (this.collapsedSelectors.has(selector)) {
-                            this.collapsedSelectors.delete(selector);
-                        } else {
-                            this.collapsedSelectors.add(selector);
-                        }
-                        UIManager.render();
-                        return;
-                    }
-                }
-				if (selectorToggleArrow) {
-					e.preventDefault();
-					e.stopPropagation();
-					const selectorToggle = selectorToggleArrow.closest('.BLTOOL-selector-toggle');
-					const selector = selectorToggle.dataset.selector;
-					if (this.collapsedSelectors.has(selector)) {
-						this.collapsedSelectors.delete(selector);
-					} else {
-						this.collapsedSelectors.add(selector);
-					}
-					UIManager.render();
-					return;
-				}
             };
 
 			this.handleThemeChange = (e) => {
@@ -1292,7 +1219,6 @@
 					const prop = e.target.dataset.prop;
 					const value = e.target.value;
 					
-					// Update both color picker and text input if this is a color property
 					if (prop.includes('color')) {
 						const isColorInput = e.target.classList.contains('BLTOOL-style-color-input');
 						const otherInput = isColorInput 
@@ -1313,10 +1239,8 @@
 					const selector = e.target.dataset.selector;
 					const prop = e.target.dataset.prop;
 					
-					// Reset to original value
 					const originalValue = this.originalStyles[selector]?.[prop];
 					if (originalValue !== undefined) {
-						// Find and update both inputs if it's a color property
 						if (prop.includes('color')) {
 							const colorInput = container.querySelector(`.BLTOOL-style-color-input[data-selector="${selector}"][data-prop="${prop}"]`);
 							const textInput = container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
@@ -1344,7 +1268,6 @@
 				}
 				this.currentStyles[selector][prop] = value;
 				
-				// Update color preview if this is a color property
 				if (prop.includes('color')) {
 					const previewDiv = document.querySelector(`.BLTOOL-selector-toggle[data-selector="${selector}"]`)
 						?.closest('div')
@@ -1491,43 +1414,53 @@
         },
 
         applyBackgroundsToDom() {
+            let cssText = '';
+            
+            Object.entries(State.backgrounds.elements).forEach(([selector, imageData]) => {
+                if (imageData) {
+                    cssText += `
+                        ${selector} {
+                            position: relative !important;
+                            background: transparent !important;
+                        }
+                        
+                        ${selector}::before {
+                            content: ""; !important;
+                            position: absolute; !important;
+                            top: 0; !important;
+                            left: 0; !important; 
+                            right: 0; !important;
+                            bottom: 0; !important;
+                            z-index: -1; !important;
+                            background-image: url('${imageData}') !important;
+                            background-repeat: no-repeat; !important;
+                            background-position: center; !important;
+                            background-size: cover; !important;
+                            pointer-events: none; !important;
+                    `;
+                    
+                    const filters = State.backgrounds.filters[selector] || {};
+                    const filterString = Object.entries(filters)
+                        .map(([filter, value]) => {
+                            const config = CONFIG.BACKGROUND_FILTERS[filter];
+                            return `${filter}(${value}${config?.unit || ''})`;
+                        })
+                        .join(' ');
+                    
+                    if (filterString) {
+                        cssText += `filter: ${filterString} !important;`;
+                    }
+                    
+                    cssText += '}\n\n';
+                }
+            });
+            
             let bgStyleElement = document.getElementById('bltool-bg-styles');
             if (!bgStyleElement) {
                 bgStyleElement = document.createElement('style');
                 bgStyleElement.id = 'bltool-bg-styles';
                 document.head.appendChild(bgStyleElement);
             }
-            
-            let cssText = '';
-            
-            Object.entries(State.backgrounds.elements).forEach(([selector, imageData]) => {
-                if (imageData) {
-                    cssText += `${selector} {\n`;
-                    cssText += `  background-image: url('${imageData}') !important;\n`;
-                    cssText += `  background-size: cover !important;\n`;
-                    cssText += `  background-position: center !important;\n`;
-                    
-                    const filters = State.backgrounds.filters[selector] || {};
-                    const filterString = Object.entries(filters)
-                        .map(([filter, value]) => {
-                            const config = CONFIG.BACKGROUND_FILTERS[filter];
-                            if (!config || filter === 'opacity') return '';
-                            return `${filter}(${value}${config.unit})`;
-                        })
-                        .filter(Boolean)
-                        .join(' ');
-                    
-                    if (filterString) {
-                        cssText += `  filter: ${filterString} !important;\n`;
-                    }
-                    
-                    if (filters.opacity !== undefined) {
-                        cssText += `  opacity: ${filters.opacity} !important;\n`;
-                    }
-                    
-                    cssText += '}\n\n';
-                }
-            });
             
             bgStyleElement.textContent = cssText;
         },
@@ -1704,7 +1637,6 @@
 
                         reader.onload = (e) => {
                             this.applyBackground(selector, e.target.result);
-                            // No need for extra render() here since applyBackground does it
                         };
 
                         reader.readAsDataURL(file);
@@ -1742,21 +1674,9 @@
             });
 
             this.handleBgClick = (e) => {
-				const selectorToggleArrow = e.target.closest('.BLTOOL-bg-selector-toggle span');
-				if (selectorToggleArrow) {
-					e.preventDefault();
-					e.stopPropagation();
-					const selectorToggle = selectorToggleArrow.closest('.BLTOOL-bg-selector-toggle');
-					const selector = selectorToggle.dataset.selector;
-					if (this.collapsedSelectors.has(selector)) {
-						this.collapsedSelectors.delete(selector);
-					} else {
-						this.collapsedSelectors.add(selector);
-					}
-					UIManager.render();
-					return;
-				}
-                
+                if (SectionHandlers.handleSectionHeader(e)) return;
+                if (SectionHandlers.handleSelectorToggle(e)) return;               
+                                
                 if (e.target.closest('button') && e.target.closest('button').dataset.selector) {
                     const selector = e.target.closest('button').dataset.selector;
                     this.removeBackground(selector);
@@ -1810,7 +1730,7 @@
                 const debouncedFilter = debounce(() => {
                     this.searchTerm = bgFilter.value;
                     UIManager.render();
-                }, 300);
+                }, 750);
                 
                 bgFilter.addEventListener('input', debouncedFilter);
                 bgFilter.addEventListener('keypress', (e) => {
@@ -1841,13 +1761,10 @@
 
         removeBackground(selector) {
             try {
-                if (State.backgrounds.elements[selector]) {
-                    delete State.backgrounds.elements[selector];
-                    delete State.backgrounds.filters[selector];
-                    
-                    this.applyBackgroundsToDom();
-                    UIManager.render();
-                }
+                delete State.backgrounds.elements[selector];
+                delete State.backgrounds.filters[selector];
+                this.applyBackgroundsToDom();
+                UIManager.render();
             } catch (e) {
                 console.error(`Could not remove background from ${selector}`, e);
             }
@@ -2111,7 +2028,6 @@
         const container = document.getElementById(TOOL_ID);
         if (!container) return;
 
-        // Save preset button
         container.querySelector('#save-preset')?.addEventListener('click', () => {
             const name = document.getElementById('preset-name').value.trim();
             const description = document.getElementById('preset-description').value.trim();
@@ -2128,13 +2044,11 @@
             this.saveCurrentChangesAsTheme(name, description, creator, classic, aesthetic, corpo);
         });
 
-        // Apply preset button
         container.querySelector('#apply-preset')?.addEventListener('click', () => {
             const selectedPreset = document.getElementById('preset-select').value;
             this.applyTheme(selectedPreset);
         });
 
-        // Delete preset button
         container.querySelector('#delete-preset')?.addEventListener('click', () => {
             const selectedPreset = document.getElementById('preset-select').value;
             if (selectedPreset && selectedPreset !== 'Default Theme') {
@@ -2144,44 +2058,36 @@
             }
         });
 
-        // Reset everything button
         container.querySelector('#reset-to-default')?.addEventListener('click', () => {
             if (confirm('Are you sure you want to reset everything? All saved themes will be deleted, and the UI will revert to the Default Theme.')) {
                 this.resetEverything();
             }
         });
 
-        // Import themes button
         container.querySelector('#import-preset')?.addEventListener('click', () => {
             this.importCSSFiles();
         });
 
-        // Export all themes button
         container.querySelector('#export-preset')?.addEventListener('click', () => {
             this.exportAllThemesAsCSS();
         });
 
-        // Export default theme button
         container.querySelector('#export-default')?.addEventListener('click', () => {
             this.exportDefaultThemeAsCSS();
         });
 
-        // Export current changes button
         container.querySelector('#export-css-button')?.addEventListener('click', () => {
             this.exportCurrentChangesAsCSS();
         });
 
-        // Export images button
         container.querySelector('#export-images')?.addEventListener('click', () => {
             BackgroundManager.exportAllImages();
         });
 
-        // Show CSS button
         container.querySelector('#show-css-button')?.addEventListener('click', () => {
             ThemeManager.showChanges();
         });
 
-        // Preset select dropdown
         const presetSelect = container.querySelector('#preset-select');
         if (presetSelect) {
             presetSelect.addEventListener('change', (e) => {
@@ -2590,28 +2496,31 @@
 
     window.initBlackliteTools = function () {
         console.log('Initializing Blacklite Tools');
-		try {
-			if (!BLTOOLdynamicDefaultThemeCSS) {
-				parseDocumentStyles();
-			}
-			
-			UIManager.createToolContainer();
-			UIManager.setupBaseStyles();
-			
-			ThemeManager.init();
-			BackgroundManager.init();
-			PresetManager.init();
-			
-			setTimeout(() => {
-				UIManager.render();
-				console.log('Initial render complete');
-			}, 50);
-			
-			window.blackliteToolsInitialized = true;
-		} catch (error) {
-			console.error('Error initializing Blacklite Tools:', error);
-		}
-	};
+        try {
+            if (!BLTOOLdynamicDefaultThemeCSS) {
+                parseDocumentStyles();
+            }
+            
+            // Initialize managers first
+            ThemeManager.init();
+            BackgroundManager.init();
+            PresetManager.init();
+            
+            // Then create UI
+            UIManager.createToolContainer();
+            UIManager.setupBaseStyles();
+            
+            // Render after a brief delay
+            setTimeout(() => {
+                UIManager.render();
+                console.log('Initial render complete');
+            }, 50);
+            
+            window.blackliteToolsInitialized = true;
+        } catch (error) {
+            console.error('Error initializing Blacklite Tools:', error);
+        }
+    };
 
     window.cleanupBlackliteTools = function() {
         console.log('Cleaning up Blacklite Tools');
