@@ -209,9 +209,13 @@
 	`;
 
 	const CONFIG = {
-        BLTOOL_VERSION: ['v3.2'],
+        BLTOOL_VERSION: ['v3.3'],
 		MOBILE_BREAKPOINT: 768,
         PRESERVED_STYLES: [
+            /* Favorites */
+            'background-color', 'color', 'font-size', 'font-family', 'font-style', 
+            'font-weight', 'text-align', 'border-width', 'border-color',
+
             /* Layout & Box Model */
             'align-content', 'align-items', 'align-self', 'all', 'aspect-ratio', 'block-size', 'box-sizing', 'clear', 
             'columns', 'column-count', 'column-fill', 'column-gap', 'column-rule', 'column-span', 'column-width',
@@ -233,13 +237,13 @@
             'wrap-after', 'wrap-before', 'wrap-flow', 'wrap-inside', 'wrap-through', 'z-index', 'zoom',
             
             /* Typography & Text */
-            'direction', 'font', 'font-family', 'font-feature-settings', 'font-kerning', 'font-language-override', 
-            'font-optical-sizing', 'font-palette', 'font-size', 'font-size-adjust', 'font-smooth', 'font-stretch', 
-            'font-style', 'font-synthesis', 'font-variant', 'font-variant-alternates', 'font-variant-caps', 
+            'direction', 'font', 'font-feature-settings', 'font-kerning', 'font-language-override', 
+            'font-optical-sizing', 'font-palette', 'font-size-adjust', 'font-smooth', 'font-stretch', 
+            'font-synthesis', 'font-variant', 'font-variant-alternates', 'font-variant-caps', 
             'font-variant-east-asian', 'font-variant-ligatures', 'font-variant-numeric', 'font-variant-position', 
-            'font-weight', 'hanging-punctuation', 'hyphenate-character', 'hyphenate-limit-chars', 'hyphenate-limit-last', 
+            'hanging-punctuation', 'hyphenate-character', 'hyphenate-limit-chars', 'hyphenate-limit-last', 
             'hyphenate-limit-lines', 'hyphenate-limit-zone', 'hyphens', 'letter-spacing', 'line-break', 'orphans', 
-            'quotes', 'ruby-align', 'ruby-merge', 'ruby-position', 'tab-size', 'text-align', 'text-align-last', 
+            'quotes', 'ruby-align', 'ruby-merge', 'ruby-position', 'tab-size', 'text-align-last', 
             'text-combine-upright', 'text-decoration', 'text-decoration-color', 'text-decoration-line', 
             'text-decoration-skip', 'text-decoration-skip-ink', 'text-decoration-style', 'text-decoration-thickness', 
             'text-emphasis', 'text-emphasis-color', 'text-emphasis-position', 'text-emphasis-style', 'text-indent', 
@@ -249,13 +253,13 @@
             
             /* Visual Effects */
             'accent-color', 'backdrop-filter', 'background', 'background-attachment', 'background-blend-mode', 
-            'background-clip', 'background-color', 'background-image', 'background-origin', 'background-position', 
+            'background-clip', 'background-image', 'background-origin', 'background-position', 
             'background-position-x', 'background-position-y', 'background-repeat', 'background-size', 'border', 
             'border-block', 'border-block-color', 'border-block-end', 'border-block-end-color', 'border-block-end-style', 
             'border-block-end-width', 'border-block-start', 'border-block-start-color', 'border-block-start-style', 
             'border-block-start-width', 'border-block-style', 'border-block-width', 'border-bottom', 'border-bottom-color', 
             'border-bottom-left-radius', 'border-bottom-right-radius', 'border-bottom-style', 'border-bottom-width', 
-            'border-collapse', 'border-color', 'border-end-end-radius', 'border-end-start-radius', 'border-image', 
+            'border-collapse', 'border-end-end-radius', 'border-end-start-radius', 'border-image', 
             'border-image-outset', 'border-image-repeat', 'border-image-slice', 'border-image-source', 'border-image-width', 
             'border-inline', 'border-inline-color', 'border-inline-end', 'border-inline-end-color', 'border-inline-end-style', 
             'border-inline-end-width', 'border-inline-start', 'border-inline-start-color', 'border-inline-start-style', 
@@ -263,8 +267,8 @@
             'border-left-style', 'border-left-width', 'border-radius', 'border-right', 'border-right-color', 
             'border-right-style', 'border-right-width', 'border-spacing', 'border-start-end-radius', 
             'border-start-start-radius', 'border-style', 'border-top', 'border-top-color', 'border-top-left-radius', 
-            'border-top-right-radius', 'border-top-style', 'border-top-width', 'border-width', 'bottom', 'box-decoration-break', 
-            'box-shadow', 'caption-side', 'caret-color', 'clip', 'clip-path', 'color', 'color-scheme', 'content', 
+            'border-top-right-radius', 'border-top-style', 'border-top-width', 'bottom', 'box-decoration-break', 
+            'box-shadow', 'caption-side', 'caret-color', 'clip', 'clip-path', 'color-scheme', 'content', 
             'counter-increment', 'counter-reset', 'counter-set', 'cursor', 'empty-cells', 'filter', 'forced-color-adjust', 
             'image-orientation', 'image-rendering', 'image-resolution', 'inset', 'inset-block', 'inset-block-end', 
             'inset-block-start', 'inset-inline', 'inset-inline-end', 'inset-inline-start', 'left', 'list-style', 
@@ -340,6 +344,7 @@
 		BACKGROUND_FILTERS: {
 			opacity: { min: 0, max: 1, step: 0.01, default: 1, unit: '' },
 			blur: { min: 0, max: 20, step: 0.1, default: 0, unit: 'px' },
+            'border-radius': { min: 0, max: 50, step: 1, default: 0, unit: 'px' },
 			brightness: { min: 0, max: 2, step: 0.05, default: 1, unit: '' },
 			contrast: { min: 0, max: 2, step: 0.05, default: 1, unit: '' },
 			grayscale: { min: 0, max: 1, step: 0.01, default: 0, unit: '' },
@@ -347,21 +352,25 @@
 			invert: { min: 0, max: 1, step: 0.01, default: 0, unit: '' },
 			saturate: { min: 0, max: 2, step: 0.05, default: 1, unit: '' },
 			sepia: { min: 0, max: 1, step: 0.01, default: 0, unit: '' }
-		}
+		},
+        PARENT_MODE: false
 	};
 
     const SELECTOR_REPLACEMENTS = {
         // Escape like this: '#navbarNavDropdown\.navbar-collapse\.collapse': '.navbarNavDropdown'
         // Background Inspector replacements
         background: {
-            '#gametext': '#gamescreen',
-            '#outerbodybg': '#outerbody',
-            '#navbarNavDropdown': '#topmenu',
-            '#input_text': '#inputrow'
+            //'#gametext': '#gamescreen',
+            //'#outerbodybg': '#outerbody',
+            //'#navbarNavDropdown': '#topmenu',
+            //'#input_text': '#inputrow'
         },
         // Theme Inspector replacements
         theme: {
             // Add theme-specific replacements here if needed
+        },
+        parent: {
+            // Add parent-specific replacements if needed
         }
     };
 
@@ -375,7 +384,8 @@
 		},
 		backgrounds: {
 			elements: {},
-			filters: {}
+			filters: {},
+            '*': { 'border-radius': CONFIG.BACKGROUND_FILTERS['border-radius'].default }
 		},
 		toolState: {
 			collapsed: false,
@@ -480,15 +490,16 @@
             if (elements.length === 0) return false;
             
             return Array.from(elements).every(el => {
-                const tagName = el.tagName.toLowerCase();
-                const computedStyle = window.getComputedStyle(el);
+                // If in parent mode, check the parent instead
+                const targetEl = CONFIG.PARENT_MODE && el.parentElement ? el.parentElement : el;
+                const tagName = targetEl.tagName.toLowerCase();
+                const computedStyle = window.getComputedStyle(targetEl);
                 
-                // Check suitability
                 return !CONFIG.UNSUITABLE_FOR_BACKGROUND.has(tagName) &&
                     computedStyle.display !== 'none' &&
                     computedStyle.visibility !== 'hidden' &&
-                    el.offsetWidth > 0 &&
-                    el.offsetHeight > 0;
+                    targetEl.offsetWidth > 0 &&
+                    targetEl.offsetHeight > 0;
             });
         } catch (e) {
             console.error('Invalid selector detected:', e);
@@ -810,14 +821,17 @@
     const InspectorManager = {
         activeInspector: null,
         lastHighlightedElement: null,
+        lastParentElement: null, 
         currentFilterInputId: null,
         handleMouseOver: null,
         handleClick: null,
+        parentMode: false,
         
         startInspector(type, onSelection, filterInputId = null) {
             this.stopInspector();
             this.activeInspector = type;
             this.currentFilterInputId = filterInputId;
+            this.parentMode = CONFIG.PARENT_MODE;
             
             document.body.style.cursor = 'crosshair';
             
@@ -827,9 +841,19 @@
                 if (this.lastHighlightedElement) {
                     this.lastHighlightedElement.style.outline = '';
                 }
+                if (this.lastParentElement) {
+                    this.lastParentElement.style.outline = '';
+                }
                 
+                // Always highlight the main element
                 event.target.style.outline = '2px solid #ff0000';
                 this.lastHighlightedElement = event.target;
+                
+                // Highlight parent if in parent mode
+                if (this.parentMode && event.target.parentElement) {
+                    event.target.parentElement.style.outline = '2px dashed #ffff00';
+                    this.lastParentElement = event.target.parentElement;
+                }
                 
                 const selector = this.generateSelector(event.target, type);
                 if (this.currentFilterInputId) {
@@ -843,7 +867,17 @@
                 event.preventDefault();
                 event.stopPropagation();
                 
-                const selector = this.generateSelector(event.target, type);
+                const selectedElement = event.target;
+                let selector;
+                
+                if (this.parentMode && selectedElement.parentElement) {
+                    // For parent mode, generate selector for the immediate parent
+                    selector = this.generateSelector(selectedElement.parentElement, type);
+                } else {
+                    // Regular mode
+                    selector = this.generateSelector(selectedElement, type);
+                }
+                
                 if (typeof onSelection === 'function') {
                     onSelection(selector);
                 }
@@ -864,6 +898,11 @@
                 this.lastHighlightedElement = null;
             }
             
+            if (this.lastParentElement) {
+                this.lastParentElement.style.outline = '';
+                this.lastParentElement = null;
+            }
+            
             if (this.handleMouseOver) {
                 document.removeEventListener('mouseover', this.handleMouseOver, true);
                 this.handleMouseOver = null;
@@ -881,6 +920,11 @@
         },
         
         generateSelector(element, inspectorType) {
+            // If in parent mode and element has a parent, focus on the parent
+            if (this.parentMode && element.parentElement) {
+                element = element.parentElement;
+            }
+
             // First generate the base selector
             let selector;
             if (element.id && !element.id.startsWith('ember') && element.id !== '') {
@@ -895,6 +939,42 @@
 
             // Apply replacements for this inspector type
             return this.applySelectorReplacements(selector, inspectorType, element); 
+
+            // For parent mode, generate a more specific selector
+            if (this.parentMode && element.parentElement) {
+                const parent = element.parentElement;
+                let parentSelector;
+                
+                if (parent.id) {
+                    parentSelector = `#${escapeSelector(parent.id)}`;
+                } else if (parent.classList.length > 0) {
+                    const classes = Array.from(parent.classList);
+                    const validClass = classes.find(c => !c.startsWith('js-'));
+                    parentSelector = validClass ? `.${escapeSelector(validClass)}` : parent.tagName.toLowerCase();
+                } else {
+                    // Create a more specific selector by including parent hierarchy
+                    const path = [];
+                    let current = element;
+                    
+                    while (current.parentElement && current !== document.body) {
+                        const tag = current.tagName.toLowerCase();
+                        const index = Array.from(current.parentElement.children).indexOf(current) + 1;
+                        path.unshift(`${tag}:nth-child(${index})`);
+                        current = current.parentElement;
+                    }
+                    
+                    parentSelector = path.join(' > ');
+                }
+                
+                return this.applySelectorReplacements(parentSelector, inspectorType, element);
+            }
+
+            return this.applySelectorReplacements(selector, inspectorType, element); 
+        },
+
+        generateParentSelector(element, inspectorType) {
+            if (!element.parentElement) return '';
+            return this.generateSelector(element.parentElement, inspectorType);
         },
 
         applySelectorReplacements(selector, inspectorType, element) {
@@ -1160,11 +1240,18 @@
 											style="margin-left: 5px; height: 28px;" 
 											${!this.searchTerm ? 'disabled' : ''}>X</button>
 								</div>
-								<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
-									<button class="BLTOOL-button" id="toggle-inspector">
-										${InspectorManager.activeInspector === 'theme' ? 'Stop Inspector' : 'Inspector'}
-									</button>
-								</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px; align-items: center;">
+                                    <button class="BLTOOL-button" id="toggle-inspector" style="flex: 1 1 auto;">
+                                        ${InspectorManager.activeInspector === 'theme' ? 'Stop Inspector' : 'Inspector'}
+                                    </button>
+                                    <div style="display: flex; align-items: center; gap: 5px; flex: 1 1 auto; background-color: #444; padding: 5px; border-radius: 4px;">
+                                        <label style="font-size: 13px; white-space: nowrap;">Parent Element Mode:</label>
+                                        <label class="BLTOOL-switch">
+                                            <input type="checkbox" id="theme-parent-mode-toggle" ${CONFIG.PARENT_MODE ? 'checked' : ''}>
+                                            <span class="BLTOOL-slider"></span>
+                                        </label>
+                                    </div>
+                                </div>       
 							</div>
 						</div>
 						
@@ -1374,6 +1461,11 @@
                         'theme-filter'
                     );
                 }
+            });
+
+            container.querySelector('#theme-parent-mode-toggle')?.addEventListener('change', (e) => {
+                CONFIG.PARENT_MODE = e.target.checked;
+                InspectorManager.parentMode = CONFIG.PARENT_MODE;
             });
 
             container.addEventListener('click', (e) => {
@@ -1637,46 +1729,64 @@
         },
 
         applyBackgroundsToDom() {
-            let cssText = '';
-            
-            Object.entries(State.backgrounds.elements).forEach(([selector, imageData]) => {
-                if (imageData) {
-                    cssText += `
-                        ${selector} {
-                            position: relative !important;
-                            background: transparent !important;
+                let cssText = '';
+                
+                Object.entries(State.backgrounds.elements).forEach(([selector, imageData]) => {
+                    if (imageData) {
+                        const filters = State.backgrounds.filters[selector] || {};
+                        const borderRadius = filters['border-radius'] || CONFIG.BACKGROUND_FILTERS['border-radius'].default;
+                        const borderRadiusUnit = CONFIG.BACKGROUND_FILTERS['border-radius'].unit;
+                        
+                        cssText += `
+                            ${selector} {
+                                position: relative !important;
+                                background: transparent !important;
+                                z-index: +1 !important;
+                                border-radius: ${borderRadius}${borderRadiusUnit} !important;
+                                overflow: hidden !important;
+                            }
+                            
+                            ${selector}::before {
+                                content: "" !important;
+                                position: absolute !important;
+                                top: 0 !important;
+                                left: 0 !important; 
+                                right: 0 !important;
+                                bottom: 0 !important;
+                                z-index: -1 !important;
+                                background-image: url('${imageData}') !important;
+                                background-repeat: no-repeat !important;
+                                background-position: center !important;
+                                background-size: cover !important;
+                                pointer-events: none !important;
+                                border-radius: ${borderRadius}${borderRadiusUnit} !important;
+                        `;
+                        
+                        // Apply other filters except border-radius
+                        const filterString = Object.entries(filters)
+                            .filter(([filter]) => filter !== 'border-radius')
+                            .map(([filter, value]) => {
+                                const config = CONFIG.BACKGROUND_FILTERS[filter];
+                                return `${filter}(${value}${config?.unit || ''})`;
+                            })
+                            .join(' ');
+                        
+                        if (filterString) {
+                            cssText += `filter: ${filterString} !important;`;
                         }
                         
-                        ${selector}::before {
-                            content: "" !important;
-                            position: absolute !important;
-                            top: 0 !important;
-                            left: 0 !important; 
-                            right: 0 !important;
-                            bottom: 0 !important;
-                            z-index: -1 !important;
-                            background-image: url('${imageData}') !important;
-                            background-repeat: no-repeat !important;
-                            background-position: center !important;
-                            background-size: cover !important;
-                            pointer-events: none !important;
-                    `;
-                    
-                    const filters = State.backgrounds.filters[selector] || {};
-                    const filterString = Object.entries(filters)
-                        .map(([filter, value]) => {
-                            const config = CONFIG.BACKGROUND_FILTERS[filter];
-                            return `${filter}(${value}${config?.unit || ''})`;
-                        })
-                        .join(' ');
-                    
-                    if (filterString) {
-                        cssText += `filter: ${filterString} !important;`;
+                        cssText += '}\n\n';
+                        
+                        // Special handling for textareas
+                        cssText += `
+                            ${selector} textarea {
+                                background-color: transparent !important;
+                                position: relative;
+                                z-index: 1;
+                            }
+                        `;
                     }
-                    
-                    cssText += '}\n\n';
-                }
-            });
+                });
             
             let bgStyleElement = document.getElementById('bltool-bg-styles');
             if (!bgStyleElement) {
@@ -1730,11 +1840,18 @@
 											style="margin-left: 5px; height: 28px;" 
 											${!this.searchTerm ? 'disabled' : ''}>X</button>
 								</div>
-								<div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
-									<button class="BLTOOL-button" id="toggle-bg-inspector">
-										${InspectorManager.activeInspector === 'background' ? 'Stop Inspector' : 'Inspector'}
-									</button>
-								</div>
+                                <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px; align-items: center;">
+                                    <button class="BLTOOL-button" id="toggle-bg-inspector" style="flex: 1 1 auto;">
+                                        ${InspectorManager.activeInspector === 'background' ? 'Stop Inspector' : 'Inspector'}
+                                    </button>
+                                    <div style="display: flex; align-items: center; gap: 5px; flex: 1 1 auto; background-color: #444; padding: 5px; border-radius: 4px;">
+                                        <label style="font-size: 13px; white-space: nowrap;">Parent Element Mode:</label>
+                                        <label class="BLTOOL-switch">
+                                            <input type="checkbox" id="bg-parent-mode-toggle" ${CONFIG.PARENT_MODE ? 'checked' : ''}>
+                                            <span class="BLTOOL-slider"></span>
+                                        </label>
+                                    </div>
+                                </div>
 							</div>
 						</div>
 						
@@ -1817,7 +1934,8 @@
                                             <img id="preview-${selector}" src="${bgImage}" style="max-width: 100%; margin-top: 10px; display: ${bgImage ? 'block' : 'none'}; 
                                                 box-sizing: border-box; filter: ${Object.entries(filters)
                                                     .map(([f, val]) => `${f}(${val}${CONFIG.BACKGROUND_FILTERS[f]?.unit || ''})`)
-                                                    .join(' ')}">
+                                                    .join(' ')}; 
+                                                border-radius: ${filters['border-radius'] || 0}${CONFIG.BACKGROUND_FILTERS['border-radius'].unit}">
                                         </div>
                                         ${hasBackground ? `
                                             <div style="margin-top: 10px;">
@@ -1829,16 +1947,16 @@
                                                             <label style="display: flex; justify-content: space-between; align-items: center;">
                                                                 <span style="flex: 1; text-align: left;">${filter}</span>
                                                                 <span id="filter-value-${selector}-${filter}" style="min-width: 50px; text-align: right;">
-                                                                    ${filters[filter]}${CONFIG.BACKGROUND_FILTERS[filter].unit}
+                                                                    ${filters[filter]}${config.unit}
                                                                 </span>
                                                             </label>
                                                             <input type="range" 
                                                                 class="BLTOOL-bg-filter-input" 
                                                                 data-selector="${selector}" 
                                                                 data-filter="${filter}"
-                                                                min="${CONFIG.BACKGROUND_FILTERS[filter].min}" 
-                                                                max="${CONFIG.BACKGROUND_FILTERS[filter].max}" 
-                                                                step="${CONFIG.BACKGROUND_FILTERS[filter].step}" 
+                                                                min="${config.min}" 
+                                                                max="${config.max}" 
+                                                                step="${config.step}" 
                                                                 value="${filters[filter]}" 
                                                                 style="width: 100%;">
                                                         </div>
@@ -1912,6 +2030,11 @@
                         'bg-filter'
                     );
                 }
+            });
+
+            container.querySelector('#bg-parent-mode-toggle')?.addEventListener('change', (e) => {
+                CONFIG.PARENT_MODE = e.target.checked;
+                InspectorManager.parentMode = CONFIG.PARENT_MODE;
             });
 
             this.handleBgClick = (e) => {
@@ -2074,12 +2197,15 @@
                 if (previewImg) {
                     const filters = State.backgrounds.filters[selector] || {};
                     const filterString = Object.entries(filters)
+                        .filter(([f]) => f !== 'border-radius') // Exclude border-radius from filter
                         .map(([f, val]) => {
                             const config = CONFIG.BACKGROUND_FILTERS[f];
                             return `${f}(${val}${config?.unit || ''})`;
                         })
                         .join(' ');
+                    
                     previewImg.style.filter = filterString;
+                    previewImg.style.borderRadius = `${filters['border-radius'] || 0}${CONFIG.BACKGROUND_FILTERS['border-radius'].unit}`;
                 }
                 
                 this.applyBackgroundsToDom();
