@@ -209,6 +209,7 @@
 	`;
 
 	const CONFIG = {
+        BLTOOL_VERSION: ['v3.1'],
 		MOBILE_BREAKPOINT: 768,
         PRESERVED_STYLES: [
             /* Layout & Box Model */
@@ -690,7 +691,7 @@
 
                     const content = `
                         <div class="BLTOOL-header">
-                            <h3>BlackLite UI Customization Tool v3</h3>
+                            <h3>BlackLite UI Customization Tool ${CONFIG.BLTOOL_VERSION}</h3>
                         </div>
                         <div class="BLTOOL-content" style="${State.toolState.collapsed ? 'display: none;' : ''}">
                             <div style="display: flex; margin-bottom: 10px;">
@@ -2215,11 +2216,11 @@
 			themes: this.themes,
 			currentTheme: this.currentTheme
 		}
-		localStorage.setItem("BLTOOL-themestorage", JSON.stringify(saveObj))
+		localStorage.setItem("BLTOOL_themestorage", JSON.stringify(saveObj))
 	},
 
 	loadFromLocalStorage() {
-		let saveJson = localStorage.getItem("BLTOOL-themestorage")
+		let saveJson = localStorage.getItem("BLTOOL_themestorage")
 		if (saveJson !== null)
 		{
 			let saveObj = JSON.parse(saveJson)
@@ -2443,9 +2444,7 @@
     
     applyTheme(themeName) {
         try {
-            if (themeName === 'unsaved') {
-                return;
-            }
+            if (themeName === 'unsaved') return;
 
             const theme = this.themes[themeName];
             if (!theme) {
@@ -2454,19 +2453,35 @@
             }
 
             UIManager.dynamicStyleElement.textContent = theme.css;
-            
-            State.backgrounds.elements = JSON.parse(JSON.stringify(theme.backgrounds?.elements || {}));
-            State.backgrounds.filters = JSON.parse(JSON.stringify(theme.backgrounds?.filters || {}));
+
+            // JSON.parse(JSON.stringify()) led to recursion
+            // found this:
+            State.backgrounds.elements = {...(theme.backgrounds?.elements || {})};
+            State.backgrounds.filters = Object.keys(theme.backgrounds?.filters || {}).reduce((acc, key) => {
+                acc[key] = {...(theme.backgrounds.filters[key] || {})};
+                return acc;
+            }, {});
+
             BackgroundManager.applyBackgroundsToDom();
-            
             this.currentTheme = themeName;
             this.unsavedChanges = false;
-            
             this.saveToLocalStorage();
             UIManager.render();
         } catch (e) {
             console.error(`Error applying theme "${themeName}":`, e);
-            this.applyTheme('Default Theme');
+            // Fallback to default theme without recursion
+            if (themeName !== 'Default Theme') {
+                console.log('Falling back to default theme');
+                const defaultTheme = this.themes['Default Theme'];
+                UIManager.dynamicStyleElement.textContent = defaultTheme.css;
+                State.backgrounds.elements = {};
+                State.backgrounds.filters = {};
+                BackgroundManager.applyBackgroundsToDom();
+                this.currentTheme = 'Default Theme';
+                this.unsavedChanges = false;
+                this.saveToLocalStorage();
+                UIManager.render();
+            }
         }
     },
     
@@ -2823,7 +2838,7 @@
             setTimeout(() => {
                 UIManager.render();
                 console.log('Initial render complete');
-            }, 50);
+            }, 100);
             
             window.blackliteToolsInitialized = true;
         } catch (error) {
