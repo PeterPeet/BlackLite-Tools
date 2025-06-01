@@ -209,7 +209,7 @@
 	`;
 
 	const CONFIG = {
-        BLTOOL_VERSION: ['v3.1'],
+        BLTOOL_VERSION: ['v3.2'],
 		MOBILE_BREAKPOINT: 768,
         PRESERVED_STYLES: [
             /* Layout & Box Model */
@@ -894,10 +894,10 @@
             }
 
             // Apply replacements for this inspector type
-            return this.applySelectorReplacements(selector, inspectorType);
+            return this.applySelectorReplacements(selector, inspectorType, element); 
         },
 
-        applySelectorReplacements(selector, inspectorType) {
+        applySelectorReplacements(selector, inspectorType, element) {
             const replacements = SELECTOR_REPLACEMENTS[inspectorType] || {};
             
             // 1. Check for exact matches
@@ -916,16 +916,16 @@
                     console.warn('Invalid regex in selector replacement:', pattern);
                 }
             }
-            
+            /*
             // 3. Apply special cases
-            if (inspectorType === 'background') {
+            if (inspectorType === 'background' && element) {  // Check element exists
                 // Special case: prefer class selectors over ID selectors
                 if (selector.startsWith('#') && element.classList.length > 0) {
                     const firstClass = element.classList[0];
-                    return `.${escapeSelector(firstClass)}`;
+                    return `#${escapeSelector(firstClass)}`;
                 }
             }
-            
+            */
             return selector;
         },
         
