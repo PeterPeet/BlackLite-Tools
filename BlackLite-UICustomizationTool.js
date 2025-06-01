@@ -46,11 +46,6 @@
 		.BLTOOL-button:hover {
 		opacity: 0.9;
 		}
-		@media (max-width: 768px) {
-		.BLTOOL-button {
-		width: 100%;
-		}
-		}
         .BLTOOL-blacklite-tools {
             position: fixed !important;
             top: 0 !important;
@@ -77,7 +72,7 @@
             transform: translateX(100%);
         }
 		.BLTOOL-blacklite-tools .BLTOOL-header {
-             cursor: default !important;
+            cursor: default !important;
 			padding: 5px 10px;
 			display: flex;
 			justify-content: space-between;
@@ -163,7 +158,7 @@
             top: 50% !important;
             transform: translateY(-50%) !important;
             width: 20px !important;
-            height: 100% !important;
+            height: 50px !important;
             background-color: rgb(38, 38, 38) !important;
             border-radius: 5px 0 0 5px !important;
             cursor: pointer !important;
@@ -198,12 +193,9 @@
         }
         @media (max-width: 768px) {
             .BLTOOL-blacklite-tools {
-                width: 90% !important;
-                left: 5% !important;
-                right: auto !important;
-                top: 10px !important;
-                max-height: 95vh !important;
-                border-left: 20px solid #333 !important;
+                left: auto !important;
+                right: 0px !important;
+                border-left: 0px solid #333 !important;
             }
 			.BLTOOL-tab-button {
 				flex: 1 1 33%;
