@@ -2206,7 +2206,27 @@
                 filters: {}
             }
         };
+        this.loadFromLocalStorage()
+		this.applyTheme(this.currentTheme);
     },
+
+    saveToLocalStorage() {
+		let saveObj = {
+			themes: this.themes,
+			currentTheme: this.currentTheme
+		}
+		localStorage.setItem("BLTOOL-themestorage", JSON.stringify(saveObj))
+	},
+
+	loadFromLocalStorage() {
+		let saveJson = localStorage.getItem("BLTOOL-themestorage")
+		if (saveJson !== null)
+		{
+			let saveObj = JSON.parse(saveJson)
+			this.themes = saveObj.themes,
+			this.currentTheme = saveObj.currentTheme
+		}
+	},
     
     renderPresetsTab() {
 	try {
@@ -2442,6 +2462,7 @@
             this.currentTheme = themeName;
             this.unsavedChanges = false;
             
+            this.saveToLocalStorage();
             UIManager.render();
         } catch (e) {
             console.error(`Error applying theme "${themeName}":`, e);
@@ -2481,6 +2502,7 @@
                 this.currentTheme = finalName;
                 this.unsavedChanges = false;
                 
+                this.saveToLocalStorage();
                 UIManager.render();
                 return true;
             } catch (e) {
@@ -2504,6 +2526,7 @@
                         this.applyTheme('Default Theme');
                     }
                     
+                    this.saveToLocalStorage();
                     UIManager.render();
                 }
             } catch (e) {
@@ -2787,18 +2810,14 @@
     window.initBlackliteTools = function () {
         console.log('Initializing Blacklite Tools');
         try {
-            if (!BLTOOLdynamicDefaultThemeCSS) {
-                parseDocumentStyles();
-            }
+            // First create the tool container and set up base styles
+            UIManager.createToolContainer();
+            UIManager.setupBaseStyles();
             
-            // Initialize managers first
+            // Then initialize managers
             ThemeManager.init();
             BackgroundManager.init();
             PresetManager.init();
-            
-            // Then create UI
-            UIManager.createToolContainer();
-            UIManager.setupBaseStyles();
             
             // Render after a brief delay
             setTimeout(() => {
