@@ -209,7 +209,7 @@
    `;
 
    const CONFIG = {
-        BLTOOL_VERSION: ['v3.3'],
+        BLTOOL_VERSION: ['v3.4'],
       MOBILE_BREAKPOINT: 768,
         PRESERVED_STYLES: [
             /* Favorites */
