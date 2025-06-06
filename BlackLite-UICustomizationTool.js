@@ -14,38 +14,45 @@
    let BLTOOLdynamicDefaultThemeCSS = '';
 
    const BLTOOLspecificstyles = `
-      .BLTOOL-body {
-      margin: 0;
-      padding: 20px;
-      font-family: Arial, sans-serif;
-      background-color: #f0f0f0;
-      }
-      .BLTOOL-sample-content {
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
-      background-color: white;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgb(51, 51, 51);
-      }
-      .BLTOOL-h1 {
-      color: #333;
-      }
-      .BLTOOL-button {
-      padding: 6px 12px;
-      font-size: 14px;
-      border: none;
-      border-radius: 4px;
-      background-color:rgb(51, 122, 183);
-      color: white;
-      cursor: pointer;
-      margin: 2px 0;
-      transition: background-color 0.3s ease;
-      white-space: nowrap;
-      }
-      .BLTOOL-button:hover {
-      opacity: 0.9;
-      }
+        .BLTOOL-body {
+        margin: 0;
+        padding: 20px;
+        font-family: Arial, sans-serif;
+        background-color: #f0f0f0;
+        }
+        .BLTOOL-sample-content {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgb(51, 51, 51);
+        }
+        .BLTOOL-h1 {
+        color: #333;
+        }
+        .BLTOOL-button {
+        padding: 6px 12px;
+        font-size: 14px;
+        border: none;
+        border-radius: 4px;
+        background-color:rgb(51, 122, 183);
+        color: white;
+        cursor: pointer;
+        margin: 2px 0;
+        transition: background-color 0.3s ease;
+        white-space: nowrap;
+        }
+        .BLTOOL-button:hover {
+        opacity: 0.9;
+        }
+        .BLTOOL-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        } 
+        .BLTOOL-button:disabled:hover {
+            opacity: 0.5;
+        }
         .BLTOOL-blacklite-tools {
             position: fixed !important;
             top: 0 !important;
@@ -71,87 +78,87 @@
         .BLTOOL-blacklite-tools.collapsed {
             transform: translateX(100%);
         }
-      .BLTOOL-blacklite-tools .BLTOOL-header {
-            cursor: default !important;
-         padding: 5px 10px;
-         display: flex;
-         justify-content: space-between;
-         align-items: center;
-         background-color: rgb(38, 38, 38);
-         border-radius: 5px;
-         margin-bottom: 10px;
-      }
-      .BLTOOL-blacklite-tools .BLTOOL-header h3 {
-         margin: 0;
-         font-size: 18px;
-      }
-      .BLTOOL-blacklite-tools .BLTOOL-header .BLTOOL-collapse-toggle {
-         cursor: pointer;
-         font-size: 14px;
-         padding: 5px;
-         transition: transform 0.3s ease;
-      }
-      .BLTOOL-blacklite-tools.collapsed .BLTOOL-content {
-         display: none;
-      }
-      .BLTOOL-blacklite-tools.collapsed .BLTOOL-header .BLTOOL-collapse-toggle {
-           transform: rotate(180deg);
-       }
-      .BLTOOL-tab-button {
-         flex: 1;
-         text-align: center;
-         padding: 5px;
-         cursor: pointer;
-         background-color:rgb(38, 38, 38);;
-         border: none;
-      }
-      .BLTOOL-tab-button.BLTOOL-active-tab {
-         background-color: #337ab7;
-      }
-      .BLTOOL-content-wrapper {
-         flex: 1;
-         display: flex;
-         flex-direction: column;
-         min-height: 0;
-      }
-      .BLTOOL-scroll-container {
-         overflow-y: auto !important;
-         width: 100% !important;
-         box-sizing: border-box !important;
-         flex-grow: 1 !important;
-         padding-bottom: 10px !important;
-         margin-bottom: 10px !important;
-      }
-      .BLTOOL-section {
-         margin-bottom: 10px;
-         border-bottom: 1px solid #444 !important; ;
-         border-radius: 5px;
-         overflow: hidden;
-      }
-      .BLTOOL-section-header {
-         padding: 8px 10px;
-         background-color: rgb(38, 38, 38) !important;
-         border-left: none !important;
-         cursor: pointer;
-         display: flex;
-         justify-content: space-between;
-         align-items: center;
-            user-select: none;
-      }
-        .BLTOOL-section-header span:last-child {
-            margin-left: 10px;
+        .BLTOOL-blacklite-tools .BLTOOL-header {
+                cursor: default !important;
+            padding: 5px 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: rgb(38, 38, 38);
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
-      .BLTOOL-section-content {
-         padding: 10px;
-         background-color: rgb(64, 64, 64);
-            transition: all 0.3s ease;
+        .BLTOOL-blacklite-tools .BLTOOL-header h3 {
+            margin: 0;
+            font-size: 18px;
+        }
+        .BLTOOL-blacklite-tools .BLTOOL-header .BLTOOL-collapse-toggle {
+            cursor: pointer;
+            font-size: 14px;
+            padding: 5px;
+            transition: transform 0.3s ease;
+        }
+        .BLTOOL-blacklite-tools.collapsed .BLTOOL-content {
+            display: none;
+        }
+        .BLTOOL-blacklite-tools.collapsed .BLTOOL-header .BLTOOL-collapse-toggle {
+            transform: rotate(180deg);
+        }
+        .BLTOOL-tab-button {
+            flex: 1;
+            text-align: center;
+            padding: 5px;
+            cursor: pointer;
+            background-color:rgb(38, 38, 38);;
+            border: none;
+        }
+        .BLTOOL-tab-button.BLTOOL-active-tab {
+            background-color: #337ab7;
+        }
+        .BLTOOL-content-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+        }
+        .BLTOOL-scroll-container {
+            overflow-y: auto !important;
+            width: 100% !important;
+            box-sizing: border-box !important;
+            flex-grow: 1 !important;
+            padding-bottom: 10px !important;
+            margin-bottom: 10px !important;
+        }
+        .BLTOOL-section {
+            margin-bottom: 10px;
+            border-bottom: 1px solid #444 !important; ;
+            border-radius: 5px;
             overflow: hidden;
-            will-change: height;
-      }
-      .BLTOOL-section.collapsed .BLTOOL-section-content {
-         display: none;
-         border-bottom: 1px solid #444 !important;
-      }
+        }
+        .BLTOOL-section-header {
+            padding: 8px 10px;
+            background-color: rgb(38, 38, 38) !important;
+            border-left: none !important;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+                user-select: none;
+        }
+            .BLTOOL-section-header span:last-child {
+                margin-left: 10px;
+            }
+        .BLTOOL-section-content {
+            padding: 10px;
+            background-color: rgb(64, 64, 64);
+                transition: all 0.3s ease;
+                overflow: hidden;
+                will-change: height;
+        }
+        .BLTOOL-section.collapsed .BLTOOL-section-content {
+            display: none;
+            border-bottom: 1px solid #444 !important;
+        }
         .BLTOOL-toggle-handle {
             position: absolute !important;
             left: -20px !important;
@@ -197,103 +204,48 @@
                 right: 0px !important;
                 border-left: 0px solid #333 !important;
             }
-         .BLTOOL-tab-button {
+        .BLTOOL-tab-button {
             flex: 1 1 33%;
             font-size: 12px;
             padding: 3px;
-         }
-         .BLTOOL-scroll-container {
+        }
+        .BLTOOL-scroll-container {
             padding-bottom: 15px !important;
-         }
+        }
       }
    `;
 
    const CONFIG = {
-        BLTOOL_VERSION: ['v3.4'],
-      MOBILE_BREAKPOINT: 768,
+        BLTOOL_VERSION: ['v3.5'],
+        MOBILE_BREAKPOINT: 768,
         PRESERVED_STYLES: [
-            /* Favorites */
-            'background-color', 'color', 'font-size', 'font-family', 'font-style', 
-            'font-weight', 'text-align', 'border-width', 'border-color',
-
-            /* Layout & Box Model */
-            'align-content', 'align-items', 'align-self', 'all', 'aspect-ratio', 'block-size', 'box-sizing', 'clear', 
-            'columns', 'column-count', 'column-fill', 'column-gap', 'column-rule', 'column-span', 'column-width',
-            'contain', 'contain-intrinsic-size', 'display', 'flex', 'flex-basis', 'flex-direction', 'flex-flow', 
-            'flex-grow', 'flex-shrink', 'flex-wrap', 'float', 'flow', 'gap', 'grid', 'grid-area', 'grid-auto-columns',
-            'grid-auto-flow', 'grid-auto-rows', 'grid-column', 'grid-column-end', 'grid-column-start', 'grid-row', 
-            'grid-row-end', 'grid-row-start', 'grid-template', 'grid-template-areas', 'grid-template-columns', 
-            'grid-template-rows', 'height', 'inline-size', 'isolation', 'justify-content', 'justify-items', 
-            'justify-self', 'line-height', 'margin', 'margin-block', 'margin-block-end', 'margin-block-start', 
-            'margin-bottom', 'margin-inline', 'margin-inline-end', 'margin-inline-start', 'margin-left', 'margin-right', 
-            'margin-top', 'max-block-size', 'max-height', 'max-inline-size', 'max-width', 'min-block-size', 'min-height', 
-            'min-inline-size', 'min-width', 'mix-blend-mode', 'object-fit', 'object-position', 'order', 'overflow', 
-            'overflow-wrap', 'overflow-x', 'overflow-y', 'overscroll-behavior', 'padding', 'padding-block', 
-            'padding-block-end', 'padding-block-start', 'padding-bottom', 'padding-inline', 'padding-inline-end', 
-            'padding-inline-start', 'padding-left', 'padding-right', 'padding-top', 'place-content', 'place-items', 
-            'place-self', 'position', 'resize', 'row-gap', 'scroll-behavior', 'scroll-margin', 'scroll-padding', 
-            'scroll-snap-align', 'scroll-snap-stop', 'scroll-snap-type', 'shape-image-threshold', 'shape-margin', 
-            'shape-outside', 'size', 'text-size-adjust', 'vertical-align', 'visibility', 'width', 'will-change', 
-            'wrap-after', 'wrap-before', 'wrap-flow', 'wrap-inside', 'wrap-through', 'z-index', 'zoom',
+            // Colors & Backgrounds
+            'background-color', 'background-image', 'background-position', 'background-repeat', 'background-size',
+            'color', 'opacity',
             
-            /* Typography & Text */
-            'direction', 'font', 'font-feature-settings', 'font-kerning', 'font-language-override', 
-            'font-optical-sizing', 'font-palette', 'font-size-adjust', 'font-smooth', 'font-stretch', 
-            'font-synthesis', 'font-variant', 'font-variant-alternates', 'font-variant-caps', 
-            'font-variant-east-asian', 'font-variant-ligatures', 'font-variant-numeric', 'font-variant-position', 
-            'hanging-punctuation', 'hyphenate-character', 'hyphenate-limit-chars', 'hyphenate-limit-last', 
-            'hyphenate-limit-lines', 'hyphenate-limit-zone', 'hyphens', 'letter-spacing', 'line-break', 'orphans', 
-            'quotes', 'ruby-align', 'ruby-merge', 'ruby-position', 'tab-size', 'text-align-last', 
-            'text-combine-upright', 'text-decoration', 'text-decoration-color', 'text-decoration-line', 
-            'text-decoration-skip', 'text-decoration-skip-ink', 'text-decoration-style', 'text-decoration-thickness', 
-            'text-emphasis', 'text-emphasis-color', 'text-emphasis-position', 'text-emphasis-style', 'text-indent', 
-            'text-justify', 'text-orientation', 'text-overflow', 'text-rendering', 'text-shadow', 'text-transform', 
-            'text-underline-offset', 'text-underline-position', 'transform-text', 'white-space', 'word-break', 
-            'word-spacing', 'word-wrap', 'writing-mode',
+            // Typography
+            'font-size', 'font-family', 'font-style', 'font-weight', 'font-stretch',
+            'line-height', 'letter-spacing', 'text-align', 'text-decoration', 'text-shadow', 
+            'text-transform', 'white-space', 'word-spacing',
             
-            /* Visual Effects */
-            'accent-color', 'backdrop-filter', 'background', 'background-attachment', 'background-blend-mode', 
-            'background-clip', 'background-image', 'background-origin', 'background-position', 
-            'background-position-x', 'background-position-y', 'background-repeat', 'background-size', 'border', 
-            'border-block', 'border-block-color', 'border-block-end', 'border-block-end-color', 'border-block-end-style', 
-            'border-block-end-width', 'border-block-start', 'border-block-start-color', 'border-block-start-style', 
-            'border-block-start-width', 'border-block-style', 'border-block-width', 'border-bottom', 'border-bottom-color', 
-            'border-bottom-left-radius', 'border-bottom-right-radius', 'border-bottom-style', 'border-bottom-width', 
-            'border-collapse', 'border-end-end-radius', 'border-end-start-radius', 'border-image', 
-            'border-image-outset', 'border-image-repeat', 'border-image-slice', 'border-image-source', 'border-image-width', 
-            'border-inline', 'border-inline-color', 'border-inline-end', 'border-inline-end-color', 'border-inline-end-style', 
-            'border-inline-end-width', 'border-inline-start', 'border-inline-start-color', 'border-inline-start-style', 
-            'border-inline-start-width', 'border-inline-style', 'border-inline-width', 'border-left', 'border-left-color', 
-            'border-left-style', 'border-left-width', 'border-radius', 'border-right', 'border-right-color', 
-            'border-right-style', 'border-right-width', 'border-spacing', 'border-start-end-radius', 
-            'border-start-start-radius', 'border-style', 'border-top', 'border-top-color', 'border-top-left-radius', 
-            'border-top-right-radius', 'border-top-style', 'border-top-width', 'bottom', 'box-decoration-break', 
-            'box-shadow', 'caption-side', 'caret-color', 'clip', 'clip-path', 'color-scheme', 'content', 
-            'counter-increment', 'counter-reset', 'counter-set', 'cursor', 'empty-cells', 'filter', 'forced-color-adjust', 
-            'image-orientation', 'image-rendering', 'image-resolution', 'inset', 'inset-block', 'inset-block-end', 
-            'inset-block-start', 'inset-inline', 'inset-inline-end', 'inset-inline-start', 'left', 'list-style', 
-            'list-style-image', 'list-style-position', 'list-style-type', 'mask', 'mask-border', 'mask-border-mode', 
-            'mask-border-outset', 'mask-border-repeat', 'mask-border-slice', 'mask-border-source', 'mask-border-width', 
-            'mask-clip', 'mask-composite', 'mask-image', 'mask-mode', 'mask-origin', 'mask-position', 'mask-repeat', 
-            'mask-size', 'mask-type', 'offset', 'offset-anchor', 'offset-distance', 'offset-path', 'offset-position', 
-            'offset-rotate', 'opacity', 'outline', 'outline-color', 'outline-offset', 'outline-style', 'outline-width', 
-            'overflow-anchor', 'overflow-clip-margin', 'paint-order', 'perspective', 'perspective-origin', 'pointer-events', 
-            'right', 'rotate', 'scale', 'scrollbar-color', 'scrollbar-gutter', 'scrollbar-width', 'stroke', 'stroke-dasharray', 
-            'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke-width', 
-            'top', 'transform', 'transform-box', 'transform-origin', 'transform-style', 'transition', 'transition-delay', 
-            'transition-duration', 'transition-property', 'transition-timing-function', 'translate', 'unicode-bidi', 
-            'user-select', 'vector-effect', 'view-transition-name', 
+            // Layout & Spacing
+            'display', 'position', 'top', 'right', 'bottom', 'left',
+            'width', 'height', 'min-width', 'min-height', 'max-width', 'max-height',
+            'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
+            'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
             
-            /* Animation & Interactivity */
-            'animation', 'animation-composition', 'animation-delay', 'animation-direction', 'animation-duration', 
-            'animation-fill-mode', 'animation-iteration-count', 'animation-name', 'animation-play-state', 
-            'animation-timeline', 'animation-timing-function', 'appearance', 'bookmark-label', 'bookmark-level', 
-            'bookmark-state', 'break-after', 'break-before', 'break-inside', 'clip-rule', 'color-interpolation', 
-            'color-interpolation-filters', 'color-rendering', 'dominant-baseline', 'fill', 'fill-opacity', 'fill-rule', 
-            'flood-color', 'flood-opacity', 'lighting-color', 'marker-end', 'marker-mid', 'marker-start', 'nav-down', 
-            'nav-left', 'nav-right', 'nav-up', 'order', 'page', 'pause', 'pause-after', 'pause-before', 'pitch', 
-            'pitch-range', 'play-during', 'richness', 'speak', 'speak-header', 'speak-numeral', 'speak-punctuation', 
-            'speech-rate', 'stress', 'text-anchor', 'voice-family', 'volume', 'writing-mode'
+            // Flexbox & Grid
+            'flex-direction', 'flex-wrap', 'justify-content', 'align-items', 'align-content',
+            'flex-grow', 'flex-shrink', 'flex-basis', 'gap',
+            'grid-template-columns', 'grid-template-rows', 'grid-gap',
+            
+            // Borders
+            'border', 'border-width', 'border-style', 'border-color', 'border-radius',
+            'border-top', 'border-right', 'border-bottom', 'border-left',
+            
+            // Visual Effects
+            'box-shadow', 'transform', 'transition', 'animation',
+            'overflow', 'visibility', 'z-index'
         ],
         UNSUITABLE_FOR_BACKGROUND: new Set([
             /* Void elements */
@@ -924,7 +876,7 @@
             UIManager.render();
         },
         
-        generateSelector(element, inspectorType) {
+       generateSelector(element, inspectorType) {
             // If in parent mode and element has a parent, focus on the parent
             if (this.parentMode && element.parentElement) {
                 element = element.parentElement;
@@ -943,37 +895,6 @@
             }
 
             // Apply replacements for this inspector type
-            return this.applySelectorReplacements(selector, inspectorType, element); 
-
-            // For parent mode, generate a more specific selector
-            if (this.parentMode && element.parentElement) {
-                const parent = element.parentElement;
-                let parentSelector;
-                
-                if (parent.id) {
-                    parentSelector = `#${escapeSelector(parent.id)}`;
-                } else if (parent.classList.length > 0) {
-                    const classes = Array.from(parent.classList);
-                    const validClass = classes.find(c => !c.startsWith('js-'));
-                    parentSelector = validClass ? `.${escapeSelector(validClass)}` : parent.tagName.toLowerCase();
-                } else {
-                    // Create a more specific selector by including parent hierarchy
-                    const path = [];
-                    let current = element;
-                    
-                    while (current.parentElement && current !== document.body) {
-                        const tag = current.tagName.toLowerCase();
-                        const index = Array.from(current.parentElement.children).indexOf(current) + 1;
-                        path.unshift(`${tag}:nth-child(${index})`);
-                        current = current.parentElement;
-                    }
-                    
-                    parentSelector = path.join(' > ');
-                }
-                
-                return this.applySelectorReplacements(parentSelector, inspectorType, element);
-            }
-
             return this.applySelectorReplacements(selector, inspectorType, element); 
         },
 
@@ -1049,6 +970,11 @@
         lastAppliedStyles: null,
         handleThemeChange: null,
         handleThemeClick: null,
+        pagination: {
+            pageSize: 15,
+            currentPage: 0
+        },
+        filteredSelectors: [],
         
         init() {
             console.log('Initializing Improved ThemeManager');
@@ -1235,27 +1161,33 @@
         },
         
         renderThemeTab() {
-      try {
-            const isAllCollapsed = Object.keys(this.originalStyles).every(selector => 
-               this.collapsedSelectors.has(selector)
-            );
-            
-            return `
-               <div class="BLTOOL-scroll-container">
-                  <div class="BLTOOL-section">
-                     <div class="BLTOOL-section-header" data-section="filter">
-                        <span>Search & Inspector</span>
-                        <span>▼</span>
-                     </div>
-                     <div class="BLTOOL-section-content">
-                        <div style="display: flex; margin-bottom: 5px; align-items: center;">
-                           <input type="text" id="theme-filter" placeholder="Filter selectors..." 
-                              style="flex:1; padding: 4px 6px; color: black; height: 28px;" 
-                              value="${this.searchTerm}">
-                           <button id="clear-filter" class="BLTOOL-button" 
-                                 style="margin-left: 5px; height: 28px;" 
-                                 ${!this.searchTerm ? 'disabled' : ''}>X</button>
-                        </div>
+            try {
+                // Pre-compute filtered selectors
+                this.computeFilteredSelectors();
+                
+                const totalPages = Math.ceil(this.filteredSelectors.length / this.pagination.pageSize);
+                const isAllCollapsed = this.filteredSelectors.every(selector => 
+                    this.collapsedSelectors.has(selector)
+                );
+                
+                return `
+                    <div class="BLTOOL-scroll-container">
+                        <!-- Your existing sections stay the same -->
+                        <div class="BLTOOL-section">
+                            <div class="BLTOOL-section-header" data-section="filter">
+                                <span>Search & Inspector</span>
+                                <span>▼</span>
+                            </div>
+                            <div class="BLTOOL-section-content">
+                                <!-- Keep existing filter controls -->
+                                <div style="display: flex; margin-bottom: 5px; align-items: center;">
+                                    <input type="text" id="theme-filter" placeholder="Filter selectors..." 
+                                        style="flex:1; padding: 4px 6px; color: black; height: 28px;" 
+                                        value="${this.searchTerm}">
+                                    <button id="clear-filter" class="BLTOOL-button" 
+                                            style="margin-left: 5px; height: 28px;" 
+                                            ${!this.searchTerm ? 'disabled' : ''}>X</button>
+                                </div>
                                 <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px; align-items: center;">
                                     <button class="BLTOOL-button" id="toggle-inspector" style="flex: 1 1 auto;">
                                         ${InspectorManager.activeInspector === 'theme' ? 'Stop Inspector' : 'Inspector'}
@@ -1268,42 +1200,172 @@
                                         </label>
                                     </div>
                                 </div>       
-                     </div>
-                  </div>
-                  
-                  <div class="BLTOOL-section">
-                     <div class="BLTOOL-section-header" data-section="controls">
-                        <span>Controls</span>
-                        <span>▼</span>
-                     </div>
-                     <div class="BLTOOL-section-content">
-                        <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
-                           <button id="toggle-collapse" class="BLTOOL-button" style="flex: 1 1 48%;">
-                              ${isAllCollapsed ? 'Open ALL' : 'Close ALL'}
-                           </button>
-                           <button id="filter-changes-button" class="BLTOOL-button" style="flex: 1 1 48%;">
-                              ${this.showOnlyChangedElements ? 'Show All' : 'Show Changed'}
-                           </button>
+                            </div>
                         </div>
-                     </div>
-                  </div>
-                  
-                  <div class="BLTOOL-section">
-                     <div class="BLTOOL-section-header" data-section="elements">
-                        <span>Elements</span>
-                        <span>▼</span>
-                     </div>
-                     <div class="BLTOOL-section-content">
-                        ${this.renderStyleGroups()}
-                     </div>
-                  </div>
-               </div>
+                        
+                        <!-- Keep existing controls section -->
+                        <div class="BLTOOL-section">
+                            <div class="BLTOOL-section-header" data-section="controls">
+                                <span>Controls</span>
+                                <span>▼</span>
+                            </div>
+                            <div class="BLTOOL-section-content">
+                                <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
+                                    <button id="toggle-collapse" class="BLTOOL-button" style="flex: 1 1 48%;">
+                                        ${isAllCollapsed ? 'Open ALL' : 'Close ALL'}
+                                    </button>
+                                    <button id="filter-changes-button" class="BLTOOL-button" style="flex: 1 1 48%;">
+                                        ${this.showOnlyChangedElements ? 'Show All' : 'Show Changed'}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Updated elements section with pagination -->
+                        <div class="BLTOOL-section">
+                            <div class="BLTOOL-section-header" data-section="elements">
+                                <span>Elements (${this.filteredSelectors.length} total)</span>
+                                <span>▼</span>
+                            </div>
+                            <div class="BLTOOL-section-content">
+                                ${this.renderPaginationControls(totalPages)}
+                                <div id="selectors-container">
+                                    ${this.renderPagedSelectors()}
+                                </div>
+                                ${totalPages > 1 ? this.renderPaginationControls(totalPages) : ''}
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (e) {
+                console.error('Error rendering theme tab:', e);
+                return '<div>Error rendering theme tab</div>';
+            }
+        },
+
+        computeFilteredSelectors() {
+            const allSelectors = Object.keys(this.currentStyles);
+            
+            this.filteredSelectors = allSelectors
+                .filter(selector => !this.isSelectorExcluded(selector))
+                .filter(selector => {
+                    if (this.searchTerm && !FilterManager.matchesFilter(this.searchTerm, selector)) {
+                        return false;
+                    }
+                    
+                    if (this.showOnlyChangedElements) {
+                        const originalStyles = this.originalStyles[selector] || {};
+                        const currentStyles = this.currentStyles[selector] || {};
+                        const hasChanges = Object.keys(currentStyles).some(
+                            prop => currentStyles[prop] && currentStyles[prop] !== originalStyles[prop]
+                        );
+                        return hasChanges;
+                    }
+                    
+                    return true;
+                });
+        },
+
+        renderPaginationControls(totalPages) {
+            if (totalPages <= 1) return '';
+            
+            return `
+                <div style="display: flex; justify-content: space-between; align-items: center; margin: 10px 0; padding: 5px; background-color: #2e2e2e;">
+                    <button id="prev-page" class="BLTOOL-button" ${this.pagination.currentPage === 0 ? 'disabled' : ''}>
+                        ← Previous
+                    </button>
+                    <span style="color: #ccc;">
+                        Page ${this.pagination.currentPage + 1} of ${totalPages}
+                    </span>
+                    <button id="next-page" class="BLTOOL-button" ${this.pagination.currentPage >= totalPages - 1 ? 'disabled' : ''}>
+                        Next →
+                    </button>
+                </div>
             `;
-         } catch (e) {
-            console.error('Error rendering theme tab:', e);
-            return '<div>Error rendering theme tab</div>';
-         }
-      },
+        },
+
+        renderPagedSelectors() {
+            const startIndex = this.pagination.currentPage * this.pagination.pageSize;
+            const endIndex = Math.min(startIndex + this.pagination.pageSize, this.filteredSelectors.length);
+            const pageSelectors = this.filteredSelectors.slice(startIndex, endIndex);
+            
+            if (pageSelectors.length === 0) {
+                return `<div style="padding: 10px; color: #aaa;">No matching elements found.</div>`;
+            }
+            
+            return pageSelectors.map(selector => this.renderSingleSelector(selector)).join('');
+        },
+
+        renderSingleSelector(selector) {
+            const isCollapsed = this.collapsedSelectors.has(selector);
+            const styles = this.currentStyles[selector] || {};
+            const originalStyles = this.originalStyles[selector] || {};
+            
+            const filteredProps = Object.keys(styles).filter(prop => {
+                return CONFIG.PRESERVED_STYLES.includes(prop);
+            });
+
+            return `
+                <div style="margin-top: 5px;" data-selector="${selector}">
+                    <div class="BLTOOL-selector-toggle" data-selector="${selector}"
+                        style="cursor: pointer; padding: 5px; background-color:rgb(51, 51, 51); color: white;">
+                        ${selector}
+                        <span style="float:right;">${isCollapsed ? '▶' : '▼'}</span>
+                    </div>
+                    ${isCollapsed ? '' : `
+                        <div style="background-color: #3e3e3e; margin: 5px 0; padding: 5px;" data-lazy-content="${selector}">
+                            ${this.renderSelectorProperties(selector, filteredProps, styles, originalStyles)}
+                        </div>
+                    `}
+                </div>
+            `;
+        },
+
+        renderSelectorProperties(selector, filteredProps, styles, originalStyles) {
+            return filteredProps.map(prop => {
+                const isColorProp = prop.includes('color');
+                const changed = styles[prop] !== originalStyles[prop];
+                
+                return `
+                    <div style="display: flex; align-items: center; margin: 5px 0;">
+                        <span style="flex-grow: 1; margin-right: 10px; color: #aaa;">${prop}</span>
+                        ${isColorProp ? `
+                            <input
+                                type="color"
+                                value="${styles[prop] || ''}"
+                                style="width: 30px; height: 30px; padding: 2px;"
+                                data-selector="${selector}"
+                                data-prop="${prop}"
+                                class="BLTOOL-style-color-input"
+                            >
+                        ` : ''}
+                        <input
+                            type="text"
+                            value="${styles[prop] || ''}"
+                            style="width: 100px; padding: 2px; color: black; ${isColorProp ? 'margin-left: 5px;' : ''}"
+                            data-selector="${selector}"
+                            data-prop="${prop}"
+                            class="BLTOOL-style-input"
+                        >
+                        ${changed ? `
+                            <button class="BLTOOL-reset-button" data-selector="${selector}" data-prop="${prop}"
+                                style="background: none; border: none; color: #ff6b6b; cursor: pointer; margin-left: 5px; font-weight: bold;">
+                                X
+                            </button>
+                        ` : ''}
+                        ${prop === 'background-color' ? `
+                            <button class="BLTOOL-transparent-button" 
+                                data-selector="${selector}"
+                                data-prop="${prop}"
+                                style="background: none; border: none; color: #6b6bff; cursor: pointer; margin-left: 5px; font-weight: bold;"
+                                title="Set to transparent">
+                                T
+                            </button>
+                        ` : ''}
+                    </div>
+                `;
+            }).join('');
+        },
     
         renderStyleGroups() {
             try {
@@ -1443,6 +1505,7 @@
             const container = document.getElementById(TOOL_ID);
             if (!container) return;
 
+            // Remove old listeners
             if (this.handleThemeChange) {
                 container.removeEventListener('change', this.handleThemeChange);
             }
@@ -1450,10 +1513,12 @@
                 container.removeEventListener('click', this.handleThemeClick);
             }
 
+            // Filter input with debouncing
             const themeFilter = container.querySelector('#theme-filter');
             if (themeFilter) {
                 const debouncedFilter = debounce(() => {
                     this.searchTerm = themeFilter.value || '';
+                    this.pagination.currentPage = 0; // Reset to first page
                     UIManager.render();
                 }, 750);
                 
@@ -1463,43 +1528,37 @@
                 });
             }
 
-            container.querySelector('#toggle-inspector')?.addEventListener('click', (e) => {
-                e.stopPropagation();
-                if (InspectorManager.activeInspector === 'theme') {
-                    InspectorManager.stopInspector();
-                } else {
-                    InspectorManager.startInspector(
-                        'theme', 
-                        (selector) => {
-                            this.searchTerm = selector;
-                            UIManager.render();
-                        },
-                        'theme-filter'
-                    );
-                }
-            });
-
-            container.querySelector('#theme-parent-mode-toggle')?.addEventListener('change', (e) => {
-                CONFIG.PARENT_MODE = e.target.checked;
-                InspectorManager.parentMode = CONFIG.PARENT_MODE;
-            });
-
-            container.addEventListener('click', (e) => {
-                if (e.target.classList.contains('BLTOOL-transparent-button')) {
+            // Event delegation for style inputs (much more efficient)
+            container.addEventListener('input', (e) => {
+                if (e.target.classList.contains('BLTOOL-style-input') || 
+                    e.target.classList.contains('BLTOOL-style-color-input')) {
+                    
                     const selector = e.target.dataset.selector;
                     const prop = e.target.dataset.prop;
+                    const value = e.target.value;
                     
-                    // Find the color input and text input
-                    const colorInput = container.querySelector(`.BLTOOL-style-color-input[data-selector="${selector}"][data-prop="${prop}"]`);
-                    const textInput = container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
+                    // Sync color and text inputs
+                    if (prop.includes('color')) {
+                        const isColorInput = e.target.classList.contains('BLTOOL-style-color-input');
+                        const otherInput = isColorInput 
+                            ? container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`)
+                            : container.querySelector(`.BLTOOL-style-color-input[data-selector="${selector}"][data-prop="${prop}"]`);
+                        
+                        if (otherInput) {
+                            otherInput.value = value;
+                        }
+                    }
                     
-                    if (colorInput) colorInput.value = '#000000';
-                    if (textInput) textInput.value = 'rgba(0,0,0,0)';
-                    
-                    this.updateStyle(selector, prop, 'rgba(0,0,0,0)');
+                    this.debouncedUpdateStyle(selector, prop, value);
                 }
             });
 
+            // Debounced style update
+            this.debouncedUpdateStyle = debounce((selector, prop, value) => {
+                this.updateStyle(selector, prop, value);
+            }, 100);
+
+            // Click handler with pagination support
             this.handleThemeClick = (e) => {
                 if (SectionHandlers.handleSectionHeader(e)) return;
                 if (SectionHandlers.handleSelectorToggle(e)) return;
@@ -1509,83 +1568,104 @@
                     if (InspectorManager.activeInspector === 'theme') {
                         InspectorManager.stopInspector();
                     } else {
-                        InspectorManager.startInspector('theme-filter', (selector) => {
-                            this.searchTerm = selector;
-                            UIManager.render();
-                        });
+                        InspectorManager.startInspector(
+                            'theme', 
+                            (selector) => {
+                                this.searchTerm = selector;
+                                this.pagination.currentPage = 0; // Reset to first page
+                                UIManager.render();
+                            },
+                            'theme-filter'
+                        );
                     }
                     return;
                 }
+
+                container.querySelector('#theme-parent-mode-toggle')?.addEventListener('change', (e) => {
+                    CONFIG.PARENT_MODE = e.target.checked;
+                    InspectorManager.parentMode = CONFIG.PARENT_MODE;
+                });
+
+                // Pagination controls
+                if (e.target.id === 'prev-page') {
+                    this.pagination.currentPage = Math.max(0, this.pagination.currentPage - 1);
+                    UIManager.render();
+                    return;
+                }
                 
+                if (e.target.id === 'next-page') {
+                    const totalPages = Math.ceil(this.filteredSelectors.length / this.pagination.pageSize);
+                    this.pagination.currentPage = Math.min(totalPages - 1, this.pagination.currentPage + 1);
+                    UIManager.render();
+                    return;
+                }
+
                 if (e.target.id === 'toggle-collapse') {
-                    const allSelectors = Object.keys(this.originalStyles);
-                    const isAllCollapsed = allSelectors.every(selector => this.collapsedSelectors.has(selector));
-                    this.collapsedSelectors = isAllCollapsed ? new Set() : new Set(allSelectors);
+                    const isAllCollapsed = this.filteredSelectors.every(selector => 
+                        this.collapsedSelectors.has(selector)
+                    );
+                    
+                    if (isAllCollapsed) {
+                        this.filteredSelectors.forEach(selector => this.collapsedSelectors.delete(selector));
+                    } else {
+                        this.filteredSelectors.forEach(selector => this.collapsedSelectors.add(selector));
+                    }
                     UIManager.render();
                     return;
                 }
 
                 if (e.target.id === 'filter-changes-button') {
                     this.showOnlyChangedElements = !this.showOnlyChangedElements;
+                    this.pagination.currentPage = 0; // Reset to first page
                     UIManager.render();
                     return;
                 }
                 
                 if (e.target.id === 'clear-filter') {
                     this.searchTerm = '';
+                    this.pagination.currentPage = 0; // Reset to first page
                     UIManager.render();
                     return;
                 }
+
+                // Reset button handling
+                if (e.target.classList.contains('BLTOOL-reset-button')) {
+                    const selector = e.target.dataset.selector;
+                    const prop = e.target.dataset.prop;
+                    
+                    const originalValue = this.originalStyles[selector]?.[prop];
+                    if (originalValue !== undefined) {
+                        if (prop.includes('color')) {
+                            const colorInput = container.querySelector(`.BLTOOL-style-color-input[data-selector="${selector}"][data-prop="${prop}"]`);
+                            const textInput = container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
+                            
+                            if (colorInput) colorInput.value = originalValue;
+                            if (textInput) textInput.value = originalValue;
+                        } else {
+                            const input = container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
+                            if (input) input.value = originalValue;
+                        }
+                        
+                        this.updateStyle(selector, prop, originalValue);
+                    }
+                }
+
+                // Transparent button handling
+                if (e.target.classList.contains('BLTOOL-transparent-button')) {
+                    const selector = e.target.dataset.selector;
+                    const prop = e.target.dataset.prop;
+                    
+                    const colorInput = container.querySelector(`.BLTOOL-style-color-input[data-selector="${selector}"][data-prop="${prop}"]`);
+                    const textInput = container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
+                    
+                    if (colorInput) colorInput.value = '#000000';
+                    if (textInput) textInput.value = 'rgba(0,0,0,0)';
+                    
+                    this.updateStyle(selector, prop, 'rgba(0,0,0,0)');
+                }
             };
 
-         this.handleThemeChange = (e) => {
-            if (e.target.classList.contains('BLTOOL-style-input') || 
-               e.target.classList.contains('BLTOOL-style-color-input')) {
-               
-               const selector = e.target.dataset.selector;
-               const prop = e.target.dataset.prop;
-               const value = e.target.value;
-               
-               if (prop.includes('color')) {
-                  const isColorInput = e.target.classList.contains('BLTOOL-style-color-input');
-                  const otherInput = isColorInput 
-                     ? container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`)
-                     : container.querySelector(`.BLTOOL-style-color-input[data-selector="${selector}"][data-prop="${prop}"]`);
-                  
-                  if (otherInput) {
-                     otherInput.value = value;
-                  }
-               }
-               
-               this.updateStyle(selector, prop, value);
-            }
-         };
-
-         container.addEventListener('click', (e) => {
-            if (e.target.classList.contains('BLTOOL-reset-button')) {
-               const selector = e.target.dataset.selector;
-               const prop = e.target.dataset.prop;
-               
-               const originalValue = this.originalStyles[selector]?.[prop];
-               if (originalValue !== undefined) {
-                  if (prop.includes('color')) {
-                     const colorInput = container.querySelector(`.BLTOOL-style-color-input[data-selector="${selector}"][data-prop="${prop}"]`);
-                     const textInput = container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
-                     
-                     if (colorInput) colorInput.value = originalValue;
-                     if (textInput) textInput.value = originalValue;
-                  } else {
-                     const input = container.querySelector(`.BLTOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
-                     if (input) input.value = originalValue;
-                  }
-                  
-                  this.updateStyle(selector, prop, originalValue);
-               }
-            }
-         });
-
             container.addEventListener('click', this.handleThemeClick);
-            container.addEventListener('change', this.handleThemeChange);
         },
         
       updateStyle(selector, prop, value) {
@@ -2356,127 +2436,129 @@
 
     saveToLocalStorage() {
       let saveObj = {
-         themes: this.themes,
-         currentTheme: this.currentTheme
-      }
-      localStorage.setItem("BLTOOL_themestorage", JSON.stringify(saveObj))
-   },
+			themes: this.themes,
+			currentTheme: this.currentTheme
+		}
+		indexeddb_save("BLTOOL_themestorage", JSON.stringify(saveObj))
+	},
 
    loadFromLocalStorage() {
-      let saveJson = localStorage.getItem("BLTOOL_themestorage")
-      if (saveJson !== null)
-      {
-         let saveObj = JSON.parse(saveJson)
-         this.themes = saveObj.themes,
-         this.currentTheme = saveObj.currentTheme
-      }
-   },
+		indexeddb_load("BLTOOL_themestorage", null).then(saveJson => {
+			if (saveJson !== null)
+			{
+				let saveObj = JSON.parse(saveJson)
+				this.themes = saveObj.themes
+				this.currentTheme = saveObj.currentTheme
+				this.applyTheme(this.currentTheme)
+			}
+		})
+	},
     
     renderPresetsTab() {
-   try {
-         let optionsHtml = '';
-         optionsHtml += `<option value="Default Theme" ${this.currentTheme === 'Default Theme' ? 'selected' : ''}>Default Theme</option>`;
+    try {
+            let optionsHtml = '';
+            optionsHtml += `<option value="Default Theme" ${this.currentTheme === 'Default Theme' ? 'selected' : ''}>Default Theme</option>`;
 
-         Object.keys(this.themes)
-            .filter(name => name !== 'Default Theme')
-            .forEach(name => {
-               optionsHtml += `<option value="${name}" ${this.currentTheme === name ? 'selected' : ''}>${name}</option>`;
-            });
+            Object.keys(this.themes)
+                .filter(name => name !== 'Default Theme')
+                .forEach(name => {
+                optionsHtml += `<option value="${name}" ${this.currentTheme === name ? 'selected' : ''}>${name}</option>`;
+                });
 
-         if (this.unsavedChanges) {
-            optionsHtml += `<option value="unsaved" selected>Configuration in use (can be unsaved)</option>`;
-         }
+            if (this.unsavedChanges) {
+                optionsHtml += `<option value="unsaved" selected>Configuration in use (can be unsaved)</option>`;
+            }
 
-         const currentTheme = this.themes[this.currentTheme] || this.themes['Default Theme'];
+            const currentTheme = this.themes[this.currentTheme] || this.themes['Default Theme'];
 
-         return `
-            <div class="BLTOOL-scroll-container">
-               <div class="BLTOOL-section">
-                  <div class="BLTOOL-section-header" data-section="theme-management">
-                     <span>Theme Management</span>
-                     <span>▼</span>
-                  </div>
-                  <div class="BLTOOL-section-content">
-                     <div style="margin-bottom: 10px;">
-                        <h4 style="margin-top: 0; margin-bottom: 5px;">Current Theme</h4>
-                        <select id="preset-select" style="width: 100%; padding: 5px; color: black; margin-bottom: 5px;">
-                           ${optionsHtml}
-                        </select>
-                        <div style="display: flex; flex-wrap: wrap; gap: 5px;">
-                           <button id="apply-preset" class="BLTOOL-button" style="flex: 1 1 48%;">Apply Theme</button>
-                           <button id="save-preset" class="BLTOOL-button" style="flex: 1 1 48%;">Save Theme</button>
-                           <button id="delete-preset" class="BLTOOL-button" style="width: 100%; margin-top: 5px;">Delete Selected Theme</button>
+            return `
+                <div class="BLTOOL-scroll-container">
+                <div class="BLTOOL-section">
+                    <div class="BLTOOL-section-header" data-section="theme-management">
+                        <span>Theme Management</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="BLTOOL-section-content">
+                        <div style="margin-bottom: 10px;">
+                            <h4 style="margin-top: 0; margin-bottom: 5px;">Current Theme</h4>
+                            <select id="preset-select" style="width: 100%; padding: 5px; color: black; margin-bottom: 5px;">
+                            ${optionsHtml}
+                            </select>
+                            <div style="display: flex; flex-wrap: wrap; gap: 5px;">
+                            <button id="apply-preset" class="BLTOOL-button" style="flex: 1 1 48%;">Apply Theme</button>
+                            <button id="save-preset" class="BLTOOL-button" style="flex: 1 1 48%;">Save Theme</button>
+                            <button id="delete-preset" class="BLTOOL-button" style="width: 100%; margin-top: 5px;">Delete Selected Theme</button>
+                            </div>
                         </div>
-                     </div>
-                  </div>
-               </div>
-               
-               <div class="BLTOOL-section">
-                  <div class="BLTOOL-section-header" data-section="theme-info">
-                     <span>Theme Information</span>
-                     <span>▼</span>
-                  </div>
-                  <div class="BLTOOL-section-content">
-                     <div style="margin-bottom: 10px;">
-                        <input type="text" id="preset-name" placeholder="Theme Name (e.g., My Dark Mode)" 
-                           style="width: 100%; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;" 
-                           value="${currentTheme.metadata.name || ''}">
-                        <input type="text" id="preset-creator" placeholder="Author (e.g., Your Name)" 
-                           style="width: 100%; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;" 
-                           value="${currentTheme.metadata.creator || ''}">
-                        <textarea id="preset-description" placeholder="Theme Description (optional)" 
-                           style="width: 100%; height: 60px; resize: vertical; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;">${currentTheme.metadata.description || ''}</textarea>
-                        <div class="BLTOOL-checkbox-container">
-                           <h4 style="margin-top: 10px; margin-bottom: 5px;">Theme is compatible with:</h4>
-                           <label style="display: inline-block; margin-right: 10px;">
-                              <input type="checkbox" id="theme-classic" data-theme-type="classic" ${currentTheme.metadata.classic ? 'checked' : ''}> Classic
-                           </label>
-                           <label style="display: inline-block; margin-right: 10px;">
-                              <input type="checkbox" id="theme-aesthetic" data-theme-type="aesthetic" ${currentTheme.metadata.aesthetic ? 'checked' : ''}> Aesthetic
-                           </label>
-                           <label style="display: inline-block;">
-                              <input type="checkbox" id="theme-corpo" data-theme-type="corpo" ${currentTheme.metadata.corpo ? 'checked' : ''}> Corpo
-                           </label>
+                    </div>
+                </div>
+                
+                <div class="BLTOOL-section">
+                    <div class="BLTOOL-section-header" data-section="theme-info">
+                        <span>Theme Information</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="BLTOOL-section-content">
+                        <div style="margin-bottom: 10px;">
+                            <input type="text" id="preset-name" placeholder="Theme Name (e.g., My Dark Mode)" 
+                            style="width: 100%; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;" 
+                            value="${currentTheme.metadata.name || ''}">
+                            <input type="text" id="preset-creator" placeholder="Author (e.g., Your Name)" 
+                            style="width: 100%; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;" 
+                            value="${currentTheme.metadata.creator || ''}">
+                            <textarea id="preset-description" placeholder="Theme Description (optional)" 
+                            style="width: 100%; height: 60px; resize: vertical; margin-bottom: 5px; color: black; padding: 4px; box-sizing: border-box;">${currentTheme.metadata.description || ''}</textarea>
+                            <div class="BLTOOL-checkbox-container">
+                            <h4 style="margin-top: 10px; margin-bottom: 5px;">Theme is compatible with:</h4>
+                            <label style="display: inline-block; margin-right: 10px;">
+                                <input type="checkbox" id="theme-classic" data-theme-type="classic" ${currentTheme.metadata.classic ? 'checked' : ''}> Classic
+                            </label>
+                            <label style="display: inline-block; margin-right: 10px;">
+                                <input type="checkbox" id="theme-aesthetic" data-theme-type="aesthetic" ${currentTheme.metadata.aesthetic ? 'checked' : ''}> Aesthetic
+                            </label>
+                            <label style="display: inline-block;">
+                                <input type="checkbox" id="theme-corpo" data-theme-type="corpo" ${currentTheme.metadata.corpo ? 'checked' : ''}> Corpo
+                            </label>
+                            </div>
                         </div>
-                     </div>
-                  </div>
-               </div>
-               
-               <div class="BLTOOL-section">
-                  <div class="BLTOOL-section-header" data-section="theme-actions">
-                     <span>Theme Actions</span>
-                     <span>▼</span>
-                  </div>
-                  <div class="BLTOOL-section-content">
-                     <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
-                        <button id="import-preset" class="BLTOOL-button" style="flex: 1 1 48%;">Import CSS</button>
-                        <button id="export-preset" class="BLTOOL-button" style="flex: 1 1 48%;">Export All</button>
-                        <button id="reset-to-default" class="BLTOOL-button" style="width: 100%;">Reset Everything</button>
-                     </div>
-                  </div>
-               </div>
-               
-               <div class="BLTOOL-section">
-                  <div class="BLTOOL-section-header" data-section="export-actions">
-                     <span>Export Actions</span>
-                     <span>▼</span>
-                  </div>
-                  <div class="BLTOOL-section-content">
-                     <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
-                        <button id="export-default" class="BLTOOL-button" style="flex: 1 1 48%;">Export Default</button>
-                        <button id="export-css-button" class="BLTOOL-button" style="flex: 1 1 48%;">Export Current</button>
-                        <button id="export-images" class="BLTOOL-button" style="width: 100%;">Export Images</button>
-                        <button id="show-css-button" class="BLTOOL-button" style="width: 100%;">Show CSS</button>
-                     </div>
-                  </div>
-               </div>
-            </div>
-         `;
-      } catch (e) {
-         console.error('Error rendering presets tab:', e);
-         return '<div style="color:red;">Error rendering presets tab. Check console for details.</div>';
-      }
-   },
+                    </div>
+                </div>
+                
+                <div class="BLTOOL-section">
+                    <div class="BLTOOL-section-header" data-section="theme-actions">
+                        <span>Theme Actions</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="BLTOOL-section-content">
+                        <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
+                            <button id="import-preset" class="BLTOOL-button" style="flex: 1 1 48%;">Import CSS</button>
+                            <button id="export-preset" class="BLTOOL-button" style="flex: 1 1 48%;">Export All</button>
+                            <button id="reset-to-default" class="BLTOOL-button" style="width: 100%;">Reset Everything</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="BLTOOL-section">
+                    <div class="BLTOOL-section-header" data-section="export-actions">
+                        <span>Export Actions</span>
+                        <span>▼</span>
+                    </div>
+                    <div class="BLTOOL-section-content">
+                        <div style="display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 5px;">
+                            <button id="export-default" class="BLTOOL-button" style="flex: 1 1 48%;">Export Default</button>
+                            <button id="export-css-button" class="BLTOOL-button" style="flex: 1 1 48%;">Export Current</button>
+                            <button id="export-images" class="BLTOOL-button" style="width: 100%;">Export Images</button>
+                            <button id="show-css-button" class="BLTOOL-button" style="width: 100%;">Show CSS</button>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            `;
+        } catch (e) {
+            console.error('Error rendering presets tab:', e);
+            return '<div style="color:red;">Error rendering presets tab. Check console for details.</div>';
+        }
+    },
     
     attachEventListeners() {
         const container = document.getElementById(TOOL_ID);
@@ -2608,6 +2690,10 @@
                 ThemeManager.currentStyles = JSON.parse(JSON.stringify(ThemeManager.initialOriginalStyles));
                 ThemeManager.applyAllStylesToDOM();
             } else {
+                //apply neutral config before doing changes
+                ThemeManager.currentStyles = JSON.parse(JSON.stringify(ThemeManager.initialOriginalStyles));
+                ThemeManager.applyAllStylesToDOM();
+                
                 // Apply theme CSS
                 UIManager.dynamicStyleElement.textContent = theme.css;
                 
@@ -2889,7 +2975,7 @@
                 const blob = new Blob([cssText], { type: 'text/css' });
                 const link = document.createElement('a');
                 link.href = URL.createObjectURL(blob);
-                link.download = 'blacklite-custom-theme.css';
+                link.download = `BlackLite-Theme-${document.getElementById('preset-name')?.value}.css`;
                 link.click();
                 URL.revokeObjectURL(link.href);
             } catch (error) {
@@ -3041,6 +3127,16 @@
 
     // IMPORTANT: only this type of instanciation works for user mod
     window.initBlackliteTools();
+
+    window.addEventListener('load', () => {
+        let intervalId = setInterval(() => {
+            if (!!window?.blackliteToolsInitialized)
+            {
+                clearInterval(intervalId)
+                setTimeout(() => document.getElementsByClassName("BLTOOL-toggle-handle")[0].click(), 750)
+            }
+        }, 100)
+    });
 
     window.addEventListener('beforeunload', () => {
         window.cleanupBlackliteTools();
