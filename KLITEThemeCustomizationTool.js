@@ -216,7 +216,7 @@
    `;
 
    const CONFIG = {
-        KLITETOOL_VERSION: ['v1.0'],
+        KLITETOOL_VERSION: ['v1.1'],
         MOBILE_BREAKPOINT: 768,
         PRESERVED_STYLES: [
             // Colors & Backgrounds
@@ -1522,7 +1522,7 @@
                     if (!this.debouncedUpdateStyle) {
                         this.debouncedUpdateStyle = debounce((selector, prop, value) => {
                             this.updateStyle(selector, prop, value);
-                        }, 100);
+                        }, 1500);
                     }
                     this.debouncedUpdateStyle(selector, prop, value);
                 }
@@ -1533,7 +1533,7 @@
             // Debounced style update
             this.debouncedUpdateStyle = debounce((selector, prop, value) => {
                 this.updateStyle(selector, prop, value);
-            }, 100);
+            }, 1500);
 
             // Click handler with pagination support
             this.handleThemeClick = (e) => {
@@ -1607,38 +1607,51 @@
 
                 // Reset button handling
                 if (e.target.classList.contains('KLITETOOL-reset-button')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
                     const selector = e.target.dataset.selector;
                     const prop = e.target.dataset.prop;
                     
                     const originalValue = this.originalStyles[selector]?.[prop];
                     if (originalValue !== undefined) {
                         if (prop.includes('color')) {
-                            const colorInput = container.querySelector(`.KLITETOOL-style-color-input[data-selector="${selector}"][data-prop="${prop}"]`);
-                            const textInput = container.querySelector(`.KLITETOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
+                            const colorInput = container.querySelector(`.KLITETOOL-style-color-input[data-selector="${CSS.escape(selector)}"][data-prop="${prop}"]`);
+                            const textInput = container.querySelector(`.KLITETOOL-style-input[data-selector="${CSS.escape(selector)}"][data-prop="${prop}"]`);
                             
                             if (colorInput) colorInput.value = originalValue;
                             if (textInput) textInput.value = originalValue;
                         } else {
-                            const input = container.querySelector(`.KLITETOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
+                            const input = container.querySelector(`.KLITETOOL-style-input[data-selector="${CSS.escape(selector)}"][data-prop="${prop}"]`);
                             if (input) input.value = originalValue;
                         }
                         
                         this.updateStyle(selector, prop, originalValue);
                     }
+                    return;
                 }
 
                 // Transparent button handling
                 if (e.target.classList.contains('KLITETOOL-transparent-button')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
                     const selector = e.target.dataset.selector;
                     const prop = e.target.dataset.prop;
                     
-                    const colorInput = container.querySelector(`.KLITETOOL-style-color-input[data-selector="${selector}"][data-prop="${prop}"]`);
-                    const textInput = container.querySelector(`.KLITETOOL-style-input[data-selector="${selector}"][data-prop="${prop}"]`);
+                    const colorInput = container.querySelector(`.KLITETOOL-style-color-input[data-selector="${CSS.escape(selector)}"][data-prop="${prop}"]`);
+                    const textInput = container.querySelector(`.KLITETOOL-style-input[data-selector="${CSS.escape(selector)}"][data-prop="${prop}"]`);
                     
-                    if (colorInput) colorInput.value = '#000000';
-                    if (textInput) textInput.value = 'rgba(0,0,0,0)';
+                    // Set transparent value
+                    const transparentValue = 'rgba(0,0,0,0)';
                     
-                    this.updateStyle(selector, prop, 'rgba(0,0,0,0)');
+                    if (colorInput) colorInput.value = '#ffffff'; // Color picker can't show transparent, so use white
+                    if (textInput) textInput.value = transparentValue;
+                    
+                    // Apply the change
+                    this.updateStyle(selector, prop, transparentValue);
+                    
+                    return;
                 }
             };
 
