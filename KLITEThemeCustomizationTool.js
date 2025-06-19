@@ -216,36 +216,87 @@
    `;
 
    const CONFIG = {
-        KLITETOOL_VERSION: ['v1.1'],
+        KLITETOOL_VERSION: ['v1.3'],
         MOBILE_BREAKPOINT: 768,
         PRESERVED_STYLES: [
-            // Colors & Backgrounds
-            'background-color', 'background-image', 'background-position', 'background-repeat', 'background-size',
-            'color', 'opacity',
+            /* Layout & Box Model */
+            'align-content', 'align-items', 'align-self', 'all', 'aspect-ratio', 'block-size', 'box-sizing', 'clear', 
+            'columns', 'column-count', 'column-fill', 'column-gap', 'column-rule', 'column-span', 'column-width',
+            'contain', 'contain-intrinsic-size', 'display', 'flex', 'flex-basis', 'flex-direction', 'flex-flow', 
+            'flex-grow', 'flex-shrink', 'flex-wrap', 'float', 'flow', 'gap', 'grid', 'grid-area', 'grid-auto-columns',
+            'grid-auto-flow', 'grid-auto-rows', 'grid-column', 'grid-column-end', 'grid-column-start', 'grid-row', 
+            'grid-row-end', 'grid-row-start', 'grid-template', 'grid-template-areas', 'grid-template-columns', 
+            'grid-template-rows', 'height', 'inline-size', 'isolation', 'justify-content', 'justify-items', 
+            'justify-self', 'line-height', 'margin', 'margin-block', 'margin-block-end', 'margin-block-start', 
+            'margin-bottom', 'margin-inline', 'margin-inline-end', 'margin-inline-start', 'margin-left', 'margin-right', 
+            'margin-top', 'max-block-size', 'max-height', 'max-inline-size', 'max-width', 'min-block-size', 'min-height', 
+            'min-inline-size', 'min-width', 'mix-blend-mode', 'object-fit', 'object-position', 'order', 'overflow', 
+            'overflow-wrap', 'overflow-x', 'overflow-y', 'overscroll-behavior', 'padding', 'padding-block', 
+            'padding-block-end', 'padding-block-start', 'padding-bottom', 'padding-inline', 'padding-inline-end', 
+            'padding-inline-start', 'padding-left', 'padding-right', 'padding-top', 'place-content', 'place-items', 
+            'place-self', 'position', 'resize', 'row-gap', 'scroll-behavior', 'scroll-margin', 'scroll-padding', 
+            'scroll-snap-align', 'scroll-snap-stop', 'scroll-snap-type', 'shape-image-threshold', 'shape-margin', 
+            'shape-outside', 'size', 'text-size-adjust', 'vertical-align', 'visibility', 'width', 'will-change', 
+            'wrap-after', 'wrap-before', 'wrap-flow', 'wrap-inside', 'wrap-through', 'z-index', 'zoom',
             
-            // Typography
-            'font-size', 'font-family', 'font-style', 'font-weight', 'font-stretch',
-            'line-height', 'letter-spacing', 'text-align', 'text-decoration', 'text-shadow', 
-            'text-transform', 'white-space', 'word-spacing',
+            /* Typography & Text */
+            'direction', 'font', 'font-family', 'font-feature-settings', 'font-kerning', 'font-language-override', 
+            'font-optical-sizing', 'font-palette', 'font-size', 'font-size-adjust', 'font-smooth', 'font-stretch', 
+            'font-style', 'font-synthesis', 'font-variant', 'font-variant-alternates', 'font-variant-caps', 
+            'font-variant-east-asian', 'font-variant-ligatures', 'font-variant-numeric', 'font-variant-position', 
+            'font-weight', 'hanging-punctuation', 'hyphenate-character', 'hyphenate-limit-chars', 'hyphenate-limit-last', 
+            'hyphenate-limit-lines', 'hyphenate-limit-zone', 'hyphens', 'letter-spacing', 'line-break', 'orphans', 
+            'quotes', 'ruby-align', 'ruby-merge', 'ruby-position', 'tab-size', 'text-align', 'text-align-last', 
+            'text-combine-upright', 'text-decoration', 'text-decoration-color', 'text-decoration-line', 
+            'text-decoration-skip', 'text-decoration-skip-ink', 'text-decoration-style', 'text-decoration-thickness', 
+            'text-emphasis', 'text-emphasis-color', 'text-emphasis-position', 'text-emphasis-style', 'text-indent', 
+            'text-justify', 'text-orientation', 'text-overflow', 'text-rendering', 'text-shadow', 'text-transform', 
+            'text-underline-offset', 'text-underline-position', 'transform-text', 'white-space', 'word-break', 
+            'word-spacing', 'word-wrap', 'writing-mode',
             
-            // Layout & Spacing
-            'display', 'position', 'top', 'right', 'bottom', 'left',
-            'width', 'height', 'min-width', 'min-height', 'max-width', 'max-height',
-            'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left',
-            'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left',
+            /* Visual Effects */
+            'accent-color', 'backdrop-filter', 'background', 'background-attachment', 'background-blend-mode', 
+            'background-clip', 'background-color', 'background-image', 'background-origin', 'background-position', 
+            'background-position-x', 'background-position-y', 'background-repeat', 'background-size', 'border', 
+            'border-block', 'border-block-color', 'border-block-end', 'border-block-end-color', 'border-block-end-style', 
+            'border-block-end-width', 'border-block-start', 'border-block-start-color', 'border-block-start-style', 
+            'border-block-start-width', 'border-block-style', 'border-block-width', 'border-bottom', 'border-bottom-color', 
+            'border-bottom-left-radius', 'border-bottom-right-radius', 'border-bottom-style', 'border-bottom-width', 
+            'border-collapse', 'border-color', 'border-end-end-radius', 'border-end-start-radius', 'border-image', 
+            'border-image-outset', 'border-image-repeat', 'border-image-slice', 'border-image-source', 'border-image-width', 
+            'border-inline', 'border-inline-color', 'border-inline-end', 'border-inline-end-color', 'border-inline-end-style', 
+            'border-inline-end-width', 'border-inline-start', 'border-inline-start-color', 'border-inline-start-style', 
+            'border-inline-start-width', 'border-inline-style', 'border-inline-width', 'border-left', 'border-left-color', 
+            'border-left-style', 'border-left-width', 'border-radius', 'border-right', 'border-right-color', 
+            'border-right-style', 'border-right-width', 'border-spacing', 'border-start-end-radius', 
+            'border-start-start-radius', 'border-style', 'border-top', 'border-top-color', 'border-top-left-radius', 
+            'border-top-right-radius', 'border-top-style', 'border-top-width', 'border-width', 'bottom', 'box-decoration-break', 
+            'box-shadow', 'caption-side', 'caret-color', 'clip', 'clip-path', 'color', 'color-scheme', 'content', 
+            'counter-increment', 'counter-reset', 'counter-set', 'cursor', 'empty-cells', 'filter', 'forced-color-adjust', 
+            'image-orientation', 'image-rendering', 'image-resolution', 'inset', 'inset-block', 'inset-block-end', 
+            'inset-block-start', 'inset-inline', 'inset-inline-end', 'inset-inline-start', 'left', 'list-style', 
+            'list-style-image', 'list-style-position', 'list-style-type', 'mask', 'mask-border', 'mask-border-mode', 
+            'mask-border-outset', 'mask-border-repeat', 'mask-border-slice', 'mask-border-source', 'mask-border-width', 
+            'mask-clip', 'mask-composite', 'mask-image', 'mask-mode', 'mask-origin', 'mask-position', 'mask-repeat', 
+            'mask-size', 'mask-type', 'offset', 'offset-anchor', 'offset-distance', 'offset-path', 'offset-position', 
+            'offset-rotate', 'opacity', 'outline', 'outline-color', 'outline-offset', 'outline-style', 'outline-width', 
+            'overflow-anchor', 'overflow-clip-margin', 'paint-order', 'perspective', 'perspective-origin', 'pointer-events', 
+            'right', 'rotate', 'scale', 'scrollbar-color', 'scrollbar-gutter', 'scrollbar-width', 'stroke', 'stroke-dasharray', 
+            'stroke-dashoffset', 'stroke-linecap', 'stroke-linejoin', 'stroke-miterlimit', 'stroke-opacity', 'stroke-width', 
+            'top', 'transform', 'transform-box', 'transform-origin', 'transform-style', 'transition', 'transition-delay', 
+            'transition-duration', 'transition-property', 'transition-timing-function', 'translate', 'unicode-bidi', 
+            'user-select', 'vector-effect', 'view-transition-name', 
             
-            // Flexbox & Grid
-            'flex-direction', 'flex-wrap', 'justify-content', 'align-items', 'align-content',
-            'flex-grow', 'flex-shrink', 'flex-basis', 'gap',
-            'grid-template-columns', 'grid-template-rows', 'grid-gap',
-            
-            // Borders
-            'border', 'border-width', 'border-style', 'border-color', 'border-radius',
-            'border-top', 'border-right', 'border-bottom', 'border-left',
-            
-            // Visual Effects
-            'box-shadow', 'transform', 'transition', 'animation',
-            'overflow', 'visibility', 'z-index'
+            /* Animation & Interactivity */
+            'animation', 'animation-composition', 'animation-delay', 'animation-direction', 'animation-duration', 
+            'animation-fill-mode', 'animation-iteration-count', 'animation-name', 'animation-play-state', 
+            'animation-timeline', 'animation-timing-function', 'appearance', 'bookmark-label', 'bookmark-level', 
+            'bookmark-state', 'break-after', 'break-before', 'break-inside', 'clip-rule', 'color-interpolation', 
+            'color-interpolation-filters', 'color-rendering', 'dominant-baseline', 'fill', 'fill-opacity', 'fill-rule', 
+            'flood-color', 'flood-opacity', 'lighting-color', 'marker-end', 'marker-mid', 'marker-start', 'nav-down', 
+            'nav-left', 'nav-right', 'nav-up', 'order', 'page', 'pause', 'pause-after', 'pause-before', 'pitch', 
+            'pitch-range', 'play-during', 'richness', 'speak', 'speak-header', 'speak-numeral', 'speak-punctuation', 
+            'speech-rate', 'stress', 'text-anchor', 'voice-family', 'volume', 'writing-mode'
         ],
         UNSUITABLE_FOR_BACKGROUND: new Set([
             /* Void elements */
@@ -307,6 +358,54 @@
       },
         PARENT_MODE: false
    };
+
+   const PROPERTY_CATEGORIES = {
+        'Basic Styling': {
+            expanded: true,
+            properties: ['background-color', 'color', 'font-size', 'font-family', 'font-weight', 'font-style', 'opacity']
+        },
+        'Layout & Spacing': {
+            expanded: false,
+            properties: ['display', 'position', 'width', 'height', 'padding', 'padding-top', 'padding-right', 'padding-bottom', 'padding-left', 'margin', 'margin-top', 'margin-right', 'margin-bottom', 'margin-left', 'top', 'right', 'bottom', 'left', 'z-index']
+        },
+        'Borders & Effects': {
+            expanded: false,
+            properties: ['border', 'border-width', 'border-style', 'border-color', 'border-radius', 'border-top', 'border-right', 'border-bottom', 'border-left', 'box-shadow', 'outline', 'outline-color', 'outline-width']
+        },
+        'Flexbox & Grid': {
+            expanded: false,
+            properties: ['flex-direction', 'flex-wrap', 'justify-content', 'align-items', 'align-content', 'flex-grow', 'flex-shrink', 'flex-basis', 'gap', 'grid-template-columns', 'grid-template-rows', 'grid-gap']
+        },
+        'Typography': {
+            expanded: false,
+            properties: ['text-align', 'text-decoration', 'text-shadow', 'text-transform', 'line-height', 'letter-spacing', 'word-spacing', 'white-space']
+        },
+        'Background & Images': {
+            expanded: false,
+            properties: ['background', 'background-image', 'background-position', 'background-repeat', 'background-size', 'background-attachment', 'background-clip']
+        },
+        'Animation & Transform': {
+            expanded: false,
+            properties: ['transform', 'transition', 'animation', 'transform-origin', 'transition-duration', 'transition-property', 'transition-timing-function']
+        },
+        'Advanced Properties': {
+            expanded: false,
+            properties: [] // Will be populated with remaining properties
+        }
+    };
+
+    function initializePropertyCategories() {
+        const allCategorizedProps = new Set();
+        Object.values(PROPERTY_CATEGORIES).forEach(category => {
+            category.properties.forEach(prop => allCategorizedProps.add(prop));
+        });
+        
+        // Add remaining properties to Advanced category
+        const remainingProps = CONFIG.PRESERVED_STYLES.filter(prop => !allCategorizedProps.has(prop));
+        PROPERTY_CATEGORIES['Advanced Properties'].properties = remainingProps;
+    };
+
+    initializePropertyCategories();
 
     const SELECTOR_REPLACEMENTS = {
         // Escape like this: '#navbarNavDropdown\.navbar-collapse\.collapse': '.navbarNavDropdown'
@@ -930,6 +1029,7 @@
         currentStyles: {},
         searchTerm: '',
         collapsedSelectors: new Set(),
+        collapsedCategories: new Set(['Layout & Spacing', 'Borders & Effects', 'Flexbox & Grid', 'Typography', 'Background & Images', 'Animation & Transform', 'Advanced Properties']),
         showOnlyChangedElements: false,
         applyDebounce: null,
         lastAppliedStyles: null,
@@ -1179,6 +1279,9 @@
                                     <button id="toggle-collapse" class="KLITETOOL-button" style="flex: 1 1 48%;">
                                         ${isAllCollapsed ? 'Open ALL' : 'Close ALL'}
                                     </button>
+                                    <button id="toggle-all-categories" class="KLITETOOL-button" style="width: 100%; margin-top: 5px;">
+                                        ${this.collapsedCategories.size === Object.keys(PROPERTY_CATEGORIES).length ? 'Expand All Categories' : 'Collapse All Categories'}
+                                    </button>
                                     <button id="filter-changes-button" class="KLITETOOL-button" style="flex: 1 1 48%;">
                                         ${this.showOnlyChangedElements ? 'Show All' : 'Show Changed'}
                                     </button>
@@ -1287,49 +1390,73 @@
         },
 
         renderSelectorProperties(selector, filteredProps, styles, originalStyles) {
-            return filteredProps.map(prop => {
-                const isColorProp = prop.includes('color');
-                const changed = styles[prop] !== originalStyles[prop];
+            let html = '';
+            
+            Object.entries(PROPERTY_CATEGORIES).forEach(([categoryName, categoryData]) => {
+                const categoryProps = categoryData.properties.filter(prop => filteredProps.includes(prop));
+                if (categoryProps.length === 0) return;
                 
-                return `
-                    <div style="display: flex; align-items: center; margin: 5px 0;">
-                        <span style="flex-grow: 1; margin-right: 10px; color: #aaa;">${prop}</span>
-                        ${isColorProp ? `
-                            <input
-                                type="color"
-                                value="${styles[prop] || ''}"
-                                style="width: 30px; height: 30px; padding: 2px;"
-                                data-selector="${selector}"
-                                data-prop="${prop}"
-                                class="KLITETOOL-style-color-input"
-                            >
-                        ` : ''}
-                        <input
-                            type="text"
-                            value="${styles[prop] || ''}"
-                            style="width: 100px; padding: 2px; color: black; ${isColorProp ? 'margin-left: 5px;' : ''}"
-                            data-selector="${selector}"
-                            data-prop="${prop}"
-                            class="KLITETOOL-style-input"
-                        >
-                        ${changed ? `
-                            <button class="KLITETOOL-reset-button" data-selector="${selector}" data-prop="${prop}"
-                                style="background: none; border: none; color: #ff6b6b; cursor: pointer; margin-left: 5px; font-weight: bold;">
-                                X
-                            </button>
-                        ` : ''}
-                        ${prop === 'background-color' ? `
-                            <button class="KLITETOOL-transparent-button" 
-                                data-selector="${selector}"
-                                data-prop="${prop}"
-                                style="background: none; border: none; color: #6b6bff; cursor: pointer; margin-left: 5px; font-weight: bold;"
-                                title="Set to transparent">
-                                T
-                            </button>
-                        ` : ''}
+                const isCollapsed = this.collapsedCategories.has(categoryName);
+                
+                html += `
+                    <div class="KLITETOOL-property-category" style="margin-bottom: 10px;">
+                        <div class="KLITETOOL-category-header" data-category="${categoryName}" data-selector="${selector}"
+                            style="cursor: pointer; padding: 5px; background-color: #2a2a2a; border-radius: 3px; margin-bottom: 5px; user-select: none;">
+                            <span style="font-weight: bold; color: #ccc;">${categoryName}</span>
+                            <span style="float: right;">${isCollapsed ? '▶' : '▼'}</span>
+                        </div>
+                        ${isCollapsed ? '' : `
+                            <div class="KLITETOOL-category-content" style="padding-left: 10px;">
+                                ${categoryProps.map(prop => {
+                                    const isColorProp = prop.includes('color');
+                                    const changed = styles[prop] !== originalStyles[prop];
+                                    
+                                    return `
+                                        <div style="display: flex; align-items: center; margin: 5px 0;">
+                                            <span style="flex-grow: 1; margin-right: 10px; color: #aaa; font-size: 13px;">${prop}</span>
+                                            ${isColorProp ? `
+                                                <input
+                                                    type="color"
+                                                    value="${styles[prop] || ''}"
+                                                    style="width: 30px; height: 30px; padding: 2px;"
+                                                    data-selector="${selector}"
+                                                    data-prop="${prop}"
+                                                    class="KLITETOOL-style-color-input"
+                                                >
+                                            ` : ''}
+                                            <input
+                                                type="text"
+                                                value="${styles[prop] || ''}"
+                                                style="width: 100px; padding: 2px; color: black; ${isColorProp ? 'margin-left: 5px;' : ''}"
+                                                data-selector="${selector}"
+                                                data-prop="${prop}"
+                                                class="KLITETOOL-style-input"
+                                            >
+                                            ${changed ? `
+                                                <button class="KLITETOOL-reset-button" data-selector="${selector}" data-prop="${prop}"
+                                                    style="background: none; border: none; color: #ff6b6b; cursor: pointer; margin-left: 5px; font-weight: bold;">
+                                                    X
+                                                </button>
+                                            ` : ''}
+                                            ${prop === 'background-color' ? `
+                                                <button class="KLITETOOL-transparent-button" 
+                                                    data-selector="${selector}"
+                                                    data-prop="${prop}"
+                                                    style="background: none; border: none; color: #6b6bff; cursor: pointer; margin-left: 5px; font-weight: bold;"
+                                                    title="Set to transparent">
+                                                    T
+                                                </button>
+                                            ` : ''}
+                                        </div>
+                                    `;
+                                }).join('')}
+                            </div>
+                        `}
                     </div>
                 `;
-            }).join('');
+            });
+            
+            return html;
         },
     
         renderStyleGroups() {
@@ -1539,6 +1666,32 @@
             this.handleThemeClick = (e) => {
                 if (SectionHandlers.handleSectionHeader(e)) return;
                 if (SectionHandlers.handleSelectorToggle(e)) return;
+                if (e.target.closest('.KLITETOOL-category-header')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    const categoryHeader = e.target.closest('.KLITETOOL-category-header');
+                    const categoryName = categoryHeader.dataset.category;
+                    
+                    if (this.collapsedCategories.has(categoryName)) {
+                        this.collapsedCategories.delete(categoryName);
+                    } else {
+                        this.collapsedCategories.add(categoryName);
+                    }
+                    
+                    UIManager.render();
+                    return;
+                }
+
+                if (e.target.id === 'toggle-all-categories') {
+                    if (this.collapsedCategories.size === Object.keys(PROPERTY_CATEGORIES).length) {
+                        this.collapsedCategories.clear();
+                    } else {
+                        Object.keys(PROPERTY_CATEGORIES).forEach(cat => this.collapsedCategories.add(cat));
+                    }
+                    UIManager.render();
+                    return;
+                }
 
                 if (e.target.id === 'toggle-inspector') {
                     e.stopPropagation();
@@ -2750,17 +2903,20 @@
                                 reader.onload = (event) => {
                                     try {
                                         const cssContent = event.target.result;
-                                        const themeName = file.name.replace('.css', '').replace(/^theme-/, '');
+                                        const metadata = this.parseMetadataFromCSS(cssContent);
+                                        
+                                        // Use metadata if available, otherwise fallback to filename
+                                        const themeName = metadata.name || file.name.replace('.css', '').replace(/^theme-/, '');
                                         
                                         const newTheme = {
                                             metadata: {
                                                 name: themeName,
-                                                description: 'Imported from ' + file.name,
-                                                creator: 'Imported',
+                                                description: metadata.description || '', // Empty if no metadata
+                                                creator: metadata.creator || '', // Empty if no metadata
                                                 date: new Date().toISOString(),
-                                                classic: true,
-                                                aesthetic: true,
-                                                corpo: true
+                                                classic: metadata.classic || false,
+                                                aesthetic: metadata.aesthetic || false,
+                                                corpo: metadata.corpo || false
                                             },
                                             css: cssContent,
                                             backgrounds: {
@@ -2780,6 +2936,7 @@
                                         importedCount++;
                                         
                                         if (importedCount === e.target.files.length) {
+                                            this.saveToLocalStorage();
                                             UIManager.render();
                                             alert(`Successfully imported ${importedCount} themes.`);
                                         }
@@ -2800,6 +2957,59 @@
                 console.error('Error importing CSS files:', e);
                 alert('Error importing CSS files: ' + e.message);
             }
+        },
+
+        parseMetadataFromCSS(cssContent) {
+            const metadata = {
+                name: null,
+                description: null,
+                creator: null,
+                classic: false,
+                aesthetic: false,
+                corpo: false
+            };
+            
+            try {
+                // Look for metadata in CSS comments at the beginning of the file
+                const commentMatch = cssContent.match(/^\/\*[\s\S]*?\*\//);
+                if (!commentMatch) {
+                    return metadata; // No metadata found
+                }
+                
+                const commentContent = commentMatch[0];
+                
+                // Parse Theme name
+                const themeMatch = commentContent.match(/Theme:\s*(.+)/i);
+                if (themeMatch) {
+                    metadata.name = themeMatch[1].trim();
+                }
+                
+                // Parse Creator
+                const creatorMatch = commentContent.match(/Creator:\s*(.+)/i);
+                if (creatorMatch) {
+                    metadata.creator = creatorMatch[1].trim();
+                }
+                
+                // Parse Description
+                const descriptionMatch = commentContent.match(/Description:\s*(.+)/i);
+                if (descriptionMatch) {
+                    metadata.description = descriptionMatch[1].trim();
+                }
+                
+                // Parse Compatibility
+                const compatibilityMatch = commentContent.match(/Compatibility:\s*(.+)/i);
+                if (compatibilityMatch) {
+                    const compatibility = compatibilityMatch[1].toLowerCase();
+                    metadata.classic = compatibility.includes('classic');
+                    metadata.aesthetic = compatibility.includes('aesthetic');
+                    metadata.corpo = compatibility.includes('corpo');
+                }
+                
+            } catch (e) {
+                console.warn('Error parsing metadata from CSS:', e);
+            }
+            
+            return metadata;
         },
         
         exportAllThemesAsCSS() {
