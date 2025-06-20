@@ -216,7 +216,7 @@
    `;
 
    const CONFIG = {
-        KLITETOOL_VERSION: ['v1.3'],
+        KLITETOOL_VERSION: ['v1.4'],
         MOBILE_BREAKPOINT: 768,
         PRESERVED_STYLES: [
             /* Layout & Box Model */
@@ -2540,7 +2540,7 @@
                 });
 
             if (this.unsavedChanges) {
-                optionsHtml += `<option value="unsaved" selected>Configuration in use (can be unsaved)</option>`;
+                optionsHtml += `<option value="unsaved" selected>Configuration in use can have unsaved changes</option>`;
             }
 
             const currentTheme = this.themes[this.currentTheme] || this.themes['Default Theme'];
@@ -2895,57 +2895,103 @@
                 fileInput.addEventListener('change', (e) => {
                     if (e.target.files && e.target.files.length > 0) {
                         let importedCount = 0;
+                        let errorCount = 0;
+                        const totalFiles = e.target.files.length;
                         
                         Array.from(e.target.files).forEach(file => {
                             if (file.name.endsWith('.css')) {
+                                // Check file size (limit to 1MB for security)
+                                if (file.size > 1024 * 1024) {
+                                    console.warn(`File ${file.name} is too large (${file.size} bytes). Skipping.`);
+                                    errorCount++;
+                                    return;
+                                }
+                                
                                 const reader = new FileReader();
                                 
                                 reader.onload = (event) => {
                                     try {
-                                        const cssContent = event.target.result;
-                                        const metadata = this.parseMetadataFromCSS(cssContent);
+                                        const rawCssContent = event.target.result;
+                                        
+                                        // SECURITY: Sanitize the CSS content before processing
+                                        const sanitizedCssContent = this.sanitize_imported_css(rawCssContent);
+                                        
+                                        // Additional validation
+                                        if (!sanitizedCssContent || sanitizedCssContent.trim().length === 0) {
+                                            throw new Error('CSS content is empty after sanitization');
+                                        }
+                                        
+                                        // Parse metadata from sanitized content
+                                        const metadata = this.parseMetadataFromCSS(sanitizedCssContent);
                                         
                                         // Use metadata if available, otherwise fallback to filename
                                         const themeName = metadata.name || file.name.replace('.css', '').replace(/^theme-/, '');
                                         
+                                        // Validate theme name
+                                        const sanitizedThemeName = this.sanitizeThemeName(themeName);
+                                        if (!sanitizedThemeName) {
+                                            throw new Error('Invalid theme name after sanitization');
+                                        }
+                                        
                                         const newTheme = {
                                             metadata: {
-                                                name: themeName,
-                                                description: metadata.description || '', // Empty if no metadata
-                                                creator: metadata.creator || '', // Empty if no metadata
+                                                name: sanitizedThemeName,
+                                                description: this.sanitizeMetadataField(metadata.description) || '',
+                                                creator: this.sanitizeMetadataField(metadata.creator) || '',
                                                 date: new Date().toISOString(),
-                                                classic: metadata.classic || false,
-                                                aesthetic: metadata.aesthetic || false,
-                                                corpo: metadata.corpo || false
+                                                classic: Boolean(metadata.classic),
+                                                aesthetic: Boolean(metadata.aesthetic),
+                                                corpo: Boolean(metadata.corpo),
+                                                imported: true, // Mark as imported for tracking
+                                                originalFileName: file.name
                                             },
-                                            css: cssContent,
+                                            css: sanitizedCssContent,
                                             backgrounds: {
                                                 elements: {},
                                                 filters: {}
                                             }
                                         };
                                         
-                                        let finalName = themeName;
+                                        // Generate unique name if needed
+                                        let finalName = sanitizedThemeName;
                                         let counter = 1;
                                         while (this.themes[finalName]) {
-                                            finalName = `${themeName} (${counter})`;
+                                            finalName = `${sanitizedThemeName} (${counter})`;
                                             counter++;
                                         }
                                         
                                         this.themes[finalName] = newTheme;
                                         importedCount++;
                                         
-                                        if (importedCount === e.target.files.length) {
-                                            this.saveToLocalStorage();
-                                            UIManager.render();
-                                            alert(`Successfully imported ${importedCount} themes.`);
-                                        }
+                                        console.log(`Successfully imported and sanitized theme: ${finalName}`);
+                                        
                                     } catch (err) {
                                         console.error(`Error processing CSS file ${file.name}:`, err);
+                                        errorCount++;
+                                    } finally {
+                                        // Check if all files are processed
+                                        if (importedCount + errorCount === totalFiles) {
+                                            this.saveToLocalStorage();
+                                            UIManager.render();
+                                            
+                                            let message = `Import complete: ${importedCount} themes imported successfully.`;
+                                            if (errorCount > 0) {
+                                                message += ` ${errorCount} files failed to import (check console for details).`;
+                                            }
+                                            alert(message);
+                                        }
                                     }
                                 };
                                 
+                                reader.onerror = () => {
+                                    console.error(`Error reading file ${file.name}`);
+                                    errorCount++;
+                                };
+                                
                                 reader.readAsText(file);
+                            } else {
+                                console.warn(`File ${file.name} is not a CSS file. Skipping.`);
+                                errorCount++;
                             }
                         });
                     }
@@ -2957,6 +3003,184 @@
                 console.error('Error importing CSS files:', e);
                 alert('Error importing CSS files: ' + e.message);
             }
+        },
+
+        sanitize_css_content(cssContent) {
+            let safeImages = [];
+            let counter = 0;
+            
+            // Remove HTML tags that might be embedded
+            cssContent = cssContent.replace(/<\s*\/?\s*\w+\s*[^>]*>/gi, "");
+            cssContent = cssContent.replace(/</g, "");
+            
+            // Preserve safe data URLs (images only) temporarily
+            cssContent = cssContent.replace(/data:image\/(jpeg|jpg|png|gif|webp|svg\+xml);base64,[A-Za-z0-9+\/=]+/gi, function(match) {
+                safeImages.push(match);
+                return "__SAFE_IMG_" + (counter++) + "__";
+            });
+            
+            // Remove dangerous protocols and expressions
+            cssContent = cssContent.replace(/(?:javascript|data(?!:image)|vbscript|file|about):/gi, "");
+            
+            // Remove CSS expressions (IE-specific but dangerous)
+            cssContent = cssContent.replace(/expression\s*\([^)]*\)/gi, "");
+            
+            // Remove @import with dangerous URLs
+            cssContent = cssContent.replace(/@import\s+(?:url\()?['"]?(?:javascript|data(?!:image)|vbscript|file):[^'")]*['"]?\)?[^;]*/gi, "");
+            
+            // Remove behavior property (IE-specific)
+            cssContent = cssContent.replace(/behavior\s*:\s*[^;}]+/gi, "");
+            
+            // Remove -moz-binding (Firefox-specific XBL)
+            cssContent = cssContent.replace(/-moz-binding\s*:\s*[^;}]+/gi, "");
+            
+            // Remove any remaining script-like content
+            cssContent = cssContent.replace(/&lt;script[\s\S]*?&lt;\/script&gt;/gi, "");
+            cssContent = cssContent.replace(/\\<script[\s\S]*?\\<\/script\\>/gi, "");
+            
+            // Sanitize content property to prevent XSS
+            cssContent = cssContent.replace(/content\s*:\s*['"][^'"]*(?:javascript|data(?!:image)|vbscript)[^'"]*['"]/gi, 'content: ""');
+            
+            // Remove any @-rules that could be dangerous except safe ones
+            const safeAtRules = ['@media', '@keyframes', '@-webkit-keyframes', '@-moz-keyframes', '@supports', '@charset', '@namespace'];
+            cssContent = cssContent.replace(/@[a-zA-Z-]+/g, function(match) {
+                const lowerMatch = match.toLowerCase();
+                if (safeAtRules.some(safe => lowerMatch.startsWith(safe.toLowerCase()))) {
+                    return match;
+                }
+                // Remove dangerous @-rules like @import with external URLs
+                return '';
+            });
+            
+            // Restore safe images
+            for(let i = 0; i < safeImages.length; i++) {
+                cssContent = cssContent.replace("__SAFE_IMG_" + i + "__", safeImages[i]);
+            }
+            
+            // Clean up any malformed CSS
+            cssContent = cssContent.replace(/[{}]/g, function(match, offset, string) {
+                // Basic validation to ensure braces are properly balanced
+                return match;
+            });
+            
+            return cssContent;
+        },
+
+        // Function to validate and sanitize a complete CSS rule
+        sanitize_css_rule(cssRule) {
+            if (!cssRule || typeof cssRule !== 'string') return '';
+            
+            // Split into selector and declarations
+            const parts = cssRule.split('{');
+            if (parts.length < 2) return '';
+            
+            const selector = sanitize_css_selector(parts[0]);
+            const declarations = parts.slice(1).join('{').replace(/}$/, '');
+            
+            if (!selector) return '';
+            
+            // Sanitize the declarations part
+            const sanitizedDeclarations = this.sanitize_css_content(declarations);
+            
+            return `${selector} { ${sanitizedDeclarations} }`;
+        },
+
+        // Main function to sanitize complete CSS content with metadata preservation
+        sanitize_imported_css(cssContent) {
+            if (!cssContent || typeof cssContent !== 'string') return '';
+            
+            // Preserve metadata comments at the beginning
+            let metadata = '';
+            const metadataMatch = cssContent.match(/^\/\*[\s\S]*?\*\//);
+            if (metadataMatch) {
+                metadata = metadataMatch[0];
+                // Sanitize metadata too (remove any scripts)
+                metadata = metadata.replace(/<script[\s\S]*?<\/script>/gi, '');
+                metadata = metadata.replace(/javascript:/gi, '');
+                cssContent = cssContent.substring(metadataMatch[0].length);
+            }
+            
+            // Sanitize the main CSS content
+            const sanitizedContent = this.sanitize_css_content(cssContent);
+            
+            // Combine metadata and sanitized content
+            return metadata + sanitizedContent;
+        },
+
+        sanitizeThemeName(name) {
+            if (!name || typeof name !== 'string') return null;
+            
+            // Remove dangerous characters and limit length
+            const sanitized = name
+                .replace(/[<>'"\\\/\0\x01-\x1F\x7F]/g, '') // Remove control chars and dangerous chars
+                .replace(/\s+/g, ' ') // Normalize whitespace
+                .trim()
+                .substring(0, 100); // Limit length
+            
+            if (!sanitized || sanitized === 'Default Theme' || sanitized.toLowerCase() === 'unsaved') {
+                return null;
+            }
+            
+            return sanitized;
+        },
+
+        sanitizeMetadataField(field) {
+            if (!field || typeof field !== 'string') return '';
+            
+            return field
+                .replace(/[<>'"\\\/\0\x01-\x1F\x7F]/g, '') // Remove dangerous characters
+                .replace(/\s+/g, ' ') // Normalize whitespace
+                .trim()
+                .substring(0, 500); // Limit length for descriptions
+        },
+
+        parseMetadataFromCSS(cssContent) {
+            const metadata = {
+                name: null,
+                description: null,
+                creator: null,
+                classic: false,
+                aesthetic: false,
+                corpo: false
+            };
+            
+            try {
+                // Look for metadata in CSS comments at the beginning of the file
+                const commentMatch = cssContent.match(/^\/\*[\s\S]*?\*\//);
+                if (!commentMatch) {
+                    return metadata; // No metadata found
+                }
+                
+                const commentContent = commentMatch[0];
+                
+                // Parse fields with sanitization
+                const patterns = [
+                    { key: 'name', regex: /(?:Theme-Name|Theme):\s*(.+)/i },
+                    { key: 'creator', regex: /Creator:\s*(.+)/i },
+                    { key: 'description', regex: /(?:Theme-Description|Description):\s*(.+)/i }
+                ];
+                
+                patterns.forEach(({ key, regex }) => {
+                    const match = commentContent.match(regex);
+                    if (match) {
+                        metadata[key] = this.sanitizeMetadataField(match[1]);
+                    }
+                });
+                
+                // Parse Compatibility with validation
+                const compatibilityMatch = commentContent.match(/Compatibility:\s*(.+)/i);
+                if (compatibilityMatch) {
+                    const compatibility = compatibilityMatch[1].toLowerCase();
+                    metadata.classic = compatibility.includes('classic');
+                    metadata.aesthetic = compatibility.includes('aesthetic');
+                    metadata.corpo = compatibility.includes('corpo');
+                }
+                
+            } catch (e) {
+                console.warn('Error parsing metadata from CSS:', e);
+            }
+            
+            return metadata;
         },
 
         parseMetadataFromCSS(cssContent) {
